@@ -28,7 +28,7 @@ jobs:
 
       - name: Upload to S3
         run: |
-          aws s3 cp build/libs/my-app.jar s3://my-app-bucket/my-app.jar
+          aws s3 cp build/libs/my-app.jar s3://igojoa/my-app.jar
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -43,7 +43,7 @@ jobs:
           aws deploy create-deployment \
             --application-name MyApp \
             --deployment-group-name MyDeploymentGroup \
-            --s3-location bucket=my-app-bucket,key=my-app.jar,bundleType=jar
+            --s3-location bucket=igojoa,key=my-app.jar,bundleType=jar
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
