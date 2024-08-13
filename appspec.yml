@@ -1,10 +1,10 @@
 version: 0.0
 os: linux
 files:
-  - source: my-app.jar
-    destination: /home/ec2-user/my-app
+  - source: build/libs/igojoaManagement-0.0.1-SNAPSHOT.jar
+    destination: /home/ubuntu/igojoaManagement-0.0.1-SNAPSHOT.jar
 hooks:
   AfterInstall:
     - location: scripts/restart_server.sh
       timeout: 300
-      runas: ec2-user
+      runas: ubuntu
