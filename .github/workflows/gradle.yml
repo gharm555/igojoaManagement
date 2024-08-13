@@ -26,9 +26,12 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew build
 
+      - name: Package JAR into ZIP
+        run: zip -j build/libs/igojoaManagement-0.0.1-SNAPSHOT.zip build/libs/igojoaManagement-0.0.1-SNAPSHOT.jar
+
       - name: Upload to S3
         run: |
-          aws s3 cp build/libs/igojoaManagement-0.0.1-SNAPSHOT.jar s3://igojoa/igojoaManagement-0.0.1-SNAPSHOT.jar
+          aws s3 cp build/libs/igojoaManagement-0.0.1-SNAPSHOT.zip s3://igojoa/igojoaManagement-0.0.1-SNAPSHOT.zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -41,9 +44,9 @@ jobs:
       - name: Deploy to CodeDeploy
         run: |
           aws deploy create-deployment \
-            --application-name igojoaManagement-0.0.1-SNAPSHOT.jar \
+            --application-name igojoaManagement \
             --deployment-group-name igojoa \
-            --s3-location bucket=igojoa,key=igojoaManagement-0.0.1-SNAPSHOT.jar,bundleType=jar
+            --s3-location bucket=igojoa,key=igojoaManagement-0.0.1-SNAPSHOT.zip,bundleType=zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
