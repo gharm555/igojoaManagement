@@ -69,7 +69,7 @@ jobs:
         with:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
             cd /path/to/your/application
