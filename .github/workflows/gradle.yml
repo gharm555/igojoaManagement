@@ -44,7 +44,7 @@ jobs:
       - name: Deploy to CodeDeploy
         run: |
           aws deploy create-deployment \
-            --application-name igojoaManagement \
+            --application-name igojoaManagement-0.0.1-SNAPSHOT.jar \
             --deployment-group-name igojoa \
             --s3-location bucket=igojoa,key=igojoaManagement-0.0.1-SNAPSHOT.zip,bundleType=zip
         env:
