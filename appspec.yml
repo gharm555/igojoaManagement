@@ -5,6 +5,6 @@ files:
     destination: /home/ubuntu/igojoaManagement-0.0.1-SNAPSHOT.jar
 hooks:
   AfterInstall:
-    - location: scripts/restart_server.sh
+    - location: /home/ubuntu/scripts/restart_server.sh
       timeout: 300
       runas: ubuntu
