@@ -2,12 +2,12 @@ version: 0.0
 os: linux
 
 files:
-  - source: build/libs/igojoaManagement-0.0.1-SNAPSHOT.jar
-    destination: /home/ubuntu/igojoaManagement-0.0.1-SNAPSHOT.jar
+  - source: igojoaManagement-0.0.1-SNAPSHOT.jar
+    destination: igojoaManagement-0.0.1-SNAPSHOT.jar
     overwrite: yes
 
 permissions:
-  - object: /home/ubuntu/igojoaManagement-0.0.1-SNAPSHOT.jar
+  - object: igojoaManagement-0.0.1-SNAPSHOT.jar
     owner: ubuntu
     group: ubuntu
 
