@@ -3,8 +3,6 @@ name: Java CI/CD with Gradle, S3, and CodeDeploy
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
