@@ -2,22 +2,22 @@ version: 0.0
 os: linux
 
 files:
-  - source: /
-    destination: igojoaManagement-0.0.1-SNAPSHOT.jar
+  - source: build/libs/igojoaManagement-0.0.1-SNAPSHOT.jar
+    destination: /home/ubuntu/igojoaManagement-0.0.1-SNAPSHOT.jar
     overwrite: yes
 
 permissions:
-  - object: igojoaManagement-0.0.1-SNAPSHOT.jar
+  - object: /home/ubuntu/igojoaManagement-0.0.1-SNAPSHOT.jar
     owner: ubuntu
     group: ubuntu
 
 hooks:
   BeforeInstall:
-    - location: stop_server.sh
+    - location: /home/ubuntu/scripts/stop_server.sh
       timeout: 300
       runas: ubuntu
 
   AfterInstall:
-    - location: restart_server.sh
+    - location: /home/ubuntu/scripts/restart_server.sh
       timeout: 300
       runas: ubuntu
