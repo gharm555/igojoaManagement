@@ -26,8 +26,13 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew build
 
-      - name: Package JAR into ZIP
-        run: zip -j build/libs/igojoaManagement-0.0.1-SNAPSHOT.zip build/libs/igojoaManagement-0.0.1-SNAPSHOT.jar
+      - name: Package JAR and other files into ZIP
+        run: |
+          zip -j build/libs/igojoaManagement-0.0.1-SNAPSHOT.zip \
+            build/libs/igojoaManagement-0.0.1-SNAPSHOT.jar \
+            appspec.yml \
+            scripts/restart_server.sh \
+            scripts/stop_server.sh
 
       - name: Upload to S3
         run: |
