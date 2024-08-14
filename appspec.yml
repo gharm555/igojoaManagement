@@ -13,11 +13,11 @@ permissions:
 
 hooks:
   BeforeInstall:
-    - location: scripts/stop_server.sh
+    - location: stop_server.sh
       timeout: 300
       runas: ubuntu
 
   AfterInstall:
-    - location: scripts/restart_server.sh
+    - location: restart_server.sh
       timeout: 300
       runas: ubuntu
