@@ -27,28 +27,28 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http.csrf(csrf -> csrf.disable());
-////        http.formLogin((login) -> login.loginPage("/admin/login"));
-//        http.formLogin(Customizer.withDefaults()); // => 스프링 시큐리티에서 제공하는 로그인 디폴트 페이지로 설정
-//        http.logout((logout) -> logout.logoutSuccessUrl("/"));
-//        return http.build();
-
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/emailVerify").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .successHandler(emailVerificationHandler)
-                        .failureUrl("/login?error=true")
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout=true")
-                        .permitAll()
-                );
-
+        http.csrf(csrf -> csrf.disable());
+//        http.formLogin((login) -> login.loginPage("/admin/login"));
+        http.formLogin(Customizer.withDefaults()); // => 스프링 시큐리티에서 제공하는 로그인 디폴트 페이지로 설정
+        http.logout((logout) -> logout.logoutSuccessUrl("/"));
         return http.build();
+
+//        http
+//                .csrf(csrf -> csrf.disable())
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/admin/emailVerify").permitAll()
+//                        .anyRequest().authenticated()
+//                )
+//                .formLogin(form -> form
+//                        .successHandler(emailVerificationHandler)
+//                        .failureUrl("/login?error=true")
+//                        .permitAll()
+//                )
+//                .logout(logout -> logout
+//                        .logoutSuccessUrl("/login?logout=true")
+//                        .permitAll()
+//                );
+//
+//        return http.build();
     }
 }
