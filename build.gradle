@@ -53,6 +53,16 @@ dependencies {
 
     // Spring Boot Mail Starter
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // Google Analytics Data API
+    implementation 'com.google.analytics:google-analytics-data:0.14.3'
+
+    // Google Auth Library
+    implementation 'com.google.auth:google-auth-library-oauth2-http:1.11.0'
+
+    // Google Cloud Libraries BOM
+    implementation platform('com.google.cloud:libraries-bom:26.1.4')
+    implementation 'com.google.cloud:google-cloud-core'
 }
 
 tasks.named('test') {
