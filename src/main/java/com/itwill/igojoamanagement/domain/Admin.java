@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-@Getter
+@Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = false)
 @Entity
@@ -24,7 +24,7 @@ public class Admin implements UserDetails {
     @Id
     @EqualsAndHashCode.Include
     @Column(name = "adminId", length = 10, updatable = false)
-    @Pattern(regexp = "\\d{9}[A-Z]", message = "올바른 사번이 아닙니다")
+//    @Pattern(regexp = "\\d{9}[A-Z]", message = "올바른 사번이 아닙니다")
     private String adminId;
 
     @NotBlank(message = "비밀번호는 필수 입력 항목입니다.")
@@ -41,7 +41,7 @@ public class Admin implements UserDetails {
 
     @Column(name = "gender")
     @Min(value = 0, message = "성별 코드는 0 이상이어야 합니다.")
-    @Max(value = 2, message = "성별 코드는 2 이하여야 합니다.")
+    @Max(value = 4, message = "성별 코드는 4 이하여야 합니다.")
     private int gender;
 
     @Column(name = "email")
@@ -66,7 +66,7 @@ public class Admin implements UserDetails {
 
     @Column(name = "hireDate")
     @NotNull(message = "입사일은 필수 입력 항목입니다.")
-    private LocalDateTime hireDate;
+    private String hireDate;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
