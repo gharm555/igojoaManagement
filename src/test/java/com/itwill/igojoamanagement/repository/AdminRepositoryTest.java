@@ -69,7 +69,7 @@ public class AdminRepositoryTest {
                 .address("서울시 강남구")
                 .phoneNumber("01012341234")
                 .role(role)
-                .hireDate(LocalDateTime.now())
+                .hireDate(LocalDateTime.now().toString())
                 .build();
 
         // When
@@ -93,7 +93,7 @@ public class AdminRepositoryTest {
                 .address("서울시 강남구")
                 .phoneNumber("01012345678")
                 .role(role)
-                .hireDate(LocalDateTime.now())
+                .hireDate(LocalDateTime.now().toString())
                 .build();
         
         AdminLoginLog log = AdminLoginLog.builder()
@@ -126,7 +126,7 @@ public class AdminRepositoryTest {
                 .address("서울시 강남구")
                 .phoneNumber("01012345678")
                 .role(role)
-                .hireDate(LocalDateTime.now())
+                .hireDate(LocalDateTime.now().toString())
                 .build();
 
         AdminLog adminLog = AdminLog.builder()
