@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -57,11 +56,11 @@ public class GA4Service {
     }
 
     private GoogleCredentials getGoogleCredentials() throws IOException {
-       try (FileInputStream serviceAccountStream = new FileInputStream(serviceAccountKeyPath)) {
-           return ServiceAccountCredentials.fromStream(serviceAccountStream)
-               .createScoped("https://www.googleapis.com/auth/analytics.readonly");
-       }
-   }
+        logger.debug("Loading Google Credentials from: {}", serviceAccountKeyPath);
+        return ServiceAccountCredentials.fromStream(
+                        new ClassPathResource(serviceAccountKeyPath).getInputStream())
+                .createScoped("https://www.googleapis.com/auth/analytics.readonly");
+    }
 
     private BetaAnalyticsDataClient createAnalyticsDataClient(GoogleCredentials credentials) throws IOException {
         logger.debug("Creating BetaAnalyticsDataClient");
@@ -127,5 +126,4 @@ public class GA4Service {
                         page.get("pagePath"), page.get("views"), page.get("avgDuration"))
         );
     }
-
 }

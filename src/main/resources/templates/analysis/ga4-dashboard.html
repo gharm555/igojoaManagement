@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="ga4Dashboard">
+<head>
+    <title>GA4 Dashboard</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<h1>아이고조아 웹페이지 통계</h1>
+<br/>
+<div th:if="${error}" th:text="${error}" style="color: red;"></div>
+<div th:if="${ga4Data}">
+    <h2>개요</h2>
+    <br/>
+    <p>전체 페이지 방문자 수: <span th:text="${ga4Data.totalViews}"></span></p>
+    <p>아이고조아 웹페이지 평균 체류시간: <span th:text="${#numbers.formatDecimal(ga4Data.avgTotalDuration, 1, 2)}"></span> seconds</p>
+    <h3>가장 많이 방문한 페이지</h3>
+    <p>경로: <span th:text="${ga4Data.mostVisitedPage.pagePath}"></span></p>
+    <p>방문자수: <span th:text="${ga4Data.mostVisitedPage.views}"></span></p>
+    <p>페이지 체류시간: <span th:text="${#numbers.formatDecimal(ga4Data.mostVisitedPage.avgDuration, 1, 2)}"></span> seconds</p>
+
+    <h2>페이지 개요</h2>
+    <br/>
+    <table>
+        <tr>
+            <th>경로</th>
+            <th>방문자수</th>
+            <th>체류시간 (초)</th>
+        </tr>
+        <tr th:each="page : ${ga4Data.pageData}">
+            <td th:text="${page.pagePath}"></td>
+            <td th:text="${page.views}"></td>
+            <td th:text="${#numbers.formatDecimal(page.avgDuration, 1, 2)}"></td>
+        </tr>
+    </table>
+
+    <br/>
+
+    <h2>방문자 수 상위 10개 경로</h2>
+    <br/>
+    <canvas id="ga4Chart"></canvas>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var pageData = /*[[${ga4Data.pageData}]]*/ [];
+
+        var top10Pages = pageData.slice(0, 10);
+        var pagePaths = top10Pages.map(page => page.pagePath);
+        var pageViews = top10Pages.map(page => page.views);
+
+        var ctx = document.getElementById('ga4Chart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: pagePaths,
+                datasets: [{
+                    label: '경로 방문자수',
+                    data: pageViews,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '방문자 수 상위 10개 경로'
+                    }
+                }
+            }
+        });
+        /*]]>*/
+    </script>
+</div>
+</body>
+</html>
