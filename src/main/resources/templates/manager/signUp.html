@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{layout/fragments :: documentHeader}"></head>
+<body>
+<header th:replace="~{layout/fragments :: pageHeader}"></header>
+<main>
+    <div class="container-fluid">
+        <form method="post" th:action="@{/manager/signUp}">
+            <input type="text" id="adminId" name="adminId" placeholder="사번">
+            <input type="password" id="password" name="password" placeholder="비밀번호">
+            <input type="text" id="name" name="name" placeholder="이름">
+            <input type="text" id="birth" name="birth" placeholder="생일">
+            <input type="number" id="gender" name="gender" placeholder="0">
+            <input type="email" id="email" name="email" placeholder="example@example.com">
+            <input type="text" id="address" name="address" placeholder="주소">
+            <input type="number" id="phoneNumber" name="phoneNumber" placeholder="전화번호">
+            <select name="roleId">
+                <option value="90">사장</option>
+                <option value="30">과장</option>
+                <option value="20">대리</option>
+                <option value="10">사원</option>
+                <option value="0">인사담당자</option>
+            </select>
+            <input type="text" id="hireDate" name="hireDate" placeholder="입사일">
+            <button type="submit" id="signInBtn">생성</button>
+        </form>
+    </div>
+</main>
+<div th:replace="~{layout/fragments :: bootstrapScript}"></div>
+</body>
+</html>

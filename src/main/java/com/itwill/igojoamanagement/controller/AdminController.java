@@ -23,29 +23,33 @@ public class AdminController {
     @Autowired
     private final AdminService adminService;
 
-    // 로그인 페이지
-    @GetMapping("login")
-    public String loginPage() {
-        log.info("login()");
-
-        return "login";
+    @GetMapping("/signIn")
+    public void signIn() {
+        log.info("signIn");
     }
 
-    @GetMapping("emailVerify")
+
+    @PostMapping("/signOut")
+    public String signOut() {
+        log.info("signOut");
+        return "redirect:/";
+    }
+
+    @GetMapping("/emailVerify")
     public String verifyPage() {
         log.info("verify()");
 
         return "/admin/emailVerify";
     }
 
-    @PostMapping("emailVerify")
+    @PostMapping("/emailVerify")
     public String verifyCode(@RequestParam String code, HttpSession session, Authentication authentication) {
         String verifyCode = (String) session.getAttribute("verificationCode");
 
         if(code.equals(verifyCode)) {
             Admin admin = (Admin) authentication.getPrincipal();
             if(admin.getRole().getRoleId() == 0) {
-                return "redirect:/admin/adminManage";
+                return "redirect:/manager/adminManage";
             } else {
                 return "redirect:/";
             }
@@ -56,11 +60,9 @@ public class AdminController {
     @GetMapping("/adminManage")
     @PreAuthorize("hasRole('ROLE_인사담당자')")
     public String adminManage() {
-        return "/admin/adminManage";
+        return "/manager/adminManage";
     }
 
-    @GetMapping("/main")
-    public String mainPage() {
-        return "main";
-    }
+
+
 }

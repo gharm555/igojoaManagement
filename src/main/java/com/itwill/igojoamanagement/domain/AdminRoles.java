@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class AdminRoles {
     @Id
     @Column(name = "roleId")
-    private int roleId;
+    private Integer roleId;
 
     @Column(name = "roleName")
     private String roleName;
