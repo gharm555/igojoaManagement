@@ -25,5 +25,6 @@ public class AdminQueryDslImpl extends QuerydslRepositorySupport implements Admi
         Admin entity = query.fetchOne();
 
         return entity;
+      
     }
 }
