@@ -1,6 +1,7 @@
 package com.itwill.igojoamanagement.config;
 
 import com.itwill.igojoamanagement.service.AdminService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +13,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+@Slf4j
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -27,28 +30,26 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable());
-        http.formLogin((login) -> login.loginPage("/admin/login"));
-        http.formLogin(Customizer.withDefaults()); // => 스프링 시큐리티에서 제공하는 로그인 디폴트 페이지로 설정
-        http.logout((logout) -> logout.logoutSuccessUrl("/"));
+        http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/admin/signIn").permitAll()
+                .anyRequest().authenticated()
+            )
+            .formLogin(login -> login
+                .loginPage("/admin/signIn")
+                .loginProcessingUrl("/admin/signIn")
+                .defaultSuccessUrl("/", true)
+                .failureUrl("/admin/signIn?error=true")
+                .usernameParameter("adminId")
+                .passwordParameter("password")
+            )
+            .logout(logout -> logout
+                .logoutUrl("/admin/signOut")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+            );
         return http.build();
-
-//        http
-//                .csrf(csrf -> csrf.disable())
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/admin/emailVerify").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .formLogin(form -> form
-//                        .successHandler(emailVerificationHandler)
-//                        .failureUrl("/login?error=true")
-//                        .permitAll()
-//                )
-//                .logout(logout -> logout
-//                        .logoutSuccessUrl("/login?logout=true")
-//                        .permitAll()
-//                );
-//
-//        return http.build();
     }
 }
