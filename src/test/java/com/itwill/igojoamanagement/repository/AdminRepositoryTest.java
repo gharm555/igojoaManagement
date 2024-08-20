@@ -43,8 +43,8 @@ public class AdminRepositoryTest {
                 .build();
 
         Admin admin = Admin.builder()
-                .adminId("123456789A")
-                .password(passwordEncoder.encode("ralrala10-"))
+                .adminId("test")
+                .password(passwordEncoder.encode("123123123"))
                 .name("요한")
                 .birth("1990-01-01")
                 .gender(1)
