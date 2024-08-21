@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Scanner;
+
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -35,10 +37,9 @@ public class ManagerController {
         }
         Admin admin = adminService.create(entity);
         log.info("회원가입:{}", admin);
-        return "redirect:/admin/signIn";
+        return "redirect:/";
     }
 
     // 권한설정
-
 
 }
