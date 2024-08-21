@@ -1,40 +1,35 @@
 package com.itwill.igojoamanagement.repository;
 
-import java.util.List;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-
-
 import com.itwill.igojoamanagement.domain.ConfirmPlace;
 import com.itwill.igojoamanagement.domain.QConfirmPlace;
+import com.itwill.igojoamanagement.dto.ConfirmPlaceNameDto;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+
+import java.util.List;
 
 
+public class ConfirmPlaceQueryDslImpl implements ConfirmPlaceQueryDsl {
+	private final JPAQueryFactory queryFactory;
 
-public class ConfirmPlaceQueryDslImpl extends QuerydslRepositorySupport implements ConfirmPlaceQueryDsl {
+	  public ConfirmPlaceQueryDslImpl(JPAQueryFactory queryFactory) {
 
-	  public ConfirmPlaceQueryDslImpl() {
-	        super(ConfirmPlace.class);
-	    }
+          this.queryFactory = queryFactory;
+      }
 
- 
-	@Override
-	public Page<ConfirmPlace> findAllWithPaging(Pageable pageable) {
 
-		return null;
-	}
-
-	@Override
-	public List<ConfirmPlace> findByPlaceNameContaining(String placeName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	public void deleteByPlaceNameAndReporterId(String placeName, String reporterId) {
-		// TODO Auto-generated method stub
-		
-	}
+	public List<ConfirmPlaceNameDto> findAllConfirmPlaceNames() {
+		QConfirmPlace confirmPlace = QConfirmPlace.confirmPlace;
 
+		return queryFactory
+				.select(Projections.constructor(ConfirmPlaceNameDto.class,
+						confirmPlace.placeName))
+				.from(confirmPlace)
+				.fetch();
+	}
 }
+
+

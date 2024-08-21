@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/fragments :: documentHeader}">
+</head>
+<body>
+<main>
+    <div class="container-fluid">
+        <div th:fragment="place">
+            <div class="row">
+                <!-- 사이드바 네비게이션 -->
+                <div class="col-md-3 border-end">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link active" id="v-pills-existing-tab" data-bs-toggle="pill" href="#v-pills-existing" role="tab" aria-controls="v-pills-existing" aria-selected="true">기존 명소</a>
+                        <a class="nav-link" id="v-pills-new-tab" data-bs-toggle="pill" href="#v-pills-new" role="tab" aria-controls="v-pills-new" aria-selected="false">신규 명소</a>
+                    </div>
+                </div>
+                <!-- 탭 컨텐츠 -->
+                <div class="col-md-9">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <!-- 기존 명소 탭 -->
+                        <div class="tab-pane fade show active" id="v-pills-existing" role="tabpanel" aria-labelledby="v-pills-existing-tab">
+                            <ul class="list-group list-group-flush">
+                                <li th:each="place : ${placeNames}" class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a th:href="@{/detailPlace(id=${place.placeName})}">
+                                        <span th:text="${place.placeName}">명소 이름</span>
+                                    </a>
+                                    <div>
+                                        <button type="button" class="btn btn-primary btn-sm">승인</button>
+                                        <button type="button" class="btn btn-secondary btn-sm">수정</button>
+                                        <button type="button" class="btn btn-danger btn-sm">삭제</button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- 신규 명소 탭 -->
+                        <div class="tab-pane fade" id="v-pills-new" role="tabpanel" aria-labelledby="v-pills-new-tab">
+                            <ul class="list-group list-group-flush">
+                                <li th:each="place : ${newPlaces}" class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a th:href="@{/detailPlace(id=${place.placeName})}">
+                                        <span th:text="${place.placeName}">명소 이름</span>
+                                    </a>
+                                    <div>
+                                        <button type="button" class="btn btn-primary btn-sm">승인</button>
+                                        <button type="button" class="btn btn-secondary btn-sm">수정</button>
+                                        <button type="button" class="btn btn-danger btn-sm">삭제</button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script th:replace="~{layout/fragments :: bootstrapScript}"></script>
+</body>
+</html>

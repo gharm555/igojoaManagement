@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.itwill.igojoamanagement.domain.ConfirmPlace;
 import com.itwill.igojoamanagement.domain.ConfirmPlaceId;
 
-public interface ConfirmPlaceReoisitory extends JpaRepository<ConfirmPlace, ConfirmPlaceId>,  ConfirmPlaceQueryDsl {
+public interface ConfirmPlaceRepoisitory extends JpaRepository<ConfirmPlace, ConfirmPlaceId>,  ConfirmPlaceQueryDsl {
 
 }

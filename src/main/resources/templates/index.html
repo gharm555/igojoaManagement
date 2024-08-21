@@ -13,7 +13,7 @@
 			<a class="nav-link" id="userMgr" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">회원 관리</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" id="placeMgr" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">명소 관리</a>
+			<a class="nav-link" id="placeMgr" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="true"  >명소 관리</a>
 		</li>
 		<li class="nav-item">
 			<a class="nav-link" id="reviewMgr" data-bs-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">리뷰 관리</a>
@@ -36,7 +36,7 @@
 		</div>
 		<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 			<div class="p-3 border bg-light">
-				<p>명소 관리 화면이 나올거임</p>
+				<div th:replace="~{place/existingPlace :: place}"></div>
 			</div>
 		</div>
 		<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="contact-tab">
@@ -46,7 +46,6 @@
 		</div>
 	</div>
 </div>
-
 <script th:replace="~{layout/fragments :: bootstrapScript}"></script>
 </body>
 </html>
