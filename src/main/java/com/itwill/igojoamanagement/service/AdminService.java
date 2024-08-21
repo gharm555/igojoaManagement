@@ -37,16 +37,13 @@ public class AdminService implements UserDetailsService {
         }
         return new User(adminDto.getAdminId(),
                 adminDto.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + adminDto.getRoleName())));
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + adminDto.getAdminGroup() + "_" + adminDto.getAdminRole())));
     }
 
 
     @Transactional
-    public Admin create(Admin entity, Integer roleId) {
-        log.info("roleId {}" , roleId);
-        AdminRoles role = adminRepository.findByRoleRoleId(roleId);
-        log.info("role {}",role);
-        entity.setRole(role);
+    public Admin create(Admin entity) {
+        log.info("create {}" , entity);
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         Admin admin = adminRepository.save(entity);
         log.info("admin {}",admin);

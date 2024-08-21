@@ -9,5 +9,7 @@ public class LoginAdminDto {
 
     private String adminId;
     private String password;
-    private String roleName;
+    private String adminGroup;
+    private String adminRole;
+
 }
