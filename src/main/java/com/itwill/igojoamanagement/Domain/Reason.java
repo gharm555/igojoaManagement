@@ -1,4 +1,4 @@
-package com.itwill.igojoamanagement.domain;
+package com.itwill.igojoamanagement.Domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

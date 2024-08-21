@@ -7,9 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 
-import com.itwill.igojoamanagement.domain.ConfirmPlace;
-import com.itwill.igojoamanagement.domain.QConfirmPlace;
-
+import com.itwill.igojoamanagement.Domain.ConfirmPlace;
 
 
 public class ConfirmPlaceQueryDslImpl extends QuerydslRepositorySupport implements ConfirmPlaceQueryDsl {

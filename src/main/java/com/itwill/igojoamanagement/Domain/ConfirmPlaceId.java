@@ -1,7 +1,6 @@
-package com.itwill.igojoamanagement.domain;
+package com.itwill.igojoamanagement.Domain;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import lombok.AllArgsConstructor;

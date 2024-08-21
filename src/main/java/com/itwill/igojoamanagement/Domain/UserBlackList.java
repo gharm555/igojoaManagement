@@ -1,4 +1,4 @@
-package com.itwill.igojoamanagement.domain;
+package com.itwill.igojoamanagement.Domain;
 
 import java.time.LocalDateTime;
 
