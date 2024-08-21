@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 
 import com.itwill.igojoamanagement.domain.ConfirmPlace;
-import com.itwill.igojoamanagement.domain.QConfirmPlace;
-
 
 
 public class ConfirmPlaceQueryDslImpl extends QuerydslRepositorySupport implements ConfirmPlaceQueryDsl {
