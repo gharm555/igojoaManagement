@@ -23,7 +23,7 @@
 				<div style="flex-grow: 1"></div>
 
 				<!-- '관리자' 링크 중앙에 위치 -->
-				<a class="navbar-brand" href="#" style="flex-grow: 0">관리자 페이지</a>
+				<a class="navbar-brand" href="/" style="flex-grow: 0">아이고조아 관리자 페이지</a>
 
 				<!-- 오른쪽 링크들 -->
 				<div style="flex-grow: 0.8; display: flex; justify-content: flex-end">
@@ -35,6 +35,9 @@
 						<th:block sec:authorize="isAuthenticated()">
 						<a class="nav-link" th:href="@{/manager/signUp}">계정 생정</a>
 						<a class="nav-link" th:href="@{/admin/signOut}">로그아웃</a>
+						</th:block>
+						<th:block sec:authorize="isAuthenticated()">
+							<a id="btn">
 						</th:block>
 					</div>
 				</div>
