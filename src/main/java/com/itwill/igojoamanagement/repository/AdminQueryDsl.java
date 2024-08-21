@@ -8,4 +8,5 @@ public interface AdminQueryDsl {
 
     LoginAdminDto findByAdminIdWithRole(String adminId);
 
+
 }
