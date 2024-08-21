@@ -20,9 +20,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private EmailVerification emailVerificationHandler;
-
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
