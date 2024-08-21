@@ -1,5 +1,5 @@
 
-package com.itwill.igojoamanagement.Domain;
+package com.itwill.igojoamanagement.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

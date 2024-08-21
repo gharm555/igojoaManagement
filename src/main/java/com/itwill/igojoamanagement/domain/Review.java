@@ -1,6 +1,6 @@
-package com.itwill.igojoamanagement.Domain;
+package com.itwill.igojoamanagement.domain;
 
-import com.itwill.igojoamanagement.Domain.key.ReviewPK;
+import com.itwill.igojoamanagement.domain.key.ReviewPK;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

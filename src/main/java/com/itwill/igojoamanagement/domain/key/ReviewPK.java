@@ -1,4 +1,4 @@
-package com.itwill.igojoamanagement.Domain.key;
+package com.itwill.igojoamanagement.domain.key;
 
 import jakarta.persistence.Embeddable;
 import lombok.Data;

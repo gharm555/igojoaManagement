@@ -1,6 +1,6 @@
 package com.itwill.igojoamanagement.service;
 
-import com.itwill.igojoamanagement.Domain.Admin;
+import com.itwill.igojoamanagement.domain.Admin;
 import com.itwill.igojoamanagement.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

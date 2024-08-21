@@ -1,7 +1,7 @@
 package com.itwill.igojoamanagement.repository;
 
-import com.itwill.igojoamanagement.Domain.ReportLog;
-import com.itwill.igojoamanagement.Domain.Review;
+import com.itwill.igojoamanagement.domain.ReportLog;
+import com.itwill.igojoamanagement.domain.Review;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

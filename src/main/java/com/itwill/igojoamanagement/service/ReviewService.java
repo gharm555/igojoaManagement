@@ -1,7 +1,7 @@
 package com.itwill.igojoamanagement.service;
 
-import com.itwill.igojoamanagement.Domain.ReportLog;
-import com.itwill.igojoamanagement.Domain.Review;
+import com.itwill.igojoamanagement.domain.ReportLog;
+import com.itwill.igojoamanagement.domain.Review;
 import com.itwill.igojoamanagement.repository.ReportLogRepository;
 import com.itwill.igojoamanagement.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
