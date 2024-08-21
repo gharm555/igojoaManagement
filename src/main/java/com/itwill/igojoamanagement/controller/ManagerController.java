@@ -30,12 +30,12 @@ public class ManagerController {
     }
 
     @PostMapping("/signUp")
-    public String signUp(@ModelAttribute Admin entity, @RequestParam(name = "roleId") Integer roleId, Model model) {
+    public String signUp(@ModelAttribute Admin entity, Model model) {
         if (entity.getAdminId() == null || entity.getAdminId().isEmpty()) {
             model.addAttribute("errorMessage", "사번(adminId)은 필수 입력 항목입니다.");
             return "manager/signUp";  // signUp 폼으로 다시 이동
         }
-        Admin admin = adminService.create(entity, roleId);
+        Admin admin = adminService.create(entity);
         log.info("회원가입:{}", admin);
         return "redirect:/";
     }

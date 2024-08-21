@@ -29,9 +29,9 @@ public class AdminQueryDslImpl implements AdminQueryDsl {
                 .select(Projections.constructor(LoginAdminDto.class,
                         admin.adminId,
                         admin.password,
-                        role.roleName))
+                        admin.adminGroup,
+                        admin.adminRole))
                 .from(admin)
-                .leftJoin(admin.role, role)
                 .where(admin.adminId.eq(adminId))
                 .fetchOne();
     }

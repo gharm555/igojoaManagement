@@ -1,13 +1,17 @@
 package com.itwill.igojoamanagement.controller;
 
 import com.itwill.igojoamanagement.service.GA4Service;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Map;
 
+@Slf4j
 @Controller
 public class homeController {
 
@@ -21,6 +25,14 @@ public class homeController {
 
     @GetMapping("/")
     public String home(Model model) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Object principal = authentication.getPrincipal();
+
+        log.info("Logged in username: {}", username);
+        log.info("Principal: {}", principal);
+
         try {
             Map<String, Object> ga4Data = ga4Service.getGA4Data();
             if (ga4Data != null) {
@@ -36,6 +48,7 @@ public class homeController {
             model.addAttribute("error", "An error occurred while retrieving GA4 data: " + e.getMessage());
             return "index";
         }
+
     }
 
 }
