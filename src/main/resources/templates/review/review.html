@@ -32,6 +32,11 @@
 					</div>
 					<div class="tab-pane fade" id="v-pills-inappropriate" role="tabpanel" aria-labelledby="v-pills-inappropriate-tab">
 						<!-- 부적절한 리뷰 목록 내용 -->
+						<ul class="list-group list-group-flush">
+							<li th:each="review : ${inappropriateReviews}" class="list-group-item">
+								<strong th:text="${review.author}">Author Name</strong>: <span th:text="${review.content}">Review Content</span>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>
