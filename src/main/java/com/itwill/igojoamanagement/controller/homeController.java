@@ -7,12 +7,14 @@ import com.itwill.igojoamanagement.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -37,6 +39,8 @@ public class homeController {
         String username = authentication.getName();
         Object principal = authentication.getPrincipal();
 
+        getIndex(model);
+
         log.info("Logged in username: {}", username);
         log.info("Principal: {}", principal);
 
@@ -46,32 +50,26 @@ public class homeController {
                 model.addAttribute("ga4Data", ga4Data);
                 return "index";
             } else {
-                //                logger.warn("GA4 data is null");
+//                logger.warn("GA4 data is null");
                 model.addAttribute("error", "No data available from GA4");
                 return "index";
             }
         } catch (Exception e) {
-            //            logger.error("Error retrieving GA4 data", e);
+//            logger.error("Error retrieving GA4 data", e);
             model.addAttribute("error", "An error occurred while retrieving GA4 data: " + e.getMessage());
             return "index";
         }
     }
 
-    public String getReviewManagement(Model model) {
-        //        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        Page<Review> reviews = reviewService.findAllReviewList();
-        Page<ReportLog> reportLogs = reviewService.findAllReportLogList();
+    @PreAuthorize("hasAnyAuthority('ROLE_리뷰_팀장', 'ROLE_리뷰_팀원')")
+    public String getIndex(Model model) {
+        List<Review> reviewList = reviewService.findAllReviewList().getContent();
+        List<ReportLog> reportLogList = reviewService.findAllReportLogList().getContent();
 
-        log.info("list{}", reviews);
-        log.info("list{}", reportLogs);
+        model.addAttribute("reportReviews", reportLogList);
+        model.addAttribute("inappropriateReviews",reviewList );
 
-        model.addAttribute("inappropriateReviews", reviews); // 전체
-        model.addAttribute("reviews", reportLogs); //
-
-        return "review/review :: review";
+        return "index"; // index.html을 렌더링
     }
-
-
-
 }
