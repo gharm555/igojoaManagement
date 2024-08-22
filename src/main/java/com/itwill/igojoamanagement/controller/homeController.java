@@ -6,6 +6,7 @@ import com.itwill.igojoamanagement.service.GA4Service;
 import com.itwill.igojoamanagement.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,13 +21,14 @@ import java.util.Map;
 @Controller
 public class homeController {
 
-//    @GetMapping("/")
-//    public String home(Model model) {
-//        return "index";
-//    }
+    //    @GetMapping("/")
+    //    public String home(Model model) {
+    //        return "index";
+    //    }
 
     @Autowired
     private GA4Service ga4Service;
+
     @Autowired
     private ReviewService reviewService;
 
@@ -57,8 +59,9 @@ public class homeController {
             model.addAttribute("error", "An error occurred while retrieving GA4 data: " + e.getMessage());
             return "index";
         }
-
     }
+
+
     @PreAuthorize("hasAnyAuthority('ROLE_리뷰_팀장', 'ROLE_리뷰_팀원')")
     public String getIndex(Model model) {
         List<Review> reviewList = reviewService.findAllReviewList().getContent();

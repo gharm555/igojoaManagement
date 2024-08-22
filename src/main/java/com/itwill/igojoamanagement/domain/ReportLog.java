@@ -51,5 +51,5 @@ public class ReportLog {
 
     @Column(length = 10, nullable = false, name = "reportedNickName")
     @NotBlank(message = "신고받은 유저의 닉네임은 필수 입력 항목입니다.")
-    private String nickName;
+    private String reportedNickName;
 }

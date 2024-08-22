@@ -20,7 +20,8 @@ public class Review {
     @EmbeddedId
     private ReviewPK reviewId;
 
-    private String review;
+    @Column(name = "review")
+    private String reviewContent;
 
     private LocalDateTime modifiedAt;
 
