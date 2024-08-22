@@ -2,12 +2,12 @@ package com.itwill.igojoamanagement.controller;
 
 import com.itwill.igojoamanagement.domain.ReportLog;
 import com.itwill.igojoamanagement.domain.Review;
+import com.itwill.igojoamanagement.dto.ReportReviewDto;
 import com.itwill.igojoamanagement.service.GA4Service;
 import com.itwill.igojoamanagement.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
+ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -64,8 +64,12 @@ public class homeController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_리뷰_팀장', 'ROLE_리뷰_팀원')")
     public String getIndex(Model model) {
-        List<Review> reviewList = reviewService.findAllReviewList().getContent();
-        List<ReportLog> reportLogList = reviewService.findAllReportLogList().getContent();
+        List<Review> reviewList = reviewService.findInappropriateReviews().getContent();
+        List<ReportReviewDto> reportLogList = reviewService.findReportReviews().getContent();
+
+        log.info("신고리뷰{}", reviewList);
+        log.info("부적절리뷰{}",reportLogList);
+
 
         model.addAttribute("reportReviews", reportLogList);
         model.addAttribute("inappropriateReviews",reviewList );
