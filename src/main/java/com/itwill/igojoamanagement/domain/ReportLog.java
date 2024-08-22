@@ -49,7 +49,7 @@ public class ReportLog {
     @NotBlank(message = "리뷰는 필수 입력 항목입니다.")
     private String review;
 
-    @Column(length = 10, nullable = false)
+    @Column(length = 10, nullable = false, name = "reportedNickName")
     @NotBlank(message = "신고받은 유저의 닉네임은 필수 입력 항목입니다.")
     private String nickName;
 }
