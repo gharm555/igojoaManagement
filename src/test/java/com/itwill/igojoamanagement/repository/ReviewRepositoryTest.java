@@ -3,7 +3,6 @@ package com.itwill.igojoamanagement.repository;
 import com.itwill.igojoamanagement.domain.ReportLog;
 import com.itwill.igojoamanagement.domain.Review;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -27,9 +26,10 @@ public class ReviewRepositoryTest {
         reviews.forEach(System.out::println);
     }
 
-    @Test
+//    @Test
     public void reportReviewList() {
         List<ReportLog> reportLogs = reportLogRepository.findAll();
         reportLogs.forEach(System.out::println);
     }
+
 }

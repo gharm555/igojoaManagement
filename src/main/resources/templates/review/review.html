@@ -26,7 +26,7 @@
 						<!-- 신고 리뷰 목록 내용 -->
 						<ul class="list-group list-group-flush">
 							<li th:each="review : ${reviews}" class="list-group-item">
-								<strong th:text="${review.author}">Author Name</strong>: <span th:text="${review.content}">Review Content</span>
+								<strong th:text="${review}">Author Name</strong>: <span th:text="${review}">Review Content</span>
 							</li>
 						</ul>
 					</div>
@@ -34,7 +34,7 @@
 						<!-- 부적절한 리뷰 목록 내용 -->
 						<ul class="list-group list-group-flush">
 							<li th:each="review : ${inappropriateReviews}" class="list-group-item">
-								<strong th:text="${review.author}">Author Name</strong>: <span th:text="${review.content}">Review Content</span>
+								<strong th:text="${review}">Author Name</strong>: <span th:text="${review}">Review Content</span>
 							</li>
 						</ul>
 					</div>
