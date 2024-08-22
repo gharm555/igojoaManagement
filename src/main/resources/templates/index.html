@@ -23,7 +23,8 @@
 	</ul>
 
 	<div class="tab-content mt-3" id="myTabContent">
-		<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+		<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab"
+		sec:authorize="hasAuthority('ROLE_회원_팀장') or hasAuthority('ROLE_명소_팀장') or hasAuthority('ROLE_리뷰_팀장')">
 			<div class="p-3 border bg-light">
 				<div th:replace="~{analysis/ga4-dashboard :: ga4Dashboard}"></div>
 			</div>
@@ -40,12 +41,13 @@
 		</div>
 		<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="contact-tab">
 			<div class="p-3 border bg-light">
-				<div th:replace="~{review/review :: review}"></div>
+				<div th:replace="~{review/review :: reviewContent}"></div>
 			</div>
 		</div>
 	</div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script th:src="@{/js/review.js}"></script>
 <script th:replace="~{layout/fragments :: bootstrapScript}"></script>
 </body>
 </html>

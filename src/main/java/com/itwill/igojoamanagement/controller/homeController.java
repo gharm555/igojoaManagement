@@ -1,14 +1,19 @@
 package com.itwill.igojoamanagement.controller;
 
+import com.itwill.igojoamanagement.domain.ReportLog;
+import com.itwill.igojoamanagement.domain.Review;
 import com.itwill.igojoamanagement.service.GA4Service;
+import com.itwill.igojoamanagement.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -22,6 +27,8 @@ public class homeController {
 
     @Autowired
     private GA4Service ga4Service;
+    @Autowired
+    private ReviewService reviewService;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -29,6 +36,8 @@ public class homeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Object principal = authentication.getPrincipal();
+
+        getIndex(model);
 
         log.info("Logged in username: {}", username);
         log.info("Principal: {}", principal);
@@ -50,5 +59,14 @@ public class homeController {
         }
 
     }
+    @PreAuthorize("hasAnyAuthority('ROLE_리뷰_팀장', 'ROLE_리뷰_팀원')")
+    public String getIndex(Model model) {
+        List<Review> reviewList = reviewService.findAllReviewList().getContent();
+        List<ReportLog> reportLogList = reviewService.findAllReportLogList().getContent();
 
+        model.addAttribute("reportReviews", reportLogList);
+        model.addAttribute("inappropriateReviews",reviewList );
+
+        return "index"; // index.html을 렌더링
+    }
 }
