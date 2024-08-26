@@ -58,6 +58,7 @@ public class ReviewRepositoryImpl extends QuerydslRepositorySupport implements R
     public Page<ReportReviewDto> findReportedReviews(Pageable pageable) {
         JPAQuery<ReportReviewDto> query = queryFactory
                 .select(Projections.fields(ReportReviewDto.class,
+                        reportLog.logId,
                         reportLog.reporterId,
                         reportLog.reportedId,
                         reportLog.reportedNickname,
