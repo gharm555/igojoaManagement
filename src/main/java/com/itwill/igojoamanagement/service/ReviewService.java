@@ -44,9 +44,13 @@ public class ReviewService {
     }
 
     // 신고 리뷰 삭제하기(신고, 리뷰 테이블 둘다 삭제)
+    @Transactional
     public void deleteReportReview(String logId) {
         ReportLog reportLog = reportLogRepository.findById(logId).orElseThrow();
         ReviewPK review = new ReviewPK(reportLog.getPlaceName(), reportLog.getReportedId());
+
+        // 블랙리스트에 등록
+        addBlackList(reportLog.getReportedId());
 
         // 리뷰 테이블에서 삭제
         reviewRepository.deleteById(review);

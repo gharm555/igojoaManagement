@@ -31,6 +31,7 @@ public class ReviewController {
     private final ReviewService reviewService;
     @GetMapping("/reportReview")
     public ResponseEntity<Map<String,Object>> getReportReview(@RequestParam(defaultValue = "0") int page) {
+
         int size = 10;
         Page<ReportReviewDto> reportLogList = reviewService.findReportReviews(PageRequest.of(page, size));
         Map<String, Object> response = new HashMap<>();
@@ -38,6 +39,7 @@ public class ReviewController {
             response.put("message", "신고된 리뷰가 없습니다");
             return ResponseEntity.ok(response);
         }
+
         response.put("reportLogList", reportLogList);
         response.put("currentPage", reportLogList.getNumber());
         response.put("totalPages", reportLogList.getTotalPages());
@@ -58,31 +60,35 @@ public class ReviewController {
     }
 
     @DeleteMapping("/deleteReportReview")
-    public ResponseEntity<String> deleteReportReview(@RequestBody String logId) {
+    public ResponseEntity<String> deleteReportReview(@RequestBody Map<String, Object> logId ) {
         log.info("deleteReview(logId: {})", logId);
+        String reviewLog = (String)logId.get("logId");
+        reviewService.deleteReportReview(reviewLog);
 
-        reviewService.deleteReportReview(logId);
-
-        return ResponseEntity.ok(logId); // 삭제한 댓글 아이디를 응답으로 보냄.
+        return ResponseEntity.ok(reviewLog); // 삭제한 댓글 아이디를 응답으로 보냄.
     }
 
     @DeleteMapping("/cancelReport")
-    public ResponseEntity<String> cancelReport(@RequestBody String logId) {
+    public ResponseEntity<String> cancelReport(@RequestBody Map<String, Object> logId) {
         log.info("cancelReport(logId: {})", logId);
+        String reviewLog = (String)logId.get("logId");
 
-        reviewService.cancelReportReview(logId);
+        reviewService.cancelReportReview(reviewLog);
 
-        return ResponseEntity.ok(logId);
+        return ResponseEntity.ok(reviewLog);
     }
 
     @DeleteMapping("/deleteInappropriateReview")
-    public ResponseEntity<String> deleteInappropriateReview(@RequestBody String placeName, @RequestBody String userId) {
-        log.info("deleteInappropriateReview(placeName: {}, userId: {})", placeName, userId);
+    public ResponseEntity<?> deleteInappropriateReview(@RequestBody Map<String, Object> data) {
+
+        String placeName = (String)data.get("placeName");
+        String userId = (String)data.get("reportedId");
+        log.info("deleteInappropriateReview(placeName: {}, reportedId: {})", placeName, userId);
 
         ReviewPK review = new ReviewPK(placeName, userId);
         reviewService.deleteInappropriateReview(review);
 
-        return ResponseEntity.ok(review.toString());
+        return ResponseEntity.ok(review);
     }
 
 }
