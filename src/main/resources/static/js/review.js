@@ -84,14 +84,16 @@ function loadReportReviews(page = 0) {
 
             reportList.innerHTML = ''; // 기존 리스트 초기화
             pagination.innerHTML = ''; // 기존 페이지네이션 초기화
+            if (response.data.message === "신고된 리뷰가 없습니다.") {
+                reportList.innerHTML = `<li class="list-group-item">${response.data.message}</li>`;
+                return;
+            }
 
             const reportLogList = response.data.reportLogList.content;
             const currentPage = response.data.reportLogList.number;
             const totalPages = response.data.reportLogList.totalPages;
 
-            if (!reportLogList || reportLogList.length === 0) {
-                reportList.innerHTML = '<li class="list-group-item">신고된 리뷰가 없습니다.</li>';
-            } else {
+
                 reportLogList.forEach((review) => {
                     const li = document.createElement('li');
                     li.className = 'list-group-item d-flex justify-content-between align-items-center';
@@ -123,7 +125,7 @@ function loadReportReviews(page = 0) {
                     pagination.appendChild(li);
                 }
             }
-        })
+        )
         .catch((error) => {
             console.error('신고 리뷰 로드 중 오류 발생:', error);
             alert('신고 리뷰 로드 중 문제가 발생했습니다.');
@@ -144,14 +146,15 @@ function loadInappropriateReviews(page = 0) {
             } else {
                 console.error('Pagination container not found for inappropriate reviews');
             }
-
+            if (response.data.message === "부적절한 리뷰가 없습니다.") {
+                inappropriateList.innerHTML = '<li class="list-group-item">부적절한 리뷰가 없습니다.</li>';
+                return;
+            }
             const reviewList = response.data.reviewList.content;
             const currentPage = response.data.reviewList.number;
             const totalPages = response.data.reviewList.totalPages;
 
-            if (!reviewList || reviewList.length === 0) {
-                inappropriateList.innerHTML = '<li class="list-group-item">부적절한 리뷰가 없습니다.</li>';
-            } else {
+
                 reviewList.forEach((review) => {
                     const li = document.createElement('li');
                     li.className = 'list-group-item d-flex justify-content-between align-items-center';
@@ -178,7 +181,7 @@ function loadInappropriateReviews(page = 0) {
                         pagination.appendChild(li);
                     }
                 }
-            }
+
         })
         .catch((error) => {
             console.error('부적절한 리뷰 로드 중 오류 발생:', error);
