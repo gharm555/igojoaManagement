@@ -24,5 +24,4 @@ public class Review {
     private String reviewContent;
 
     private LocalDateTime modifiedAt;
-
 }
