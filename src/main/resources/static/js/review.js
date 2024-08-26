@@ -16,15 +16,15 @@ function deleteReview(button) {
     const iplaceName = iplaceNameElement ? iplaceNameElement.textContent.trim() : null;
 
     if (confirm('정말로 이 리뷰를 삭제하시겠습니까?')) {
-        console.log("리뷰 삭제 요청: ", reportedId, rplaceName || userId, iplaceName);
+        console.log("리뷰 삭제 요청: ", logId || userId, iplaceName);
         if (button.classList.contains('report-delete')) {
-            axios.post('/review/delete', {data: {reportedId: reportedId, placeName: rplaceName}})
+            axios.delete(`/review/deleteReportReview`, {data: {logId: logId}})
                 .then((response) => {
                     console.log(response.data);
                     alert('리뷰가 삭제되었습니다.');
                 });
         } else {
-            axios.post('/review/delete', {data: {reportedId: userId, placeName: iplaceName}})
+            axios.delete(`/review/delete`, {data: {userId: userId, placeName: iplaceName}})
                 .then((response) => {
                     console.log(response.data);
                     alert('리뷰가 삭제되었습니다.');
