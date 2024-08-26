@@ -17,6 +17,7 @@
 					<ul class="list-group list-group-flush" id="report-list">
 						<li th:each="review : ${reportReviews}" class="list-group-item d-flex justify-content-between align-items-center">
 							<div>
+								<span class="d-none" id="logId" name="logId" th:text="${review.logId}"></span>
 								<strong class="reportedId" th:text="${review.reporterId != null ? review.reporterId : 'Unknown User'}"></strong>
 								<span> (at </span><span th:text="${review.reportTime}"></span>):
 								<span th:text="${review.reportReason}"></span>
@@ -37,6 +38,11 @@
 							</div>
 						</li>
 					</ul>
+					<nav aria-label="Report Reviews Page Navigation" id="report-pagination">
+						<ul class="pagination justify-content-center">
+							<!-- 페이지네이션 버튼들 -->
+						</ul>
+					</nav>
 				</div>
 				<!-- 전체 리뷰 목록 -->
 				<div class="tab-pane fade" id="v-pills-inappropriate" role="tabpanel" aria-labelledby="v-pills-inappropriate-tab">
@@ -56,84 +62,14 @@
 							</div>
 						</li>
 					</ul>
+					<nav aria-label="Inappropriate Reviews Page Navigation" id="inappropriate-pagination">
+						<ul class="pagination justify-content-center">
+							<!-- 페이지네이션 버튼들 -->
+						</ul>
+					</nav>
 				</div>
 			</div>
-			<nav
-				aria-label="Post List Page Navigation"
-				th:if="${totalPages > 0}"
-				th:fragment="pagination"
-				id="pagination"
-			>
-				<ul class="mt-5 pagination justify-content-center">
-					<!-- 첫 페이지로 이동 -->
-					<li class="page-item" th:classappend="${currentPage == 1} ? disabled">
-						<a
-							class="page-link"
-							th:href="@{/(page=1)}"
-							th:attr="data-page=1"
-							aria-label="First"
-						>
-							<span aria-hidden="true">&laquo;&laquo;</span>
-						</a>
-					</li>
 
-					<!-- 이전 그룹으로 이동 -->
-					<li class="page-item" th:classappend="${startPage == 1} ? disabled">
-						<a
-							class="page-link"
-							th:href="@{/(page=${startPage - 5})}"
-							th:attr="data-page=${startPage - 5}"
-							aria-label="Previous Group"
-						>
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
-
-					<!-- 페이지 번호 -->
-					<li
-						class="page-item"
-						th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"
-						th:classappend="${pageNum == currentPage} ? active"
-					>
-						<a
-							class="page-link"
-							th:href="@{/(page=${pageNum})}"
-							th:text="${pageNum}"
-							th:attr="data-page=${pageNum}"
-						></a>
-					</li>
-
-					<!-- 다음 그룹으로 이동 -->
-					<li
-						class="page-item"
-						th:classappend="${endPage == totalPages} ? disabled"
-					>
-						<a
-							class="page-link"
-							th:href="@{/(page=${endPage+1})}"
-							th:attr="data-page=${endPage+1}"
-							aria-label="Next Group"
-						>
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</li>
-
-					<!-- 마지막 페이지로 이동 -->
-					<li
-						class="page-item"
-						th:classappend="${currentPage == totalPages} ? disabled"
-					>
-						<a
-							class="page-link"
-							th:href="@{/(page=${totalPages})}"
-							th:attr="data-page=${totalPages}"
-							aria-label="Last"
-						>
-							<span aria-hidden="true">&raquo;&raquo;</span>
-						</a>
-					</li>
-				</ul>
-			</nav>
 		</div>
 	</div>
 </div>

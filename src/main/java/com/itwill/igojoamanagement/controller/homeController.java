@@ -1,6 +1,5 @@
 package com.itwill.igojoamanagement.controller;
 
-import com.itwill.igojoamanagement.domain.ReportLog;
 import com.itwill.igojoamanagement.domain.Review;
 import com.itwill.igojoamanagement.dto.ReportReviewDto;
 import com.itwill.igojoamanagement.service.GA4Service;
@@ -8,7 +7,7 @@ import com.itwill.igojoamanagement.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -35,13 +33,11 @@ public class homeController {
     private ReviewService reviewService;
 
     @GetMapping("/")
-    public String home(Model model, Pageable pageable) {
+    public String home(Model model) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Object principal = authentication.getPrincipal();
-
-        getIndex(model, pageable);
 
         log.info("Logged in username: {}", username);
         log.info("Principal: {}", principal);
@@ -61,24 +57,5 @@ public class homeController {
             model.addAttribute("error", "An error occurred while retrieving GA4 data: " + e.getMessage());
             return "index";
         }
-    }
-
-
-    @PreAuthorize("hasAnyAuthority('ROLE_리뷰_팀장', 'ROLE_리뷰_팀원')")
-    public String getIndex(Model model, Pageable pageable) {
-        Page<Review> reviewList = reviewService.findInappropriateReviews(pageable);
-        Page<ReportReviewDto> reportLogList = reviewService.findReportReviews(pageable);
-
-        log.info("신고리뷰{}", reviewList);
-        log.info("부적절리뷰{}",reportLogList);
-
-
-        model.addAttribute("reportReviews", reportLogList.getContent());
-        model.addAttribute("inappropriateReviews", reviewList.getContent());
-        model.addAttribute("currentPage", pageable.getPageNumber());
-        model.addAttribute("totalPages", reviewList.getTotalPages());
-
-
-        return "index"; // index.html을 렌더링
     }
 }
