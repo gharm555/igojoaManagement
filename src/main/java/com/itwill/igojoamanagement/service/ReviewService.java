@@ -22,18 +22,17 @@ public class ReviewService {
     private final ReportLogRepository reportLogRepository;
 
     @Transactional(readOnly = true)
-    public Page<Review> findInappropriateReviews() {
-        Pageable pageable = PageRequest.of(0, 10);
+    public Page<Review> findInappropriateReviews(Pageable pageable) {
         Page<Review> reviewList = reviewRepository.findInappropriateReviews(pageable);
         log.info(reviewList.toString());
         return reviewList;
     }
 
     @Transactional(readOnly = true)
-    public Page<ReportReviewDto> findReportReviews() {
-        Pageable pageable = PageRequest.of(0, 10);
+    public Page<ReportReviewDto> findReportReviews(PageRequest pageable) {
         Page<ReportReviewDto> reviewList = reviewRepository.findReportedReviews(pageable);
         log.info(reviewList.toString());
+        reviewList.forEach(System.out::println);
         return reviewList;
     }
 

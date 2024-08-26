@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 public class ReportReviewDto {
+    private String logId;
     private String reporterId;
     private String reportedId;
     private String reportedNickname;
