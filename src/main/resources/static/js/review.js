@@ -5,8 +5,6 @@ function deleteReview(button) {
         return;
     }
 
-    const reportedIdElement = liElement.querySelector('.reportedId');
-    const rplaceNameElement = liElement.querySelector('.r-placeName');
     const userIdElement = liElement.querySelector('.userId');
     const iplaceNameElement = liElement.querySelector('.i-placeName');
 
@@ -15,17 +13,18 @@ function deleteReview(button) {
 
     if (confirm('정말로 이 리뷰를 삭제하시겠습니까?')) {
         if (button.classList.contains('report-delete')) {
+
             const logId = liElement.querySelector('#logId').textContent.trim();
-            axios.delete('/review/delete', {data: {logId: logId}})
+            axios.delete('/review/deleteReportReview', {data: {logId: logId}})
                 .then((response) => {
                     console.log(response.data);
                     alert('리뷰가 삭제되었습니다.');
                     loadReportReviews();
                 });
         } else {
-            console.log("리뷰 삭제 요청: " + userId, iplaceName);
-            axios.delete('/review/delete', {data: {reportedId: userId, placeName: iplaceName}})
+            axios.delete('/review/deleteInappropriateReview', {data: {reportedId: userId, placeName: iplaceName}})
                 .then((response) => {
+                    console.log(userId);
                     console.log(response.data);
                     alert('리뷰가 삭제되었습니다.');
                     loadInappropriateReviews();
@@ -49,13 +48,14 @@ function cancelReport(button) {
     const logId = liElement.querySelector('#logId').textContent.trim();
     if (confirm('정말로 이 신고를 취소하시겠습니까?')) {
         console.log("신고 취소 요청: " + reportedId, rplaceName);
-        axios.delete('/review/cancel', {data: {logId : logId}})
+        axios.delete('/review/cancelReport', {data: {logId: logId}})
             .then((response) => {
                 console.log(response.data);
                 alert('신고가 취소되었습니다.');
             });
     }
 }
+
 const reviewMgr = document.querySelector('#reviewMgr');
 const reportTab = document.querySelector('#v-pills-report-tab');
 const inappropriateTab = document.querySelector('#v-pills-inappropriate-tab');
@@ -68,6 +68,7 @@ reportTab.addEventListener('click', (e) => {
 inappropriateTab.addEventListener('click', (e) => {
     loadInappropriateReviews();
 });
+
 // 신고 리뷰 로드 함수
 function loadReportReviews(page = 0) {
     axios.get(`/review/reportReview?page=${page}`)
