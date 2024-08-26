@@ -21,7 +21,7 @@
 								<span> (at </span><span th:text="${review.reportTime}"></span>):
 								<span th:text="${review.reportReason}"></span>
 								<br>
-								<strong th:text="${review.nickName != null ? review.nickName : 'Unknown Place'}"></strong><span>: </span>
+								<strong th:text="${review.reportedNickname != null ? review.reportedNickname : 'Unknown Place'}"></strong><span>: </span>
 								<span th:if="${#strings.length(review.review) > 25}" th:text="${#strings.substring(review.review, 0, 25) + '...'}"></span>
 								<span th:if="${#strings.length(review.review) <= 25}" th:text="${review.review}"></span>
 								<br>
@@ -45,7 +45,7 @@
 							<div>
 								<strong class="userId" th:text="${review.reviewId.userId != null ? review.reviewId.userId : 'Unknown User'}"></strong>
 								:
-								<span th:text="${review.review}"></span>
+								<span th:text="${review.reviewContent}"></span>
 								<br>
 								<small>장소: <span class="i-placeName" th:text="${review.reviewId.placeName != null ? review.reviewId.placeName : '알 수 없음'}"></span></small>
 							</div>
