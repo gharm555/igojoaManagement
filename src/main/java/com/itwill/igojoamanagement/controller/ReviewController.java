@@ -28,7 +28,7 @@ public class ReviewController {
         Page<ReportReviewDto> reportLogList = reviewService.findReportReviews(PageRequest.of(page, size));
         Map<String, Object> response = new HashMap<>();
         if(reportLogList == null || reportLogList.isEmpty()) {
-            response.put("message", "신고된 리뷰가 없습니다");
+            response.put("message", "신고된 리뷰가 없습니다.");
             return ResponseEntity.ok(response);
         }
         response.put("reportLogList", reportLogList);
@@ -43,7 +43,7 @@ public class ReviewController {
         Page<Review> reviewList = reviewService.findInappropriateReviews(PageRequest.of(page, size));
         Map<String, Object> response = new HashMap<>();
         if(reviewList == null || reviewList.isEmpty()) {
-            response.put("message", "부적절한 리뷰가 없습니다");
+            response.put("message", "부적절한 리뷰가 없습니다.");
             return ResponseEntity.ok(response);
         }
         response.put("reviewList", reviewList);
