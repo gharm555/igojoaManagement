@@ -2,11 +2,13 @@ package com.itwill.igojoamanagement.controller;
 
 import com.itwill.igojoamanagement.domain.ReportLog;
 import com.itwill.igojoamanagement.domain.Review;
+import com.itwill.igojoamanagement.dto.ReportReviewDto;
 import com.itwill.igojoamanagement.service.GA4Service;
 import com.itwill.igojoamanagement.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,13 +35,13 @@ public class homeController {
     private ReviewService reviewService;
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model, Pageable pageable) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Object principal = authentication.getPrincipal();
 
-        getIndex(model);
+        getIndex(model, pageable);
 
         log.info("Logged in username: {}", username);
         log.info("Principal: {}", principal);
@@ -63,12 +65,19 @@ public class homeController {
 
 
     @PreAuthorize("hasAnyAuthority('ROLE_리뷰_팀장', 'ROLE_리뷰_팀원')")
-    public String getIndex(Model model) {
-        List<Review> reviewList = reviewService.findAllReviewList().getContent();
-        List<ReportLog> reportLogList = reviewService.findAllReportLogList().getContent();
+    public String getIndex(Model model, Pageable pageable) {
+        Page<Review> reviewList = reviewService.findInappropriateReviews(pageable);
+        Page<ReportReviewDto> reportLogList = reviewService.findReportReviews(pageable);
 
-        model.addAttribute("reportReviews", reportLogList);
-        model.addAttribute("inappropriateReviews",reviewList );
+        log.info("신고리뷰{}", reviewList);
+        log.info("부적절리뷰{}",reportLogList);
+
+
+        model.addAttribute("reportReviews", reportLogList.getContent());
+        model.addAttribute("inappropriateReviews", reviewList.getContent());
+        model.addAttribute("currentPage", pageable.getPageNumber());
+        model.addAttribute("totalPages", reviewList.getTotalPages());
+
 
         return "index"; // index.html을 렌더링
     }

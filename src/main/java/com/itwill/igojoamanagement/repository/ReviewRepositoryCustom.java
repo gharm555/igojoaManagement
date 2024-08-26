@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ReviewRepositoryCustom {
 
-    Page<Review> findinappropriateReviews(Pageable pageable);
+    Page<Review> findInappropriateReviews(Pageable pageable);
+
     Page<ReportReviewDto> findReportedReviews(Pageable pageable);
 }
