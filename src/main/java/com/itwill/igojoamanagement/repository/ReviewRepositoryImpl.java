@@ -1,6 +1,7 @@
 package com.itwill.igojoamanagement.repository;
 
 import com.itwill.igojoamanagement.domain.Review;
+import com.itwill.igojoamanagement.dto.ReportReviewDetailDto;
 import com.itwill.igojoamanagement.dto.ReportReviewDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -30,6 +31,7 @@ public class ReviewRepositoryImpl extends QuerydslRepositorySupport implements R
         this.queryFactory = queryFactory;
     }
 
+    // 부적절한 리뷰 가져오기
     @Override
     public Page<Review> findInappropriateReviews(Pageable pageable) {
         JPAQuery<Review> query = queryFactory
@@ -54,6 +56,7 @@ public class ReviewRepositoryImpl extends QuerydslRepositorySupport implements R
 
     }
 
+    // 신고받은 리뷰 가져오기
     @Override
     public Page<ReportReviewDto> findReportedReviews(Pageable pageable) {
         JPAQuery<ReportReviewDto> query = queryFactory
@@ -86,10 +89,28 @@ public class ReviewRepositoryImpl extends QuerydslRepositorySupport implements R
         return new PageImpl<>(results, pageable, total);
     }
 
+    // 리뷰 상세
+    @Override
+    public ReportReviewDetailDto findReviewDetail(String logId) {
+        JPAQuery<ReportReviewDetailDto> query = queryFactory
+                .select(Projections.fields(ReportReviewDetailDto.class,
+                        reportLog.reporterId,
+                        reportLog.reportReason,
+                        reportLog.reportedId,
+                        reportLog.review))
+                .from(reportLog)
+                .where(reportLog.logId.eq(logId));
+
+        ReportReviewDetailDto result = query.fetchOne();
+
+        return result;
+    }
+
+    // 부적절한 리뷰 키워드 체크
     private BooleanExpression isInappropriate() {
-        List<String> inappropriateKeywords = Arrays.asList("바보", "병신", "멍청이", "젠장");
+        List<String> inappropriateKeywords = Arrays.asList("바보", "병신", "멍청이", "젠장", "시발");
         BooleanExpression result = null;
-        for(String keyword : inappropriateKeywords) {
+        for (String keyword : inappropriateKeywords) {
             BooleanExpression containsKeywords = review.reviewContent.containsIgnoreCase(keyword);
             if (result == null) {
                 result = containsKeywords;
