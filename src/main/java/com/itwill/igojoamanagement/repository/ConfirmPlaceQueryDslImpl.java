@@ -8,33 +8,31 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 
 import com.itwill.igojoamanagement.domain.ConfirmPlace;
-import com.itwill.igojoamanagement.domain.QConfirmPlace;
-
 
 
 public class ConfirmPlaceQueryDslImpl extends QuerydslRepositorySupport implements ConfirmPlaceQueryDsl {
 
-	  public ConfirmPlaceQueryDslImpl() {
-	        super(ConfirmPlace.class);
-	    }
+    public ConfirmPlaceQueryDslImpl() {
+        super(ConfirmPlace.class);
+    }
 
- 
-	@Override
-	public Page<ConfirmPlace> findAllWithPaging(Pageable pageable) {
 
-		return null;
-	}
+    @Override
+    public Page<ConfirmPlace> findAllWithPaging(Pageable pageable) {
 
-	@Override
-	public List<ConfirmPlace> findByPlaceNameContaining(String placeName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public void deleteByPlaceNameAndReporterId(String placeName, String reporterId) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public List<ConfirmPlace> findByPlaceNameContaining(String placeName) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void deleteByPlaceNameAndReporterId(String placeName, String reporterId) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

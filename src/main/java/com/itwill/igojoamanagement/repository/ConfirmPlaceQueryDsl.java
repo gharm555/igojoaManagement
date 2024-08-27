@@ -9,7 +9,6 @@ import com.itwill.igojoamanagement.domain.ConfirmPlace;
 
 public interface ConfirmPlaceQueryDsl {
 
-	
     Page<ConfirmPlace> findAllWithPaging(Pageable pageable);
     List<ConfirmPlace> findByPlaceNameContaining(String placeName);
     void deleteByPlaceNameAndReporterId(String placeName, String reporterId);

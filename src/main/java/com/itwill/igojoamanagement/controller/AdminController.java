@@ -12,14 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final AdminService adminService;
-
     @GetMapping("/signIn")
     public void signIn() {
-
         log.info("signIn");
-
-
     }
 
     @PostMapping("/signOut")
@@ -27,5 +22,6 @@ public class AdminController {
         log.info("signOut");
         return "redirect:/";
     }
+
 
 }

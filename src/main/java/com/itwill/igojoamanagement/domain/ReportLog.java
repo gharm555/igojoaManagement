@@ -8,14 +8,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Builder
-@Getter
 @Entity
 @Table(name = "reportLogs")
 public class ReportLog {
@@ -26,11 +25,11 @@ public class ReportLog {
     private String logId;
 
     @Column(length = 20, nullable = false)
-    @NotBlank(message = "보고자 ID는 필수 입력 항목입니다.")
+    @NotBlank(message = "신고자 ID는 필수 입력 항목입니다.")
     private String reporterId;
 
     @Column(length = 20, nullable = false)
-    @NotBlank(message = "피보고자 ID는 필수 입력 항목입니다.")
+    @NotBlank(message = "신고받은 유저 ID는 필수 입력 항목입니다.")
     private String reportedId;
 
     @Column(length = 20, nullable = false)
@@ -54,6 +53,5 @@ public class ReportLog {
     private String reportedNickName;
 
     @Column(name = "reasonCode")
-    @Setter
     private Integer reasonCode;
 }

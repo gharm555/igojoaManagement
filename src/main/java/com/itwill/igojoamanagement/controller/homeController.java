@@ -1,26 +1,21 @@
 package com.itwill.igojoamanagement.controller;
 
-import com.itwill.igojoamanagement.dto.ReportedUserDto;
 import com.itwill.igojoamanagement.dto.UserDto;
 import com.itwill.igojoamanagement.service.GA4Service;
 import com.itwill.igojoamanagement.service.UserService;
 import lombok.RequiredArgsConstructor;
+import com.itwill.igojoamanagement.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 
@@ -29,10 +24,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class homeController {
 
-    @Autowired
-    private GA4Service ga4Service;
+    private final GA4Service ga4Service;
 
     private final UserService userService;
+
+    private final ReviewService reviewService;
 
     @GetMapping("/")
     public String home(Model model) {
