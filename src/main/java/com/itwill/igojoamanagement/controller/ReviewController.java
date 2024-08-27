@@ -2,6 +2,7 @@ package com.itwill.igojoamanagement.controller;
 
 import com.itwill.igojoamanagement.domain.key.ReviewPK;
 import com.itwill.igojoamanagement.domain.Review;
+import com.itwill.igojoamanagement.dto.ReportReviewDetailDto;
 import com.itwill.igojoamanagement.dto.ReportReviewDto;
 import com.itwill.igojoamanagement.dto.ReportReviewDto;
 import com.itwill.igojoamanagement.service.ReviewService;
@@ -29,6 +30,8 @@ import java.util.Map;
 public class ReviewController {
 
     private final ReviewService reviewService;
+
+    // 신고 리뷰
     @GetMapping("/reportReview")
     public ResponseEntity<Map<String,Object>> getReportReview(@RequestParam(defaultValue = "0") int page) {
 
@@ -46,6 +49,7 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
 
+    // 부적절한 리뷰
     @GetMapping("/inappropriateReview")
     public ResponseEntity<Map<String,Object>> getInappropriateReview(@RequestParam(defaultValue = "0") int page) {
         int size = 10;
@@ -59,6 +63,7 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
 
+    // 신고리뷰 삭제
     @DeleteMapping("/deleteReportReview")
     public ResponseEntity<String> deleteReportReview(@RequestBody Map<String, Object> logId ) {
         log.info("deleteReview(logId: {})", logId);
@@ -68,6 +73,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviewLog); // 삭제한 댓글 아이디를 응답으로 보냄.
     }
 
+    // 신고 취소
     @DeleteMapping("/cancelReport")
     public ResponseEntity<String> cancelReport(@RequestBody Map<String, Object> logId) {
         log.info("cancelReport(logId: {})", logId);
@@ -78,6 +84,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviewLog);
     }
 
+    // 부적절한 리뷰 삭제
     @DeleteMapping("/deleteInappropriateReview")
     public ResponseEntity<?> deleteInappropriateReview(@RequestBody Map<String, Object> data) {
 
@@ -91,4 +98,13 @@ public class ReviewController {
         return ResponseEntity.ok(review);
     }
 
+    // 리뷰 상세
+    @GetMapping("/detail")
+    public ResponseEntity<ReportReviewDetailDto> getDetail(@RequestParam String logId) {
+        log.info("getDetail(logId: {})", logId);
+
+        ReportReviewDetailDto reviewDetail = reviewService.findReportReviewDetail(logId);
+
+        return ResponseEntity.ok(reviewDetail);
+    }
 }

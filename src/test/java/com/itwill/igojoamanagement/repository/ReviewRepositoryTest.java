@@ -2,7 +2,9 @@ package com.itwill.igojoamanagement.repository;
 
 import com.itwill.igojoamanagement.domain.ReportLog;
 import com.itwill.igojoamanagement.domain.Review;
+import com.itwill.igojoamanagement.dto.ReportReviewDetailDto;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -32,4 +34,10 @@ public class ReviewRepositoryTest {
         reportLogs.forEach(System.out::println);
     }
 
+
+    @Test
+    public void reportDetail() {
+        ReportReviewDetailDto detail = reviewRepository.findReviewDetail("240816121130404");
+        log.info("detail: {}", detail);
+    }
 }
