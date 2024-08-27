@@ -51,6 +51,7 @@ public class homeController {
 //                logger.warn("GA4 data is null");
                 model.addAttribute("error", "No data available from GA4");
                 return "index";
+                // 테스트
             }
         } catch (Exception e) {
 //            logger.error("Error retrieving GA4 data", e);
