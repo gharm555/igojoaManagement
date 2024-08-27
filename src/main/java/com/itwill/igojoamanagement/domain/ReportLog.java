@@ -10,10 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -54,5 +51,9 @@ public class ReportLog {
 
     @Column(length = 10, nullable = false)
     @NotBlank(message = "닉네임은 필수 입력 항목입니다.")
-    private String nickName;
+    private String reportedNickName;
+
+    @Column(name = "reasonCode")
+    @Setter
+    private Integer reasonCode;
 }

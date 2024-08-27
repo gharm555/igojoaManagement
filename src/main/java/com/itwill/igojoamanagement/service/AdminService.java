@@ -23,10 +23,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class AdminService implements UserDetailsService {
-    @Autowired
-    private AdminRepository adminRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+    private final AdminRepository adminRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(readOnly = true)

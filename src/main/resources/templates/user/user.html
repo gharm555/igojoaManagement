@@ -1,12 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="user">
-<head>
-    <meta charset="UTF-8">
-    <title>유저관리</title>
-</head>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div class="container">
-
+<div th:fragment="user">
+    <div class="user-container">
+        <div class="user-buttons">
+            <button id="allUsers">전체정보</button>
+            <button id="reportedUsers">신고당한유저</button>
+            <button id="blacklist">블랙리스트</button>
+        </div>
+        <div id="userContent">
+            <!-- 여기에 내용이 동적으로 삽입됨 -->
+        </div>
+        <div id="pagination">
+            <!-- 페이지네이션 -->
+        </div>
     </div>
+</div>
 </body>
 </html>
