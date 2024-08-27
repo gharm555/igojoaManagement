@@ -18,6 +18,7 @@ import lombok.*;
 @Entity
 @Table(name = "reportLogs")
 public class ReportLog {
+
     @Id
     @Column(length = 23, nullable = false)
     @NotBlank(message = "로그 ID는 필수 입력 항목입니다.")
@@ -39,8 +40,6 @@ public class ReportLog {
     @NotNull(message = "보고 시간은 필수 입력 항목입니다.")
     private LocalDateTime reportTime;
 
-    private Integer reasonCode;
-
     @Column(length = 200, nullable = false)
     @NotBlank(message = "보고 이유는 필수 입력 항목입니다.")
     private String reportReason;
@@ -49,7 +48,10 @@ public class ReportLog {
     @NotBlank(message = "리뷰는 필수 입력 항목입니다.")
     private String review;
 
-    @Column(length = 10, nullable = false, name = "reportedNickname")
-    @NotBlank(message = "신고받은 유저의 닉네임은 필수 입력 항목입니다.")
-    private String reportedNickname;
+    @Column(length = 10, nullable = false)
+    @NotBlank(message = "닉네임은 필수 입력 항목입니다.")
+    private String reportedNickName;
+
+    @Column(name = "reasonCode")
+    private Integer reasonCode;
 }
