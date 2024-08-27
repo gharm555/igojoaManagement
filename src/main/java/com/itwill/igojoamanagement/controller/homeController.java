@@ -48,6 +48,7 @@ public class homeController {
             } else {
                 model.addAttribute("error", "No data available from GA4");
                 return "index";
+                // 테스트
             }
         } catch (Exception e) {
             model.addAttribute("error", "An error occurred while retrieving GA4 data: " + e.getMessage());
