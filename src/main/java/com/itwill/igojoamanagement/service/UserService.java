@@ -56,7 +56,7 @@ public class UserService {
         Page<ReportLog> reportLogs = reportLogRepository.findByReasonCode(102, pageable);
         return reportLogs.map(log -> {
             User user = userRepository.findById(log.getReportedId()).orElseThrow();
-            return new ReportedUserDto(log.getReportedId(), user.getNickName(), log.getReportedNickName());
+            return new ReportedUserDto(log.getReportedId(), user.getNickName(), log.getReportedNickname());
         });
     }
 
@@ -65,7 +65,7 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         ReportLog reportLog = reportLogRepository.findFirstByReportedIdOrderByReportTimeDesc(userId)
                 .orElseThrow(() -> new RuntimeException("Report log not found"));
-        return new ReportedUserDto(userId, user.getNickName(), reportLog.getReportedNickName());
+        return new ReportedUserDto(userId, user.getNickName(), reportLog.getReportedNickname());
     }
 
 
