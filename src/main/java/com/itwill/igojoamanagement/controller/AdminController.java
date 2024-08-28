@@ -1,6 +1,7 @@
 package com.itwill.igojoamanagement.controller;
 
 import com.itwill.igojoamanagement.domain.Admin;
+import com.itwill.igojoamanagement.dto.AdminDto;
 import com.itwill.igojoamanagement.service.AdminService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -27,18 +28,18 @@ public class AdminController {
         log.info("signIn");
     }
     @PostMapping("/signIn")
-    public void login(@RequestParam String username, @RequestParam String password,
+    public void login(@RequestParam String adminId, @RequestParam String password,
                       HttpSession session, HttpServletResponse response) throws IOException {
-        Admin user = adminService.authenticate(username, password);
 
-        if (user != null) {
-            session.setAttribute("authenticatedUser", user);
+        Admin admin = adminService.signIn(adminId, password);
+
+        if (adminId != null) {
+            session.setAttribute("authenticatedAdmin", admin);
             response.sendRedirect("/"); // 로그인 성공 시 루트 경로로 리디렉션
         } else {
             response.sendRedirect("/signIn?error=true"); // 로그인 실패 시 로그인 페이지로 리디렉션
         }
     }
-
 
     @PostMapping("/signOut")
     public String signOut(HttpSession session) {
