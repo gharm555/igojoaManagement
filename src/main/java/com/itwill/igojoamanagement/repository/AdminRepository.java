@@ -4,7 +4,9 @@ import com.itwill.igojoamanagement.domain.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface AdminRepository extends JpaRepository<Admin, String>{
+import java.util.Optional;
 
-    Admin findByAdminIdAndPassword(String adminId, String password);
+public interface AdminRepository extends JpaRepository<Admin, String>, AdminRepositoryCustom{
+
+    Optional<Admin> findByAdminId(String adminId);
 }

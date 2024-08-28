@@ -2,10 +2,15 @@ package com.itwill.igojoamanagement.domain;
 
 import com.itwill.igojoamanagement.domain.key.AuthorityButtonId;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.awt.*;
 
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "authority_button")
 public class AuthorityButton {
@@ -22,5 +27,4 @@ public class AuthorityButton {
 	@JoinColumn(name = "btnId")
 	private Button button;
 
-	// Getters and setters
 }

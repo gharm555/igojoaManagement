@@ -2,7 +2,13 @@ package com.itwill.igojoamanagement.domain;
 
 import com.itwill.igojoamanagement.domain.key.AdminAuthorityId;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "admin_Authority")
 public class AdminAuthority {
