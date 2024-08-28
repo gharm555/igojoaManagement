@@ -29,10 +29,10 @@
 				<div style="flex-grow: 0.8; display: flex; justify-content: flex-end">
 
 					<div class="navbar-nav">
-						<th:block sec:authorize="isAnonymous()">
+						<th:block >
 						<a class="nav-link" aria-current="page" th:href="@{/admin/signIn}">로그인</a>
 						</th:block>
-						<th:block sec:authorize="isAuthenticated()">
+						<th:block>
 						<a class="nav-link" th:href="@{/manager/signUp}">계정 생정</a>
 						<a class="nav-link" th:href="@{/admin/signOut}">로그아웃</a>
 						</th:block>
