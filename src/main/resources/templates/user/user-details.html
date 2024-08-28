@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="userDetails">
+    <p>
+        <strong>아이디 : </strong>
+        <span th:text="${user.userId}" id="userId"></span>
+    </p>
+    <p>
+        <strong>닉네임 : </strong>
+        <input type="text" th:value="${user.nickName}" id="nickName"/>
+        <button id="nickNameChangeBtn">변경</button>
+    </p>
+    <div th:if="${isTeamLeader}">
+        <p><strong>이메일 : </strong> <span th:text="${user.email}"></span></p>
+        <p><strong>전화번호 : </strong> <span th:text="${user.phoneNumber}"></span></p>
+    </div>
+</div>
+</html>

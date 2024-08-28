@@ -47,7 +47,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script th:src="@{/js/review.js}"></script>
 <script th:replace="~{layout/fragments :: bootstrapScript}"></script>
+<script th:src="@{/js/review.js}" sec:authorize="hasAnyAuthority('ROLE_리뷰_팀장', 'ROLE_리뷰_팀원')"></script>
+<script th:src="@{/js/user.js}" sec:authorize="hasAnyAuthority('ROLE_회원_팀장', 'ROLE_회원_팀원', 'ROLE_명소_팀장', 'ROLE_리뷰_팀장')"></script>
 </body>
 </html>

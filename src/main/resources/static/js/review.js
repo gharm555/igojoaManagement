@@ -52,6 +52,7 @@ function cancelReport(button) {
             .then((response) => {
                 console.log(response.data);
                 alert('신고가 취소되었습니다.');
+                loadReportReviews();
             });
     }
 }
@@ -69,29 +70,42 @@ inappropriateTab.addEventListener('click', (e) => {
     loadInappropriateReviews();
 });
 
+// 날짜 포맷팅 함수
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('ko-KR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    }).format(date);
+}
+
 // 신고 리뷰 로드 함수
 function loadReportReviews(page = 0) {
     axios.get(`/review/reportReview?page=${page}`)
         .then((response) => {
-            const reportList = document.getElementById('report-list');
-            const paginationContainer = document.getElementById('report-pagination');
-            const pagination = paginationContainer ? paginationContainer.querySelector('ul') : null;
+                const reportList = document.getElementById('report-list');
+                const paginationContainer = document.getElementById('report-pagination');
+                const pagination = paginationContainer ? paginationContainer.querySelector('ul') : null;
 
-            if (!pagination) {
-                console.error('Pagination container not found');
-                return;
-            }
+                if (!pagination) {
+                    console.error('Pagination container not found');
+                    return;
+                }
 
-            reportList.innerHTML = ''; // 기존 리스트 초기화
-            pagination.innerHTML = ''; // 기존 페이지네이션 초기화
-            if (response.data.message === "신고된 리뷰가 없습니다.") {
-                reportList.innerHTML = `<li class="list-group-item">${response.data.message}</li>`;
-                return;
-            }
+                reportList.innerHTML = ''; // 기존 리스트 초기화
+                pagination.innerHTML = ''; // 기존 페이지네이션 초기화
+                if (response.data.message === "신고된 리뷰가 없습니다.") {
+                    reportList.innerHTML = `<li class="list-group-item">${response.data.message}</li>`;
+                    return;
+                }
 
-            const reportLogList = response.data.reportLogList.content;
-            const currentPage = response.data.reportLogList.number;
-            const totalPages = response.data.reportLogList.totalPages;
+                const reportLogList = response.data.reportLogList.content;
+                const currentPage = response.data.reportLogList.number;
+                const totalPages = response.data.reportLogList.totalPages;
 
 
                 reportLogList.forEach((review) => {
@@ -107,7 +121,9 @@ function loadReportReviews(page = 0) {
                             <strong>${review.reportedNickname != null ? review.reportedNickname : 'Unknown Place'}</strong><span>: </span>
                             <span>${review.review.length > 25 ? review.review.substring(0, 25) + '...' : review.review}</span>
                             <br>
-                            <small>장소: <span class="r-placeName">${review.placeName != null ? review.placeName : '알 수 없음'}</span></small>
+                            <small><strong>장소</strong>: <span class="r-placeName">${review.placeName != null ? review.placeName : '알 수 없음'}</span></small>&nbsp;&nbsp;
+                            <small class="reportedId"><strong>신고자</strong>: ${review.reporterId != null ? review.reporterId : 'Unknown User'}</small>&nbsp;&nbsp;
+                            <small><strong>신고시간</strong>: ${formatDate(review.reportTime)}</small>
                         </div>
                         <div>
                             <button class="btn btn-warning btn-sm report-cancel" onclick="cancelReport(this)">신고 취소</button>
@@ -180,9 +196,11 @@ function loadInappropriateReviews(page = 0) {
                         <div data-bs-toggle="modal" data-bs-target="#exampleModal" class="trigger-modal">
                             <strong class="userId">${review.reviewId.userId != null ? review.reviewId.userId : 'Unknown User'}</strong>
                             :
+
                             <span>${review.reviewContent.length > 25 ? review.reviewContent.substring(0, 25) + '...' : review.reviewContent}</span>
                             <br>
-                            <small>장소: <span class="i-placeName">${review.reviewId.placeName != null ? review.reviewId.placeName : '알 수 없음'}</span></small>
+                            <small><strong>장소</strong>: <span class="i-placeName">${review.reviewId.placeName != null ? review.reviewId.placeName : '알 수 없음'}</span></small>&nbsp;&nbsp;
+                            <small><strong>작성시간</strong>: ${formatDate(review.modifiedAt)}</small>
                         </div>
                         <div>
                             <button class="btn btn-danger btn-sm inappropriate-delete" onclick="deleteReview(this)">삭제</button>
@@ -201,21 +219,23 @@ function loadInappropriateReviews(page = 0) {
                     });
                 });
 
-                // 페이지네이션 버튼 생성
-                if (pagination) {
-                    for (let i = 0; i < totalPages; i++) {
-                        const li = document.createElement('li');
-                        li.className = `page-item ${i === currentPage ? 'active' : ''}`;
-                        li.innerHTML = `<a class="page-link" href="#" onclick="loadInappropriateReviews(${i})">${i + 1}</a>`;
-                        pagination.appendChild(li);
-                    }
+            // 페이지네이션 버튼 생성
+            if (pagination) {
+                for (let i = 0; i < totalPages; i++) {
+                    const li = document.createElement('li');
+                    li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                    li.innerHTML = `<a class="page-link" href="#" onclick="loadInappropriateReviews(${i})">${i + 1}</a>`;
+                    pagination.appendChild(li);
                 }
+            }
 
         })
         .catch((error) => {
             console.error('부적절한 리뷰 로드 중 오류 발생:', error);
             alert('부적절한 리뷰 로드 중 문제가 발생했습니다.');
         });
+
+
 }
 
 
