@@ -8,10 +8,6 @@ import com.itwill.igojoamanagement.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,12 +29,12 @@ public class homeController {
     @GetMapping("/")
     public String home(Model model) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Object principal = authentication.getPrincipal();
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String username = authentication.getName();
+//        Object principal = authentication.getPrincipal();
 
-        log.info("Logged in username: {}", username);
-        log.info("Principal: {}", principal);
+//        log.info("Logged in username: {}", username);
+//        log.info("Principal: {}", principal);
 
         try {
             Map<String, Object> ga4Data = ga4Service.getGA4Data();

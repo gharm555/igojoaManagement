@@ -4,18 +4,18 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.util.Collection;
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
-@Data
 @ToString(callSuper = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = false)
+@Data
 @Entity
 @Table(name = "admins")
 public class Admin {
 
     @Id
-    @EqualsAndHashCode.Include
     @Column(name = "adminId", length = 10, updatable = false)
     //    @Pattern(regexp = "\\d{9}[A-Z]", message = "올바른 사번이 아닙니다")
     private String adminId;
