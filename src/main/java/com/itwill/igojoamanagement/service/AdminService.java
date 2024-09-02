@@ -46,4 +46,3 @@ public class AdminService implements UserDetailsService {
         return admin;
     }
 }
-

@@ -202,5 +202,3 @@ function loadInappropriateReviews(page = 0) {
 
 
 }
-
-
