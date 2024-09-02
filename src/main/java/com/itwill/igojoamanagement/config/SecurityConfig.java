@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Slf4j
 @Configuration
@@ -28,25 +29,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/admin/signIn").permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin(login -> login
-                .loginPage("/admin/signIn")
-                .loginProcessingUrl("/admin/signIn")
-                .defaultSuccessUrl("/", true)
-                .failureUrl("/admin/signIn?error=true")
-                .usernameParameter("adminId")
-                .passwordParameter("password")
-            )
-            .logout(logout -> logout
-                .logoutUrl("/admin/signOut")
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-            );
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/admin/signIn", "/manager/signUp", "/css/**", "/js/**", "/images/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(login -> login
+                        .loginPage("/admin/signIn")
+                        .loginProcessingUrl("/admin/signIn")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/admin/signIn?error=true")
+                        .usernameParameter("adminId")
+                        .passwordParameter("password")
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/admin/signOut")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                );
         return http.build();
     }
 }

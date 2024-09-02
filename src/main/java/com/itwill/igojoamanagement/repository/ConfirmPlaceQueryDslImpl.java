@@ -1,75 +1,38 @@
 package com.itwill.igojoamanagement.repository;
 
-import com.itwill.igojoamanagement.domain.ConfirmPlace;
-import com.itwill.igojoamanagement.domain.QConfirmPlace;
-import com.itwill.igojoamanagement.domain.QPlaceImage;
-import com.itwill.igojoamanagement.dto.ConfirmPlaceDetailsDTO;
-import com.itwill.igojoamanagement.dto.ConfirmPlaceNameDto;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-import java.util.List;
-import java.util.Optional;
+
+import com.itwill.igojoamanagement.domain.ConfirmPlace;
 
 
-public class ConfirmPlaceQueryDslImpl implements ConfirmPlaceQueryDsl {
-	private final JPAQueryFactory queryFactory;
+public class ConfirmPlaceQueryDslImpl extends QuerydslRepositorySupport implements ConfirmPlaceQueryDsl {
 
-	  public ConfirmPlaceQueryDslImpl(JPAQueryFactory queryFactory) {
-
-          this.queryFactory = queryFactory;
-      }
+    public ConfirmPlaceQueryDslImpl() {
+        super(ConfirmPlace.class);
+    }
 
 
+    @Override
+    public Page<ConfirmPlace> findAllWithPaging(Pageable pageable) {
 
-	@Override
-	public List<ConfirmPlaceNameDto> findAllConfirmPlaceNames() {
-		QConfirmPlace confirmPlace = QConfirmPlace.confirmPlace;
+        return null;
+    }
 
-		return queryFactory
-				.select(Projections.constructor(ConfirmPlaceNameDto.class,
-						confirmPlace.placeName))
-				.from(confirmPlace)
-				.fetch();
-	}
+    @Override
+    public List<ConfirmPlace> findByPlaceNameContaining(String placeName) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
+    @Override
+    public void deleteByPlaceNameAndReporterId(String placeName, String reporterId) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public Optional<ConfirmPlaceDetailsDTO> findPlaceDetailsWithImages(String placeName, String reporterId) {
-		QConfirmPlace confirmPlace = QConfirmPlace.confirmPlace;
-		QPlaceImage placeImage = QPlaceImage.placeImage;
+    }
 
-		return Optional.ofNullable(queryFactory
-				.select(Projections.constructor(ConfirmPlaceDetailsDTO.class,
-						confirmPlace.placeName,
-						confirmPlace.largeAddress,
-						confirmPlace.mediumAddress,
-						confirmPlace.smallAddress,
-						confirmPlace.placeDescription,
-						confirmPlace.placeLongitude,
-						confirmPlace.placeLatitude,
-						confirmPlace.operatingHours,
-						confirmPlace.radius,
-						placeImage.firstUrl,
-						placeImage.secondUrl,
-						placeImage.thirdUrl))
-				.from(confirmPlace)
-				.leftJoin(placeImage).on(confirmPlace.placeName.eq(placeImage.placeName))
-				.where(confirmPlace.placeName.eq(placeName)
-						.and(confirmPlace.reporterId.eq(reporterId)))
-				.fetchOne());
-	}
-
-	@Override
-	public void deleteByPlaceNameAndReporterId(String placeName, String reporterId) {
-		QConfirmPlace confirmPlace = QConfirmPlace.confirmPlace;
-
-		queryFactory.delete(confirmPlace)
-				.where(confirmPlace.placeName.eq(placeName)
-						.and(confirmPlace.reporterId.eq(reporterId)))
-				.execute();
-	}
 }
-
-
