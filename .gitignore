@@ -45,6 +45,7 @@ application-*.yml
 #*.json
 src/main/resources/keys/kinetic-star-432406-s1-264e7d8679a3.json
 
+src/main/resources/application.properties
 # Environment variables file
 .env
 *.env
