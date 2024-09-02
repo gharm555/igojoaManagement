@@ -29,9 +29,9 @@ public class QConfirmPlace extends EntityPathBase<ConfirmPlace> {
 
     public final StringPath placeDescription = createString("placeDescription");
 
-    public final NumberPath<java.math.BigDecimal> placeLatitude = createNumber("placeLatitude", java.math.BigDecimal.class);
+    public final NumberPath<Double> placeLatitude = createNumber("placeLatitude", Double.class);
 
-    public final NumberPath<java.math.BigDecimal> placeLongitude = createNumber("placeLongitude", java.math.BigDecimal.class);
+    public final NumberPath<Double> placeLongitude = createNumber("placeLongitude", Double.class);
 
     public final StringPath placeName = createString("placeName");
 

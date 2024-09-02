@@ -48,7 +48,7 @@ public class QUserBlackList extends EntityPathBase<UserBlackList> {
 
     public QUserBlackList(Class<? extends UserBlackList> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.admin = inits.isInitialized("admin") ? new QAdmin(forProperty("admin"), inits.get("admin")) : null;
+        this.admin = inits.isInitialized("admin") ? new QAdmin(forProperty("admin")) : null;
     }
 
 }
