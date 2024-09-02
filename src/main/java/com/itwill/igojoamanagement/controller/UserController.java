@@ -1,5 +1,6 @@
 package com.itwill.igojoamanagement.controller;
 
+import com.itwill.igojoamanagement.domain.RestrictionLog;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin/user")
@@ -83,6 +86,34 @@ public class UserController {
                 UserDto userDetails = userService.getUserDetailsForTeamMember(userId);
                 return ResponseEntity.ok(userDetails);
             }
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    // 신고 취소
+    @DeleteMapping("/cancelReport")
+    public ResponseEntity<String> cancelReport(@RequestBody Map<String, Object> logId) {
+        log.info("cancelReport(logId: {}", logId);
+        String nicknameLog = (String) logId.get("logId");
+
+        userService.cancelReportNickName(nicknameLog);
+
+        return ResponseEntity.ok(nicknameLog);
+    }
+
+    // 블랙리스트 매핑
+    @GetMapping("/blacklist")
+    @ResponseBody
+    public ResponseEntity<Page<RestrictionLog>> getBlacklist(
+            @PageableDefault(page = 0, size = 10, sort = "reportTime", direction = Sort.Direction.DESC) Pageable pageable) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() &&
+                (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_회원_팀장")) ||
+                        auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_회원_팀원")) ||
+                        auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_리뷰_팀장")) ||
+                        auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_명소_팀장")))) {
+            Page<RestrictionLog> blackList = userService.getBlackList(pageable);
+            return ResponseEntity.ok(blackList);
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }

@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ReportedUserDto {
+    private String logId;
     private String reportedId;
     private String currentNickname;
     private String reportedNickname;

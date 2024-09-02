@@ -1,6 +1,7 @@
 package com.itwill.igojoamanagement.service;
 
 import com.itwill.igojoamanagement.domain.ReportLog;
+import com.itwill.igojoamanagement.domain.RestrictionLog;
 import com.itwill.igojoamanagement.domain.User;
 import com.itwill.igojoamanagement.dto.ReportedUserDto;
 import com.itwill.igojoamanagement.dto.UserDto;
@@ -56,17 +57,42 @@ public class UserService {
         Page<ReportLog> reportLogs = reportLogRepository.findByReasonCode(102, pageable);
         return reportLogs.map(log -> {
             User user = userRepository.findById(log.getReportedId()).orElseThrow();
-            return new ReportedUserDto(log.getReportedId(), user.getNickName(), log.getReportedNickname());
+            return new ReportedUserDto(log.getLogId(), log.getReportedId(), user.getNickName(), log.getReportedNickname());
         });
     }
 
-    public ReportedUserDto getReportedUserDetails(String userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        ReportLog reportLog = reportLogRepository.findFirstByReportedIdOrderByReportTimeDesc(userId)
-                .orElseThrow(() -> new RuntimeException("Report log not found"));
-        return new ReportedUserDto(userId, user.getNickName(), reportLog.getReportedNickname());
+    /// 옛날코드? 2024-09-02
+//    public ReportedUserDto getReportedUserDetails(String userId) {
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//        ReportLog reportLog = reportLogRepository.findFirstByReportedIdOrderByReportTimeDesc(userId)
+//                .orElseThrow(() -> new RuntimeException("Report log not found"));
+//        return new ReportedUserDto(userId, user.getNickName(), reportLog.getReportedNickname());
+//    }
+
+    // 신고 취소
+    @Transactional
+    public void cancelReportNickName(String logId) {
+        reportLogRepository.deleteById(logId);
     }
 
+
+    // 블랙리스트 유저 정보
+    @Transactional(readOnly = true)
+    public Page<RestrictionLog> getBlackList(Pageable pageable) {
+        // (1): 블랙리스트가 있는지 체크
+        Page<RestrictionLog> blackList = userRepository.findBlackList(pageable);
+
+        // (2) : 없다면 -> null -> 컨트롤러에서 응답메시지를 없다고 줌
+
+        // (3) : 블랙리스트가 있다면 page 처리해서 return
+
+        if (blackList == null) {
+            return null;
+        } else {
+            return blackList;
+        }
+
+    }
 
 }

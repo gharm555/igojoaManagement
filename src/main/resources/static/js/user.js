@@ -28,6 +28,24 @@ document.addEventListener('DOMContentLoaded', function () {
     .user-link:hover {
         text-decoration: underline;
     }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
 `;
     document.head.appendChild(style);
 
@@ -37,14 +55,16 @@ document.addEventListener('DOMContentLoaded', function () {
         currentUrl = '/admin/user/user-management';
         loadUsers(currentUrl);
     });
+
     reportedUsersBtn.addEventListener('click', () => {
         currentUrl = '/admin/user/reported-users';
         loadUsers(currentUrl);
     });
-    // blacklistBtn.addEventListener('click', () => {
-    //     currentUrl = '/admin/user/blacklist';
-    //     loadUsers(currentUrl);
-    // }); // 아직 구현 안됨
+
+    blacklistBtn.addEventListener('click', () => {
+        currentUrl = '/admin/user/blacklist';
+        loadUsers(currentUrl);
+    }); // 아직 구현 안됨
 
     function loadUsers(url, page = 0) {
         axios.get(`${url}?page=${page}`)
@@ -55,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => {
                 console.error('Error:', error);
-                contentDiv.innerHTML = '<p>데이터를 불러오는 중 오류가 발생했습니다.</p>';
+                contentDiv.innerHTML = '<p>데이터가 없습니다.</p>';
             });
     }
 
@@ -63,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let html = '<table><thead><tr><th>유저 아이디</th>';
 
         if (currentUrl === '/admin/user/reported-users') {
-            html += '<th>현재 닉네임</th><th>신고된 닉네임</th>';
+            html += '<th>현재 닉네임</th><th>신고된 닉네임</th> <th>로그 아이디</th>';
         }
 
         html += '</tr></thead><tbody>';
@@ -76,7 +96,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (currentUrl === '/admin/user/reported-users') {
                 const currentNickname = user.currentNickname || '-';
                 const reportedNickname = user.reportedNickname || '-';
-                html += `<td>${currentNickname}</td><td>${reportedNickname}</td>`;
+                const logId = user.logId || '-';
+                html += `<td>${currentNickname}</td><td>${reportedNickname}</td><td><p>${logId}</p><button class="reportCancelBtn" data-log-id="${logId}">신고 취소</button></td>`;
             }
 
             html += '</tr>';
@@ -84,6 +105,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
         html += '</tbody></table>';
         contentDiv.innerHTML = html;
+
+        // 신고 취소 버튼에 이벤트 리스너 추가
+        document.querySelectorAll('.reportCancelBtn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const logId = e.target.getAttribute('data-log-id');
+                axios.delete('/admin/user/cancelReport', { data: { logId } })
+            .then(response => {
+                    alert('신고가 성공적으로 취소되었습니다.');
+                    loadUsers('/admin/user/reported-users');  // 페이지를 새로고침하여 업데이트된 데이터를 로드
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('신고 취소 중 오류가 발생했습니다.');
+            });
+            });
+        });
 
         // 유저 링크에 이벤트 리스너 추가
         document.querySelectorAll('.user-link').forEach(link => {
@@ -109,39 +146,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showUserModal(user) {
         let modalContent;
+
+        if (user.logId) {
+            modalContent = `<p>로그 아이디: ${user.logId}</p>`;
+        }
+
         if (user.email) { // ROLE_회원_팀장인 경우
-            modalContent = `
+            modalContent += `
             <p>이메일: ${user.email}</p>
             <p>전화번호: ${user.phoneNumber}</p>
             <p>닉네임: <input type="text" id="nickNameInput" value="${user.nickName}"></p>
         `;
         } else { // ROLE_회원_팀원인 경우
-            modalContent = `
+            modalContent += `
             <p>닉네임: <input type="text" id="nickNameInput" value="${user.nickName}"></p>
         `;
         }
 
         const modalHtml = `
-        <div class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">유저 정보</h5>
-                    </div>
-                    <div class="modal-body">
-                        ${modalContent}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="submitBtn">전송</button>
-                        <button type="button" class="btn btn-secondary" id="cancelBtn">취소</button>
-                    </div>
-                </div>
+        <div id="userModal" class="modal">
+            <div class="modal-content">
+                <h5>유저 정보</h5>
+                ${modalContent}
+                <button id="submitBtn">전송</button>
+                <button id="cancelBtn">취소</button>
             </div>
         </div>
     `;
 
         document.body.insertAdjacentHTML('beforeend', modalHtml);
-        const modal = document.querySelector('.modal');
+        const modal = document.getElementById('userModal');
         modal.style.display = 'block';
 
         function closeModal() {
@@ -150,8 +184,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+
         // 취소 버튼에 이벤트 리스너 추가
-        modal.querySelector('#cancelBtn').addEventListener('click', closeModal);
+        document.getElementById('cancelBtn').addEventListener('click', closeModal);
 
         // ESC 키로 모달 닫기
         document.addEventListener('keydown', function (event) {
@@ -161,16 +196,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // 모달 바깥 영역 클릭으로 닫기
-        modal.addEventListener('click', function (event) {
+        window.addEventListener('click', function (event) {
             if (event.target === modal) {
                 closeModal();
             }
         });
 
         // 전송 버튼
-        modal.querySelector('#submitBtn').addEventListener('click', () => {
+        document.getElementById('submitBtn').addEventListener('click', () => {
             const userId = user.userId;
-            const newNickName = document.querySelector('#nickNameInput').value;
+            const newNickName = document.getElementById('nickNameInput').value;
 
             axios.post('/admin/user/change-nickname', {
                 userId: userId,
@@ -238,3 +273,4 @@ document.addEventListener('DOMContentLoaded', function () {
     // 초기 로드
     loadUsers(currentUrl);
 });
+
