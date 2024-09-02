@@ -18,16 +18,12 @@ public class ManagerController {
 
     // 계정 생성 페이지
     @GetMapping("/signUp")
-    public void signInPage() {
+    public void signUp() {
         log.info("signUp()");
     }
 
     @PostMapping("/signUp")
-    public String signUp(@ModelAttribute Admin entity, Model model) {
-        if (entity.getAdminId() == null || entity.getAdminId().isEmpty()) {
-            model.addAttribute("errorMessage", "사번(adminId)은 필수 입력 항목입니다.");
-            return "manager/signUp";  // signUp 폼으로 다시 이동
-        }
+    public String signUp(@ModelAttribute Admin entity) {
         Admin admin = adminService.create(entity);
         log.info("회원가입:{}", admin);
         return "redirect:/admin/signIn";
