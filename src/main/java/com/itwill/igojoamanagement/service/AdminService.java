@@ -21,7 +21,8 @@ public class AdminService {
     @Transactional
     public Admin signIn(String adminId, String password) {
         log.info("adminId: {}", adminId);
-        Admin admin = adminRepository.findByAdminId(adminId).orElseThrow();
+        Admin admin = adminRepository
+            .findByAdminId(adminId).orElseThrow();
 
         if (!password.equals(admin.getPassword())) {
             throw new RuntimeException("Invalid password");
