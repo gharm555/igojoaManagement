@@ -1,13 +1,15 @@
 package com.itwill.igojoamanagement.service;
 
 import com.itwill.igojoamanagement.domain.Admin;
+import com.itwill.igojoamanagement.dto.AdminDto;
 import com.itwill.igojoamanagement.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -16,15 +18,26 @@ public class AdminService {
 
     private final AdminRepository adminRepository;
 
+    @Transactional
+    public Admin signIn(String adminId, String password) {
+        log.info("adminId: {}", adminId);
+        Admin admin = adminRepository.findByAdminId(adminId).orElseThrow();
 
-    public Admin authenticate(String adminId, String password) {
-        log.info("authenticate {} {}", adminId, password);
-        Admin admin = adminRepository.findByAdminIdAndPassword(adminId, password);
-        if (admin != null && password.equals(admin.getPassword())) {
-            return admin;
-        } else {
-            return null;
+        if (!password.equals(admin.getPassword())) {
+            throw new RuntimeException("Invalid password");
         }
+        return admin;
+    }
+
+    @Transactional
+    public List<AdminDto> getAdminAuthority(String adminId) {
+        log.info("adminId: {}", adminId);
+        List<AdminDto> result = adminRepository.findByAdminDtoByAdminId(adminId);
+        log.info("Admin Authorities for admin ID {}: ", adminId);
+        for (AdminDto authority : result) {
+            log.info("Authority: {}", authority);
+        }
+        return result;
     }
 
     @Transactional

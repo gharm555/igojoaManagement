@@ -98,13 +98,13 @@ public class ReviewController {
         return ResponseEntity.ok(review);
     }
 
-    // 리뷰 상세
-    @GetMapping("/detail")
-    public ResponseEntity<ReportReviewDetailDto> getDetail(@RequestParam String logId) {
-        log.info("getDetail(logId: {})", logId);
-
-        ReportReviewDetailDto reviewDetail = reviewService.findReportReviewDetail(logId);
-
-        return ResponseEntity.ok(reviewDetail);
-    }
+//    // 리뷰 상세
+//    @GetMapping("/detail")
+//    public ResponseEntity<ReportReviewDetailDto> getDetail(@RequestParam String logId) {
+//        log.info("getDetail(logId: {})", logId);
+//
+//        ReportReviewDetailDto reviewDetail = reviewService.findReportReviewDetail(logId);
+//
+//        return ResponseEntity.ok(reviewDetail);
+//    }
 }
