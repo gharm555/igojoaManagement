@@ -72,16 +72,16 @@ public class ReviewService {
         reviewRepository.deleteById(reviewId);
     }
 
-    // 블랙리스트에 등록
-//    public void addBlackList(String userId) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String adminId = authentication.getName();
-//
-//        UserBlackListPK blackListLog = new UserBlackListPK(userId);
-//        UserBlackList userBlackList = UserBlackList.builder().userBlackListPK(blackListLog).reasonCode(101).adminId(adminId).build();
-//
-//       userBlackListRepository.save(userBlackList);
-//    }
+     // 블랙리스트에 등록
+    public void addBlackList(String userId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String adminId = authentication.getName();
+
+        UserBlackListPK blackListLog = new UserBlackListPK(userId);
+        UserBlackList userBlackList = UserBlackList.builder().userBlackListPK(blackListLog).reasonCode(101).adminId(adminId).build();
+
+       userBlackListRepository.save(userBlackList);
+    }
 
 }
 
