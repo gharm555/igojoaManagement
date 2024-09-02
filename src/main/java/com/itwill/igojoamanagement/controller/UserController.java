@@ -37,51 +37,7 @@ public class UserController {
         }
     }
 
-    // New / 2024-08-27
-//    @GetMapping("/reported-users")
-//    @ResponseBody
-//    public ResponseEntity<Page<ReportedUserDto>> getReportedUsers(
-//            @PageableDefault(page = 0, size = 10, sort = "reportTime", direction = Sort.Direction.DESC) Pageable pageable) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null && auth.isAuthenticated() &&
-//                (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_회원_팀장")) ||
-//                        auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_회원_팀원")))) {
-//            Page<ReportedUserDto> reportedUsers = userService.getReportedUsers(pageable);
-//            return ResponseEntity.ok(reportedUsers);
-//        }
-//        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-//    }
-//
-//    // New / 2024-08-27
-//    @GetMapping("/user-management")
-//    @ResponseBody
-//    public ResponseEntity<Page<UserDto>> getUserManagement(
-//            @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null && auth.isAuthenticated() &&
-//                (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_회원_팀장")) ||
-//                        auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_회원_팀원")))) {
-//            Page<UserDto> users = userService.getUsersIdPage(pageable);
-//            return ResponseEntity.ok(users);
-//        }
-//        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-//    }
-//
-//    // New 2024-08-27
-//    @GetMapping("/user-details/{userId}")
-//    @ResponseBody
-//    public ResponseEntity<?> getUserDetails(@PathVariable String userId) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null && auth.isAuthenticated()) {
-//            if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_회원_팀장"))) {
-//                UserDto userDetails = userService.getUserDetailsForTeamLeader(userId);
-//                return ResponseEntity.ok(userDetails);
-//            } else if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_회원_팀원"))) {
-//                UserDto userDetails = userService.getUserDetailsForTeamMember(userId);
-//                return ResponseEntity.ok(userDetails);
-//            }
-//        }
-//        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-//    }
+
 
 }
+
