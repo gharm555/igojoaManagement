@@ -29,25 +29,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/admin/signIn","/css/**", "/js/**", "/images/**").permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin(login -> login
-                .loginPage("/admin/signIn")
-                .loginProcessingUrl("/admin/signIn")
-                .defaultSuccessUrl("/", true)
-                .failureUrl("/admin/signIn?error=true")
-                .usernameParameter("adminId")
-                .passwordParameter("password")
-            )
-            .logout(logout -> logout
-                .logoutUrl("/admin/signOut")
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-            );
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/admin/signIn", "/manager/signUp", "/css/**", "/js/**", "/images/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(login -> login
+                        .loginPage("/admin/signIn")
+                        .loginProcessingUrl("/admin/signIn")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/admin/signIn?error=true")
+                        .usernameParameter("adminId")
+                        .passwordParameter("password")
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/admin/signOut")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                );
         return http.build();
     }
 }
