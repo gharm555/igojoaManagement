@@ -97,7 +97,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const currentNickname = user.currentNickname || '-';
                 const reportedNickname = user.reportedNickname || '-';
                 const logId = user.logId || '-';
-                html += `<td>${currentNickname}</td><td>${reportedNickname}</td><td><p>${logId}</p><button class="reportCancelBtn" data-log-id="${logId}">신고 취소</button></td>`;
+                html += `<td>${currentNickname}</td><td>${reportedNickname}</td><td><p>${logId}</p><button class="reportCancelBtn" data-log-id="${logId}">신고 취소</button>
+<button class="changeReportedUserNickName" data-log-id="${logId}" data-user-id="${userId}">신고자 닉네임 바꾸기</button></td>`;
             }
 
             html += '</tr>';
@@ -110,15 +111,37 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.reportCancelBtn').forEach(button => {
             button.addEventListener('click', (e) => {
                 const logId = e.target.getAttribute('data-log-id');
-                axios.delete('/admin/user/cancelReport', { data: { logId } })
-            .then(response => {
-                    alert('신고가 성공적으로 취소되었습니다.');
-                    loadUsers('/admin/user/reported-users');  // 페이지를 새로고침하여 업데이트된 데이터를 로드
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('신고 취소 중 오류가 발생했습니다.');
+                axios.delete('/admin/user/cancelReport', {data: {logId}})
+                    .then(response => {
+                        alert('신고가 성공적으로 취소되었습니다.');
+                        loadUsers('/admin/user/reported-users');  // 페이지를 새로고침하여 업데이트된 데이터를 로드
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('신고 취소 중 오류가 발생했습니다.');
+                    });
             });
+        });
+
+        // 신고자 닉네임 바꾸기 이벤트 리스너 추가
+        document.querySelectorAll('.changeReportedUserNickName').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const logId = e.target.getAttribute('data-log-id');
+                const changeNickName = prompt("변경할 닉네임을 입력하세요.");
+                const reportedId = e.target.getAttribute('data-user-id');
+
+                axios.put('/admin/user/changeReportedNickName', {
+                    logId: logId,
+                    nickName: changeNickName,
+                    reportedId: reportedId
+                }).then(response => {
+                    if (response.data === '변경 성공') {
+                        alert('정상화');
+                    }
+                    loadUsers('/admin/user/reported-users');
+                }).catch(error => {
+                    alert('처리 실패');
+                });
             });
         });
 
@@ -273,4 +296,3 @@ document.addEventListener('DOMContentLoaded', function () {
     // 초기 로드
     loadUsers(currentUrl);
 });
-

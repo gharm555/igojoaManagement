@@ -6,12 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
-public class ReportedUserDto {
+public class ToRestrictionLogs {
     private String logId;
     private String reportedId;
-    private String currentNickname;
-    private String reportedNickname;
+    private String adminId;
+    private Integer reasonCode;
+    private String detail;
 }

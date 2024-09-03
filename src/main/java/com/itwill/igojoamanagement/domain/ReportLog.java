@@ -54,4 +54,15 @@ public class ReportLog {
 
     @Column(name = "reasonCode")
     private Integer reasonCode;
+
+    @Column(name = "confirm", columnDefinition = "varchar(12) default '대기중'")
+    private String confirm;
+
+    public void confirmReport() {
+        this.confirm = "처리완료";
+    }
+
+    public void cancelReport() {
+        this.confirm = "신고취소";
+    }
 }

@@ -1,6 +1,7 @@
 package com.itwill.igojoamanagement.controller;
 
 import com.itwill.igojoamanagement.domain.RestrictionLog;
+import com.itwill.igojoamanagement.dto.ChangeReportedNickNameRequest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -118,4 +119,27 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
+//    @PutMapping("/changeReportedNickName")
+//    @ResponseBody
+//    public ResponseEntity<?> changeReportedNickName(@RequestBody Map<String, Object> requestBody) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        String result = userService.blackListProcess(auth, requestBody);
+//        if (result.startsWith("변경 성공")) {
+//            return ResponseEntity.ok(result);
+//        } else {
+//            return ResponseEntity.badRequest().body(result);
+//        }
+//    }
+
+    @PutMapping("/changeReportedNickName")
+    @ResponseBody
+    public ResponseEntity<?> changeReportedNickName(@RequestBody ChangeReportedNickNameRequest requestBody) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String result = userService.changeReportedNickName(auth, requestBody);
+        if (result.startsWith("변경 성공")) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.badRequest().body(result);
+        }
+    }
 }

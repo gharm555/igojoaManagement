@@ -14,6 +14,4 @@ import org.springframework.data.repository.query.Param;
 public interface UserRepository extends JpaRepository<User, String>{
     Page<User> findAll(Pageable pageable);
 
-    @Query("SELECT r FROM RestrictionLog r WHERE COUNT(r.restrictionLogPK.reportedId) >= 3")
-    Page<RestrictionLog> findBlackList(Pageable pageable);
 }

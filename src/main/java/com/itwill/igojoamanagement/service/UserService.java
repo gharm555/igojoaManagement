@@ -3,19 +3,25 @@ package com.itwill.igojoamanagement.service;
 import com.itwill.igojoamanagement.domain.ReportLog;
 import com.itwill.igojoamanagement.domain.RestrictionLog;
 import com.itwill.igojoamanagement.domain.User;
+import com.itwill.igojoamanagement.domain.key.RestrictionLogPK;
+import com.itwill.igojoamanagement.dto.ChangeReportedNickNameRequest;
 import com.itwill.igojoamanagement.dto.ReportedUserDto;
+import com.itwill.igojoamanagement.dto.ToRestrictionLogs;
 import com.itwill.igojoamanagement.dto.UserDto;
 import com.itwill.igojoamanagement.repository.ReportLogRepository;
+import com.itwill.igojoamanagement.repository.RestrictionLogRepository;
 import com.itwill.igojoamanagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -25,6 +31,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ReportLogRepository reportLogRepository;
+    private final RestrictionLogRepository restrictionLogRepository;
 
     // 유저 전체 목록 service
     public Page<UserDto> getUsersIdPage(Pageable pageable) {
@@ -48,44 +55,38 @@ public class UserService {
 
         user.setNickName(userDto.getNickName());
         userRepository.save(user);
+
+
+        /* (1) 닉네임을 바꿀 User 행(객체) 찾아오기
+         * (2) reportLogs 테이블에서 confirm 컬럼 "처리완료"로 바꾸기
+         * (3) user테이블에서 닉네임 변경 진행하기
+         */
     }
 
     // 신고 유저 service
     // New / 2024-08-27
     @Transactional(readOnly = true)
     public Page<ReportedUserDto> getReportedUsers(Pageable pageable) {
-        Page<ReportLog> reportLogs = reportLogRepository.findByReasonCode(102, pageable);
+        Page<ReportLog> reportLogs = reportLogRepository.findReportedUser(pageable);
         return reportLogs.map(log -> {
             User user = userRepository.findById(log.getReportedId()).orElseThrow();
             return new ReportedUserDto(log.getLogId(), log.getReportedId(), user.getNickName(), log.getReportedNickname());
         });
     }
 
-    /// 옛날코드? 2024-09-02
-//    public ReportedUserDto getReportedUserDetails(String userId) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//        ReportLog reportLog = reportLogRepository.findFirstByReportedIdOrderByReportTimeDesc(userId)
-//                .orElseThrow(() -> new RuntimeException("Report log not found"));
-//        return new ReportedUserDto(userId, user.getNickName(), reportLog.getReportedNickname());
-//    }
-
     // 신고 취소
     @Transactional
     public void cancelReportNickName(String logId) {
-        reportLogRepository.deleteById(logId);
+        ReportLog reportLog = reportLogRepository.findById(logId).orElseThrow();
+
+        reportLog.cancelReport();
     }
 
 
     // 블랙리스트 유저 정보
     @Transactional(readOnly = true)
     public Page<RestrictionLog> getBlackList(Pageable pageable) {
-        // (1): 블랙리스트가 있는지 체크
-        Page<RestrictionLog> blackList = userRepository.findBlackList(pageable);
-
-        // (2) : 없다면 -> null -> 컨트롤러에서 응답메시지를 없다고 줌
-
-        // (3) : 블랙리스트가 있다면 page 처리해서 return
+        Page<RestrictionLog> blackList = restrictionLogRepository.findBlackList(pageable);
 
         if (blackList == null) {
             return null;
@@ -93,6 +94,29 @@ public class UserService {
             return blackList;
         }
 
+    }
+
+    @Transactional
+    public String changeReportedNickName(Authentication auth, ChangeReportedNickNameRequest requestBody) {
+        // (1) user테이블에서 정보 수정(userId를 이용해서 nickName 수정)
+        try {
+            String reportedId = requestBody.getReportedId();
+            User targetUser = userRepository.findById(reportedId)
+                    .orElseThrow(() -> new RuntimeException("User not found: " + reportedId));
+            String newNickName = requestBody.getNickName();
+
+            targetUser.setNickName(newNickName);
+            userRepository.save(targetUser);
+
+            // (2) reportLogs 테이블의 confirm 컬럼의 값을 "처리완료"로 수정
+            String logId = requestBody.getLogId();
+            ReportLog reportLog = reportLogRepository.findById(logId).orElseThrow();
+            reportLog.confirmReport();
+
+            return "변경 성공";
+        } catch (Exception e) {
+            return "변경 실패: " + e.getMessage();
+        }
     }
 
 }
