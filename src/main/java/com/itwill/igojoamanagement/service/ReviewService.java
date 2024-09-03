@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +52,7 @@ public class ReviewService {
         ReviewPK review = new ReviewPK(reportLog.getPlaceName(), reportLog.getReportedId());
 
         // 블랙리스트에 등록
-//        addBlackList(reportLog.getReportedId());
+        addBlackList(reportLog.getReportedId());
 
         // 리뷰 테이블에서 삭제
         reviewRepository.deleteById(review);
@@ -73,15 +75,20 @@ public class ReviewService {
     }
 
     // 블랙리스트에 등록
-//    public void addBlackList(String userId) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String adminId = authentication.getName();
-//
-//        UserBlackListPK blackListLog = new UserBlackListPK(userId);
-//        UserBlackList userBlackList = UserBlackList.builder().userBlackListPK(blackListLog).reasonCode(101).adminId(adminId).build();
-//
-//       userBlackListRepository.save(userBlackList);
-//    }
+    @Transactional
+    public void addBlackList(String userId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String adminId = authentication.getName();
 
+        UserBlackListPK blackListLog = new UserBlackListPK(userId);
+        UserBlackList userBlackList = UserBlackList.builder().userBlackListPK(blackListLog).reasonCode(101).adminId(adminId).build();
+
+       userBlackListRepository.save(userBlackList);
+    }
+
+    // 신고 리뷰 상세
+    public ReportReviewDetailDto findReportReviewDetail(String logId) {
+        ReportReviewDetailDto reviewDetail = reviewRepository.findReviewDetail(logId);
+        return reviewDetail;
+    }
 }
-

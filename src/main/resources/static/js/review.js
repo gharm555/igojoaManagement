@@ -112,13 +112,9 @@ function loadReportReviews(page = 0) {
                     const li = document.createElement('li');
                     li.className = 'list-group-item d-flex justify-content-between align-items-center';
                     li.innerHTML = `
-                        <div data-bs-toggle="modal" data-bs-target="#exampleModal" class="trigger-modal" style="hover">
-                            <span class="d-none" id="logId" name="logId">${review.logId}</span>
-                            <strong class="reportedId">${review.reporterId != null ? review.reporterId : 'Unknown User'}</strong>
-                            <span> (at ${review.reportTime}): </span>
-                            <span>${review.reportReason}</span>
-                            <br>
-                            <strong>${review.reportedNickname != null ? review.reportedNickname : 'Unknown Place'}</strong><span>: </span>
+                        <div>
+                            <span class="d-none" id="logId" name="logId">${review.logId}</span>           
+                            <strong>${review.reportedId != null ? review.reportedId : 'Unknown Place'}</strong><span>: </span>
                             <span>${review.review.length > 25 ? review.review.substring(0, 25) + '...' : review.review}</span>
                             <br>
                             <small><strong>장소</strong>: <span class="r-placeName">${review.placeName != null ? review.placeName : '알 수 없음'}</span></small>&nbsp;&nbsp;
@@ -131,24 +127,6 @@ function loadReportReviews(page = 0) {
                         </div>`;
                     reportList.appendChild(li);
 
-                    // 각 모달 트리거 요소에 이벤트 리스너 추가
-                    li.querySelector('.trigger-modal').addEventListener('click', function() {
-                        const modalTitle = document.querySelector('#exampleModalLabel');
-                        const modalBody = document.querySelector('#exampleModal .modal-body');
-
-                        // null 체크
-                        if (modalTitle && modalBody) {
-                            // 모달에 필요한 데이터 업데이트
-                            modalTitle.textContent = `리뷰 신고 정보 (${review.reportedNickname || 'Unknown Place'})`;
-                            modalBody.innerHTML = `
-                            <p><strong>신고자:</strong> ${review.reporterId || 'Unknown User'}</p>
-                            <p><strong>신고 사유:</strong> ${review.reportReason}</p>
-                            <p><strong>리뷰 내용:</strong> ${review.review}</p>
-                        `;
-                        } else {
-                            console.error('모달 요소를 찾을 수 없습니다.');
-                        }
-                    });
                 });
 
                 // 페이지네이션 버튼 생성
@@ -189,14 +167,12 @@ function loadInappropriateReviews(page = 0) {
             const totalPages = response.data.reviewList.totalPages;
 
 
-                reviewList.forEach((review) => {
-                    const li = document.createElement('li');
-                    li.className = 'list-group-item d-flex justify-content-between align-items-center';
-                    li.innerHTML = `
-                        <div data-bs-toggle="modal" data-bs-target="#exampleModal" class="trigger-modal">
-                            <strong class="userId">${review.reviewId.userId != null ? review.reviewId.userId : 'Unknown User'}</strong>
-                            :
-
+            reviewList.forEach((review) => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.innerHTML = `
+                        <div>
+                            <strong class="userId">${review.reviewId.userId != null ? review.reviewId.userId : 'Unknown User'}</strong><span>: </span>
                             <span>${review.reviewContent.length > 25 ? review.reviewContent.substring(0, 25) + '...' : review.reviewContent}</span>
                             <br>
                             <small><strong>장소</strong>: <span class="i-placeName">${review.reviewId.placeName != null ? review.reviewId.placeName : '알 수 없음'}</span></small>&nbsp;&nbsp;
@@ -205,19 +181,8 @@ function loadInappropriateReviews(page = 0) {
                         <div>
                             <button class="btn btn-danger btn-sm inappropriate-delete" onclick="deleteReview(this)">삭제</button>
                         </div>`;
-                    inappropriateList.appendChild(li);
-
-                    // 각 모달 트리거 요소에 이벤트 리스너 추가
-                    li.querySelector('.trigger-modal').addEventListener('click', () => {
-                        updateModal({
-                            title: `리뷰 내용 (${review.reviewId.userId || 'Unknown User'})`,
-                            body: `
-                                <p><strong>리뷰 내용:</strong> ${review.reviewContent}</p>
-                                <p><strong>장소:</strong> ${review.reviewId.placeName || '알 수 없음'}</p>
-                            `
-                        });
-                    });
-                });
+                inappropriateList.appendChild(li);
+            });
 
             // 페이지네이션 버튼 생성
             if (pagination) {
@@ -236,17 +201,4 @@ function loadInappropriateReviews(page = 0) {
         });
 
 
-}
-
-
-function updateModal({ title, body }) {
-    const modalTitle = document.querySelector('#exampleModalLabel');
-    const modalBody = document.querySelector('#exampleModal .modal-body');
-
-    if (modalTitle && modalBody) {
-        modalTitle.textContent = title;
-        modalBody.innerHTML = body;
-    } else {
-        console.error('모달 요소를 찾을 수 없습니다.');
-    }
 }

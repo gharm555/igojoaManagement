@@ -63,10 +63,13 @@ dependencies {
     // Google Cloud Libraries BOM
     implementation platform('com.google.cloud:libraries-bom:26.1.4')
     implementation 'com.google.cloud:google-cloud-core'
+<<<<<<< HEAD
 
     // AWS
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'software.amazon.awssdk:s3:2.17.46'
+=======
+>>>>>>> 6abfd7180ea55685ce69b42bc98cab6b8de82b30
 }
 
 //tasks.named('test') {

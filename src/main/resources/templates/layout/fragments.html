@@ -28,6 +28,7 @@
 			<!-- 오른쪽 링크들 -->
 			<div style="flex-grow: 0.8; display: flex; justify-content: flex-end">
 
+<<<<<<< HEAD
 				<div class="navbar-nav">
 					<th:block sec:authorize="isAnonymous()">
 						<a class="nav-link" aria-current="page" th:href="@{/admin/signIn}">로그인</a>
@@ -50,3 +51,27 @@
 ></script>
 </body>
 </html>
+=======
+                <div class="navbar-nav">
+                    <th:block sec:authorize="isAnonymous()">
+                        <a class="nav-link" aria-current="page" th:href="@{/admin/signIn}">로그인</a>
+                        <a class="nav-link" th:href="@{/manager/signUp}">계정 생정</a>
+                    </th:block>
+
+                    <th:block sec:authorize="isAuthenticated()">
+                        <a class="nav-link" th:href="@{/admin/signOut}">로그아웃</a>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<script
+        th:fragment="bootstrapScript"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"
+></script>
+</body>
+</html>
+>>>>>>> 6abfd7180ea55685ce69b42bc98cab6b8de82b30

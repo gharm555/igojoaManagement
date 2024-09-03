@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/fragments :: documentHeader}">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- Axios 라이브러리 추가 -->
+</head>
+<body>
+<main>
+    <div th:fragment="place">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- 사이드바 네비게이션 -->
+                <div class="col-md-3 border-end">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link active" id="v-pills-existing-tab" data-bs-toggle="pill" href="#v-pills-existing" role="tab" aria-controls="v-pills-existing" aria-selected="true">기존 명소</a>
+                        <a class="nav-link" id="v-pills-new-tab" data-bs-toggle="pill" href="#v-pills-new" role="tab" aria-controls="v-pills-new" aria-selected="false">신규 명소</a>
+                    </div>
+                </div>
+                <!-- 탭 컨텐츠 -->
+                <div class="col-md-9">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <!-- 기존 명소 탭 -->
+                        <div class="tab-pane fade show active" id="v-pills-existing" role="tabpanel" aria-labelledby="v-pills-existing-tab">
+                            <ul class="list-group list-group-flush" id="existing-places-list">
+                                <!-- 기존 명소 목록이 여기에 동적으로 추가됩니다 -->
+                            </ul>
+                            <nav aria-label="Page navigation for existing places">
+                                <ul class="pagination" id="existing-places-pagination">
+                                    <!-- 페이지 버튼이 동적으로 추가될 예정 -->
+                                </ul>
+                            </nav>
+                        </div>
+                        <!-- 신규 명소 탭 -->
+                        <div class="tab-pane fade" id="v-pills-new" role="tabpanel" aria-labelledby="v-pills-new-tab">
+                            <ul class="list-group list-group-flush" id="new-places-list">
+                                <!-- 신규 명소 목록이 여기에 동적으로 추가됩니다 -->
+                            </ul>
+                            <nav aria-label="Page navigation for new places">
+                                <ul class="pagination" id="new-places-pagination">
+                                    <!-- 페이지 버튼이 동적으로 추가될 예정 -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 모달 창 -->
+        <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailModalLabel">장소 세부 정보</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="placeDetailsForm">
+                            <div class="mb-3">
+                                <label for="modal-reporterId" class="form-label">작성자</label>
+                                <input type="text" class="form-control" id="modal-reporterId" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="modal-placeName" class="form-label">장소 이름</label>
+                                <input type="text" class="form-control" id="modal-placeName" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="modal-largeAddress" class="form-label">주소</label>
+                                <input type="text" class="form-control" id="modal-largeAddress" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="modal-placeDescription" class="form-label">설명</label>
+                                <textarea class="form-control" id="modal-placeDescription" rows="3" readonly></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="modal-operatingHours" class="form-label">운영 시간</label>
+                                <input type="text" class="form-control" id="modal-operatingHours" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="modal-placeLatitude" class="form-label">위도</label>
+                                <input type="text" class="form-control" id="modal-placeLatitude" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="modal-placeLongitude" class="form-label">경도</label>
+                                <input type="text" class="form-control" id="modal-placeLongitude" readonly>
+                            </div>
+                            <!-- 이미지가 있을 경우 표시 -->
+                            <div class="mb-3">
+                                <img id="modal-firstImage" src="" alt="First Image" class="img-fluid">
+                                <p id="modal-firstImage-name" class="mt-1"></p>
+                                <input type="file" id="modal-firstImage-input" style="display: none;" accept="image/*">
+
+                                <img id="modal-secondImage" src="" alt="Second Image" class="img-fluid">
+                                <p id="modal-secondImage-name" class="mt-1"></p>
+                                <input type="file" id="modal-secondImage-input" style="display: none;" accept="image/*">
+
+                                <img id="modal-thirdImage" src="" alt="Third Image" class="img-fluid">
+                                <p id="modal-thirdImage-name" class="mt-1"></p>
+                                <input type="file" id="modal-thirdImage-input" style="display: none;" accept="image/*">
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+<script th:replace="~{layout/fragments :: bootstrapScript}"></script>
+</body>
+</html>
