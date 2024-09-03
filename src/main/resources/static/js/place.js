@@ -2,6 +2,42 @@ document.addEventListener('DOMContentLoaded', function() {
     var currentExistingPage = 0;
     var currentNewPage = 0;
 
+
+    document.querySelectorAll('.img-fluid').forEach(function(img) {
+        img.addEventListener('click', function() {
+            // 해당 이미지에 대응하는 파일 입력 요소를 찾음
+            var inputId = this.id + '-input';
+            var fileInput = document.getElementById(inputId);
+
+            if (fileInput) {
+                fileInput.click(); // 파일 선택 창 열기
+            }
+        });
+    });
+
+    // 파일 선택 후 이미지 미리 보기 업데이트
+    document.querySelectorAll('input[type="file"]').forEach(function(input) {
+        input.addEventListener('change', function(event) {
+            var file = event.target.files[0];
+
+            if (file) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    // 선택된 파일의 데이터 URL을 사용해 이미지 src 변경
+                    var imgId = input.id.replace('-input', '');
+                    var imgElement = document.getElementById(imgId);
+                    imgElement.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+
+
+
+
     function loadExistingPlaces(page) {
         currentExistingPage = page;
         axios.get('/api/detailPlacesList', {
@@ -114,13 +150,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 setImageWithName('modal-firstImage', place.firstUrl, place.firstImageName);
                 setImageWithName('modal-secondImage', place.secondUrl, place.secondImageName);
                 setImageWithName('modal-thirdImage', place.thirdUrl, place.thirdImageName);
+
                 var modal = new bootstrap.Modal(document.getElementById('detailModal'));
+                var reporterIdElement = document.getElementById('modal-reporterId');
+                var reporterIdContainer = reporterIdElement.closest('.mb-3');
+
+                if (place.reporterId) {
+                    reporterIdElement.value = place.reporterId;
+                    reporterIdContainer.style.display = 'block'; // 보여줍니다.
+                } else {
+                    reporterIdContainer.style.display = 'none'; // 숨깁니다.
+                }
+
                 modal.show();
             })
             .catch(function(error) {
                 console.error('Error loading place details:', error);
             });
     }
+
     function setImageWithName(elementId, imageUrl, imageName) {
         const imgElement = document.getElementById(elementId);
         const imgNameElement = document.getElementById(`${elementId}-name`);
@@ -149,6 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (imgNameElement) imgNameElement.style.display = 'none';
         }
     }
+
     function loadConfirmPlaceDetails(placeName, reporterId) {
         if (!reporterId) {
             console.error('Reporter ID is null or undefined');
@@ -173,6 +222,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 setImageWithName('modal-firstImage', place.firstUrl, place.firstImageName);
                 setImageWithName('modal-secondImage', place.secondUrl, place.secondImageName);
                 setImageWithName('modal-thirdImage', place.thirdUrl, place.thirdImageName);
+
+                var reporterIdElement = document.getElementById('modal-reporterId');
+                var reporterIdContainer = reporterIdElement.closest('.mb-3');
+
+                // Reporter ID가 존재할 경우 보여주고, 그렇지 않을 경우 숨깁니다.
+                if (place.reporterId) {
+                    reporterIdElement.value = place.reporterId;
+                    reporterIdContainer.style.display = 'block'; // 보이게 설정
+                } else {
+                    reporterIdContainer.style.display = 'none'; // 숨김
+                }
+
                 var modal = new bootstrap.Modal(document.getElementById('detailModal'));
                 modal.show();
             })
@@ -180,6 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error loading confirm place details:', error);
             });
     }
+
 
     // 페이지네이션 업데이트 함수
     function updatePagination(paginationElement, totalPages, loadFunction, currentPage) {
