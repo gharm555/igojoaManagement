@@ -25,11 +25,14 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     // lombok
     testAnnotationProcessor 'org.projectlombok:lombok'
@@ -61,11 +64,14 @@ dependencies {
     implementation platform('com.google.cloud:libraries-bom:26.1.4')
     implementation 'com.google.cloud:google-cloud-core'
 
+    // AWS
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'software.amazon.awssdk:s3:2.17.46'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-}
+//tasks.named('test') {
+//    useJUnitPlatform()
+//}
 
 // Querydsl 관련 빌드 옵션 -----
 def querydslDir = "$buildDir/generated/querydsl"
