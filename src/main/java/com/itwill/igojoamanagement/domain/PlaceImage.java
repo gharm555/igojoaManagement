@@ -14,13 +14,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 @Entity
-@Table(name = "PlaceImages")
+@Table(name = "placeImages")
 public class PlaceImage {
 
     @Id
     @Column(name = "placeName", length = 20, nullable = false)
     private String placeName;
-
 
     @Column(name = "firstUrl", length = 200, nullable = false)
     private String firstUrl;

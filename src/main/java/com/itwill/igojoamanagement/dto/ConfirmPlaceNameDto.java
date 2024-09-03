@@ -15,10 +15,13 @@ public class ConfirmPlaceNameDto {
 
     private String placeName;
 
+    private String reporterId;
+
     public static ConfirmPlaceNameDto fromEntity(ConfirmPlace entity){
 
         return ConfirmPlaceNameDto.builder()
                 .placeName(entity.getPlaceName())
+                .reporterId(entity.getReporterId())
                 .build();
     }
 

@@ -56,11 +56,11 @@ public class ConfirmPlace {
 
 	@Column(nullable = false)
 	@NotNull(message = "경도는 필수 입력 항목입니다.")
-	private double placeLongitude;
+	private Double placeLongitude;
 
 	@Column(nullable = false)
 	@NotNull(message = "위도는 필수 입력 항목입니다.")
-	private double placeLatitude;
+	private Double placeLatitude;
 
 	@Column(length = 500)
 	@Size(max = 500, message = "운영 시간은 최대 500자까지 입력할 수 있습니다.")
