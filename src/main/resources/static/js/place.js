@@ -52,15 +52,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     existingPlacesList.innerHTML = ''; // 기존 내용 비우기
                     response.data.content.forEach(function(place) {
                         var listItem = `
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="#" class="show-detail-btn" data-place-name="${place.placeName}" data-place-type="existing">
-                            <span>${place.placeName}</span>
-                        </a>
-                        <div>
-                            <button type="button" class="btn btn-secondary btn-sm">수정</button>
-                            <button type="button" class="btn btn-danger btn-sm">삭제</button>
-                        </div>
-                    </li>`;
+                <tr>
+                    <td><a href="#" class="show-detail-btn" data-place-name="${place.placeName}" data-place-type="existing">${place.placeName}</a></td>
+                    <td>${place.largeAddress} ${place.midiumAddress} ${place.smallAddress}</td>
+                    <td><button type="button" class="btn btn-danger btn-sm delete-btn" data-place-name="${place.placeName}" >삭제</button></td>
+                </tr>`;
                         existingPlacesList.insertAdjacentHTML('beforeend', listItem);
                     });
 
@@ -69,13 +65,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         button.addEventListener('click', function(event) {
                             event.preventDefault();
                             var placeName = this.getAttribute('data-place-name');
-                            var placeType = this.getAttribute('data-place-type');
-                            if (placeType === 'existing') {
-                                loadPlaceDetails(placeName); // 기존 명소 로드
-                            } else {
-                                var reporterId = this.getAttribute('data-reporter-id'); // 신규 명소인 경우 리포터 ID도 가져옴
-                                loadConfirmPlaceDetails(placeName, reporterId);
-                            }
+                            loadPlaceDetails(placeName); // 기존 명소 로드
+                        });
+                    });
+                    document.querySelectorAll('.delete-btn').forEach(function(button) {
+                        button.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            var placeName = this.getAttribute('data-place-name');
+                            console.log('Approving place:', placeName); // 로그 추가
+                            deletePlace(placeName); // 비동기 승인 처리
                         });
                     });
 
@@ -103,17 +101,36 @@ document.addEventListener('DOMContentLoaded', function() {
                     newPlacesList.innerHTML = ''; // 기존 내용 비우기
                     response.data.content.forEach(function(place) {
                         var listItem = `
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="#" class="show-detail-btn" data-place-name="${place.placeName}" data-reporter-id="${place.reporterId}" data-place-type="new">
-                            <span>${place.placeName}</span>
-                        </a>
-                        <div>
-                            <button type="button" class="btn btn-primary btn-sm">승인</button>
-                            <button type="button" class="btn btn-secondary btn-sm">수정</button>
-                            <button type="button" class="btn btn-danger btn-sm">삭제</button>
-                        </div>
-                    </li>`;
+                <tr>
+                    <td><a href="#" class="show-detail-btn" data-place-name="${place.placeName}" data-reporter-id="${place.reporterId}" data-place-type="new">${place.placeName}</a></td>
+                    <td>${place.reporterId}</td>
+                    <td>${place.largeAddress} ${place.mediumAddress} ${place.smallAddress}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary btn-sm approve-btn" data-place-name="${place.placeName}" data-reporter-id="${place.reporterId}">승인</button>
+                        <button type="button" class="btn btn-danger btn-sm confirmDelete-btn" data-place-name="${place.placeName}" data-reporter-id="${place.reporterId}">삭제</button>
+                    </td>
+                </tr>`;
                         newPlacesList.insertAdjacentHTML('beforeend', listItem);
+                    });
+                    document.querySelectorAll('.approve-btn').forEach(function(button) {
+                        button.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            var placeName = this.getAttribute('data-place-name');
+                            var reporterId = this.getAttribute('data-reporter-id');
+                            console.log('Approving place:', placeName, 'Reporter ID:', reporterId); // 로그 추가
+                            approvePlace(placeName, reporterId); // 비동기 승인 처리
+                        });
+                    });
+
+
+                    document.querySelectorAll('.confirmDelete-btn').forEach(function(button) {
+                        button.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            var placeName = this.getAttribute('data-place-name');
+                            var reporterId = this.getAttribute('data-reporter-id');
+                            console.log('Approving place:', placeName, 'Reporter ID:', reporterId); // 로그 추가
+                            deleteConfirm(placeName,reporterId); // 비동기 승인 처리
+                        });
                     });
 
                     // 상세 정보 버튼 클릭 이벤트 설정
@@ -122,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             event.preventDefault();
                             var placeName = this.getAttribute('data-place-name');
                             var reporterId = this.getAttribute('data-reporter-id');
+
                             loadConfirmPlaceDetails(placeName, reporterId);
                         });
                     });
@@ -136,6 +154,31 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
+    function approvePlace(placeName, reporterId) {
+        console.log('Approving place:', placeName, 'Reporter ID:', reporterId);
+        axios.post('/api/approvePlace', {
+            placeName: placeName,
+            reporterId: reporterId
+        })
+            .then(function(response) {
+                alert('승인되었습니다!');
+                loadNewPlaces(currentNewPage); // 페이지를 새로고침하여 업데이트된 내용을 반영
+            })
+            .catch(function(error) {
+                console.error('Error approving place:', error);
+                if (error.response && error.response.data) {
+                    if (error.response.data.includes('이미 승인된 장소입니다')) {
+                        alert('이미 승인된 장소입니다. 기존 정보를 확인해주세요.');
+                    } else {
+                        alert(error.response.data);
+                    }
+                } else {
+                    alert('승인에 실패했습니다. 다시 시도해 주세요.');
+                }
+            });
+    }
+
+
     function loadPlaceDetails(placeName) {
         axios.get(`/api/placeDetails/${placeName}`)
             .then(function(response) {
@@ -147,6 +190,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('modal-operatingHours').value = place.operatingHours;
                 document.getElementById('modal-placeLatitude').value = place.placeLatitude;
                 document.getElementById('modal-placeLongitude').value = place.placeLongitude;
+                document.getElementById('modal-ridius').value = place.placeRadius;
+
                 setImageWithName('modal-firstImage', place.firstUrl, place.firstImageName);
                 setImageWithName('modal-secondImage', place.secondUrl, place.secondImageName);
                 setImageWithName('modal-thirdImage', place.thirdUrl, place.thirdImageName);
@@ -161,6 +206,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     reporterIdContainer.style.display = 'none'; // 숨깁니다.
                 }
+
+
 
                 modal.show();
             })
@@ -219,20 +266,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('modal-operatingHours').value = place.operatingHours;
                 document.getElementById('modal-placeLatitude').value = place.placeLatitude;
                 document.getElementById('modal-placeLongitude').value = place.placeLongitude;
+                document.getElementById('modal-ridius').value = place.radius;
                 setImageWithName('modal-firstImage', place.firstUrl, place.firstImageName);
                 setImageWithName('modal-secondImage', place.secondUrl, place.secondImageName);
                 setImageWithName('modal-thirdImage', place.thirdUrl, place.thirdImageName);
 
                 var reporterIdElement = document.getElementById('modal-reporterId');
                 var reporterIdContainer = reporterIdElement.closest('.mb-3');
-
-                // Reporter ID가 존재할 경우 보여주고, 그렇지 않을 경우 숨깁니다.
-                if (place.reporterId) {
-                    reporterIdElement.value = place.reporterId;
-                    reporterIdContainer.style.display = 'block'; // 보이게 설정
-                } else {
-                    reporterIdContainer.style.display = 'none'; // 숨김
-                }
 
                 var modal = new bootstrap.Modal(document.getElementById('detailModal'));
                 modal.show();
@@ -242,6 +282,37 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
+    function deletePlace(placeName) {
+        console.log('Deleting place:', placeName);
+        axios.delete('/api/placeDelete', {
+            data: { placeName: placeName } // delete 요청에서는 data 속성을 사용하여 본문 데이터를 보냅니다.
+        })
+            .then(function(response) {
+                alert('장소가 삭제되었습니다!');
+
+                loadExistingPlaces(currentExistingPage);
+            })
+            .catch(function(error) {
+                console.error('Error deleting place:', error);
+                alert('삭제에 실패했습니다. 다시 시도해 주세요.');
+            });
+    }
+function  deleteConfirm(placeName,reporterId){
+        axios.delete(`/api/confirmDelete`,{
+            data:{placeName: placeName,
+                reporterId: reporterId
+            }
+        })
+            .then(function (reponse){
+                alert('장소가 삭제되었습니다!');
+                loadNewPlaces(currentNewPage);
+            })
+            .catch(function(error) {
+                console.error('Error deleting place:', error);
+                alert('삭제에 실패했습니다. 다시 시도해 주세요.');
+            });
+
+}
 
     // 페이지네이션 업데이트 함수
     function updatePagination(paginationElement, totalPages, loadFunction, currentPage) {

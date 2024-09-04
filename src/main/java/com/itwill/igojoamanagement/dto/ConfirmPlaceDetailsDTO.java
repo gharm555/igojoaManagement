@@ -33,7 +33,7 @@ public class ConfirmPlaceDetailsDTO {
     public static ConfirmPlaceDetailsDTO fromEntity(ConfirmPlace confirmPlace, PlaceImage placeImage) {
         return ConfirmPlaceDetailsDTO.builder()
                 .placeName(confirmPlace.getPlaceName())
-                .placeName(confirmPlace.getReporterId())
+                .reporterId(confirmPlace.getReporterId())
                 .largeAddress(confirmPlace.getLargeAddress())
                 .mediumAddress(confirmPlace.getMediumAddress())
                 .smallAddress(confirmPlace.getSmallAddress())

@@ -7,6 +7,5 @@ import com.itwill.igojoamanagement.domain.ConfirmPlaceId;
 
 
 
-public interface ConfirmPlaceRepoisitory extends JpaRepository<ConfirmPlace, ConfirmPlaceId>,  ConfirmPlaceQueryDsl {
-
+public interface ConfirmPlaceRepository extends JpaRepository<ConfirmPlace, ConfirmPlaceId> {
 }
