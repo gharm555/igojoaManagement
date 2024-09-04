@@ -9,6 +9,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface RestrictionLogRepository extends JpaRepository<RestrictionLog, RestrictionLogPK>{
-    @Query("SELECT r FROM RestrictionLog r WHERE COUNT(r.restrictionLogPK.reportedId) >= 3")
-    Page<RestrictionLog> findBlackList(Pageable pageable);
 }

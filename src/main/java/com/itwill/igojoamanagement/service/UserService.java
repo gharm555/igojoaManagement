@@ -1,5 +1,6 @@
 package com.itwill.igojoamanagement.service;
 
+import com.itwill.igojoamanagement.domain.BlackUser;
 import com.itwill.igojoamanagement.domain.ReportLog;
 import com.itwill.igojoamanagement.domain.RestrictionLog;
 import com.itwill.igojoamanagement.domain.User;
@@ -8,6 +9,7 @@ import com.itwill.igojoamanagement.dto.ChangeReportedNickNameRequest;
 import com.itwill.igojoamanagement.dto.ReportedUserDto;
 import com.itwill.igojoamanagement.dto.ToRestrictionLogs;
 import com.itwill.igojoamanagement.dto.UserDto;
+import com.itwill.igojoamanagement.repository.BlackUserRepository;
 import com.itwill.igojoamanagement.repository.ReportLogRepository;
 import com.itwill.igojoamanagement.repository.RestrictionLogRepository;
 import com.itwill.igojoamanagement.repository.UserRepository;
@@ -22,6 +24,7 @@ import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,6 +35,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ReportLogRepository reportLogRepository;
     private final RestrictionLogRepository restrictionLogRepository;
+    private final BlackUserRepository blackUserRepository;
 
     // 유저 전체 목록 service
     public Page<UserDto> getUsersIdPage(Pageable pageable) {
@@ -55,12 +59,6 @@ public class UserService {
 
         user.setNickName(userDto.getNickName());
         userRepository.save(user);
-
-
-        /* (1) 닉네임을 바꿀 User 행(객체) 찾아오기
-         * (2) reportLogs 테이블에서 confirm 컬럼 "처리완료"로 바꾸기
-         * (3) user테이블에서 닉네임 변경 진행하기
-         */
     }
 
     // 신고 유저 service
@@ -85,8 +83,8 @@ public class UserService {
 
     // 블랙리스트 유저 정보
     @Transactional(readOnly = true)
-    public Page<RestrictionLog> getBlackList(Pageable pageable) {
-        Page<RestrictionLog> blackList = restrictionLogRepository.findBlackList(pageable);
+    public Page<BlackUser> getBlackList(Pageable pageable) {
+        Page<BlackUser> blackList = blackUserRepository.findBlackUsers(pageable);
 
         if (blackList == null) {
             return null;
@@ -117,6 +115,44 @@ public class UserService {
         } catch (Exception e) {
             return "변경 실패: " + e.getMessage();
         }
+    }
+
+    @Transactional
+    public boolean reportBlackList(Authentication auth, Map<String, Object> logId) {
+        String adminId = auth.getName();
+        String usedLogId = (String) logId.get("logId");
+
+        Optional<ReportLog> reportLog = reportLogRepository.findById(usedLogId);
+
+        BlackUser blackUser = BlackUser.builder()
+                .userId(reportLog.get().getReportedId())
+                .adminId(adminId)
+                .reasonCode(reportLog.get().getReasonCode())
+                .detail(reportLog.get().getReportedNickname())
+                .build();
+
+        if (reportLog.isPresent()) {
+            blackUserRepository.save(blackUser);
+            ReportLog a = reportLog.get();
+            a.confirmReport();
+            return true;
+        }
+        
+        return false;
+    }
+
+    @Transactional
+    public boolean cancelBlacklist(Map<String, Object> requestBody) {
+        String userId = (String) requestBody.get("userId");
+
+        BlackUser blackUser = blackUserRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found: " + userId));
+        blackUser.confirmCancel();
+
+        if (blackUser.getConfirm().equals("제재철회")) {
+            return true;
+        }
+
+        return false;
     }
 
 }
