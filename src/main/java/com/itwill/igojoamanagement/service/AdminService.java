@@ -45,8 +45,4 @@ public class AdminService implements UserDetailsService {
         log.info("admin {}", admin);
         return admin;
     }
-
 }
-
-
-

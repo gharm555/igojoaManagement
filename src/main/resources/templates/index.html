@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{layout/fragments :: documentHeader}">
-	<link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
 </head>
 <body>
 <header th:replace="~{layout/fragments :: pageHeader}"></header>
@@ -48,13 +48,13 @@
 			</div>
 		</div>
 	</div>
-
 </div>
 <!-- Use Axios :) -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script th:replace="~{layout/fragments :: bootstrapScript}"></script>
 <script th:src="@{/js/review.js}" sec:authorize="hasAnyAuthority('ROLE_리뷰_팀장', 'ROLE_리뷰_팀원')"></script>
 <script th:src="@{/js/user.js}" sec:authorize="hasAnyAuthority('ROLE_회원_팀장', 'ROLE_회원_팀원', 'ROLE_명소_팀장', 'ROLE_리뷰_팀장')"></script>
-<script th:src="@{/js/place.js}" sec:authorize="hasAnyAuthority('ROLE_명소_팀장', 'ROLE_명소_팀원')"></script>
+<script th:src="@{/js/place.js}"></script>
+<script th:src="@{/js/index.js}"></script>
 </body>
 </html>

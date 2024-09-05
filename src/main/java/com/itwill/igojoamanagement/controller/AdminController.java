@@ -1,6 +1,6 @@
 package com.itwill.igojoamanagement.controller;
 
-
+import com.itwill.igojoamanagement.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

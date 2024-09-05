@@ -1,9 +1,13 @@
 package com.itwill.igojoamanagement.service;
 
 import com.itwill.igojoamanagement.domain.Place;
+import com.itwill.igojoamanagement.domain.PlaceImage;
+import com.itwill.igojoamanagement.domain.PlaceStats;
 import com.itwill.igojoamanagement.dto.PlaceNameDto;
+import com.itwill.igojoamanagement.repository.PlaceImageRepository;
 import com.itwill.igojoamanagement.repository.PlaceQueryDsl;
 import com.itwill.igojoamanagement.repository.PlaceRepository;
+import com.itwill.igojoamanagement.repository.PlaceStatsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,10 @@ public class PlaceService {
 
     @Autowired
     private  PlaceRepository placeRepo;
+    @Autowired
+    private PlaceImageRepository placeImageRepo;
+    @Autowired
+    private PlaceStatsRepository placeStatsRepository;
 
     @Autowired
     private PlaceQueryDsl placeQueryDsl;
@@ -40,6 +48,13 @@ public class PlaceService {
     @Transactional(readOnly = true)
     public Optional<Object> getPlaceDetail(String placeName) {
         return placeQueryDsl.findPlaceDetailWithImage(placeName);
+    }
+    @Transactional
+    public void deletePlace(String placeName) {
+        placeImageRepo.deleteByPlaceName(placeName);
+        placeRepo.deleteByPlaceName(placeName);
+        placeStatsRepository.deleteById(placeName);
+
     }
 
 }

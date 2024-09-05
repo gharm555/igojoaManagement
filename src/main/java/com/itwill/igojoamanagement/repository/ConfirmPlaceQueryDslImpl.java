@@ -32,6 +32,7 @@ public class ConfirmPlaceQueryDslImpl extends QuerydslRepositorySupport implemen
         this.queryFactory = queryFactory;
     }
 
+
     @Override
     public void deleteByPlaceNameAndReporterId(String placeName, String reporterId) {
         QConfirmPlace confirmPlace = QConfirmPlace.confirmPlace;

@@ -1,6 +1,3 @@
-
-
-
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.8'
@@ -67,7 +64,6 @@ dependencies {
     implementation platform('com.google.cloud:libraries-bom:26.1.4')
     implementation 'com.google.cloud:google-cloud-core'
 
-
     // AWS
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.99'  // v1
@@ -91,4 +87,4 @@ tasks.withType(JavaCompile) {
 clean.doLast {
     file(querydslDir).deleteDir()
 }
-// ——————————————
+// -----------------------------
