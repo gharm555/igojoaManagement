@@ -1,15 +1,19 @@
 package com.itwill.igojoamanagement.repository;
 
-import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
-import com.itwill.igojoamanagement.domain.ConfirmPlace;
+import com.itwill.igojoamanagement.dto.ConfirmPlaceDetailsDTO;
+
+import java.util.Optional;
+
+
 
 public interface ConfirmPlaceQueryDsl {
 
-    Page<ConfirmPlace> findAllWithPaging(Pageable pageable);
-    List<ConfirmPlace> findByPlaceNameContaining(String placeName);
     void deleteByPlaceNameAndReporterId(String placeName, String reporterId);
+
+    void deleteByPlaceNameAndReporterIdAndImg(String placeName, String reporterId);
+
+    Optional<ConfirmPlaceDetailsDTO> findConfirmPlaceDetailsWithImages(String placeName, String reporterId);
+
 }
