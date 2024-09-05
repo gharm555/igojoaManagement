@@ -3,14 +3,13 @@ package com.itwill.igojoamanagement.service;
 import com.itwill.igojoamanagement.domain.ConfirmPlace;
 import com.itwill.igojoamanagement.domain.Place;
 import com.itwill.igojoamanagement.domain.PlaceImage;
+import com.itwill.igojoamanagement.domain.PlaceStats;
 import com.itwill.igojoamanagement.dto.ConfirmPlaceDetailsDTO;
 import com.itwill.igojoamanagement.dto.ConfirmPlaceNameDto;
 
 import com.itwill.igojoamanagement.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,6 +31,7 @@ public class ConfirmPlaceService {
 
 
     private final PlaceRepository placeRepository;
+    private final PlaceStatsRepository placeStatsRepository;
 
 
     @Transactional(readOnly = true)
@@ -89,6 +89,13 @@ public class ConfirmPlaceService {
                             .build();
 
                     placeRepository.save(place);
+
+                    PlaceStats placeStats = PlaceStats.builder()
+                            .placeName(place.getPlaceName())
+                            .highestBadge("경치좋음")
+                            .secondHighestBadge("야경좋음")
+                            .build();
+                    placeStatsRepository.save(placeStats);
 
                     // PlaceImage 엔티티 생성 및 저장
                     PlaceImage placeImage = PlaceImage.builder()
