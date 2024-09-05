@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface ReportLogRepository extends JpaRepository<ReportLog, String> {
     Page<ReportLog> findByReasonCode(Integer reasonCode, Pageable pageable);
     Optional<ReportLog> findFirstByReportedIdOrderByReportTimeDesc(String reportedId);
+
 }

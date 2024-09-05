@@ -57,6 +57,45 @@ function cancelReport(button) {
     }
 }
 
+function addBlackList(button) {
+    const liElement = button.closest('li');
+    if (!liElement) {
+        console.error('리스트 항목을 찾을 수 없습니다.');
+        return;
+    }
+
+    let detailElement;
+    let userIdElement;
+
+    if (confirm('정말로 이 유저를 블랙하시겠습니까?')) {
+        if (button.classList.contains('report-black')) {
+            userIdElement = liElement.querySelector('#reportedId')
+            detailElement = liElement.querySelector('#reportDetail');
+        } else {
+            userIdElement = liElement.querySelector('#userId')
+            detailElement = liElement.querySelector('#inappropriateDetail');
+        }
+        const userId = userIdElement ? userIdElement.textContent.trim() : null;
+        const detail = detailElement ? detailElement.textContent.trim() : null;
+
+        console.log("블랙 요청: " + userId);
+
+        axios.post('/review/userBlack', {data: {userId, detail}})
+            .then((response) => {
+                console.log(response.data);
+                alert(userId + '님이 블랙처리되었습니다.');
+            })
+            .catch((error) => {
+                if (error.response && error.response.status === 409) {
+                    alert(error.response.data.message);
+                } else {
+                    console.error('블랙리스트 추가 중 오류 발생:', error);
+                    alert('블랙리스트 추가 중 오류가 발생했습니다.');
+                }
+            });
+    }
+}
+
 const reviewMgr = document.querySelector('#reviewMgr');
 const reportTab = document.querySelector('#v-pills-report-tab');
 const inappropriateTab = document.querySelector('#v-pills-inappropriate-tab');
@@ -115,21 +154,22 @@ function loadReportReviews(page = 0) {
                         <div data-bs-toggle="modal" data-bs-target="#exampleModal" class="trigger-modal" style="hover">
                             <span class="d-none" id="logId" name="logId">${review.logId}</span>
                             <br>
-                            <strong>${review.reportedNickname != null ? review.reportedNickname : 'Unknown Place'}</strong><span>: </span>
-                            <span>${review.review.length > 25 ? review.review.substring(0, 25) + '...' : review.review}</span>
+                            <strong id="reportedId">${review.reportedId != null ? review.reportedId : 'Unknown Place'}</strong><span>: </span>
+                            <span id="reportDetail">${review.review.length > 25 ? review.review.substring(0, 25) + '...' : review.review}</span>
                             <br>
                             <small><strong>장소</strong>: <span class="r-placeName">${review.placeName != null ? review.placeName : '알 수 없음'}</span></small>&nbsp;&nbsp;
-                            <small class="reportedId"><strong>신고자</strong>: ${review.reporterId != null ? review.reporterId : 'Unknown User'}</small>&nbsp;&nbsp;
+                            <small><strong>신고자</strong>: ${review.reporterId != null ? review.reporterId : 'Unknown User'}</small>&nbsp;&nbsp;
                             <small><strong>신고시간</strong>: ${formatDate(review.reportTime)}</small>
                         </div>
                         <div>
                             <button class="btn btn-warning btn-sm report-cancel" onclick="cancelReport(this)">신고 취소</button>
                             <button class="btn btn-danger btn-sm report-delete" onclick="deleteReview(this)">삭제</button>
+                            <button class="btn btn-dark btn-sm report-black" onclick="addBlackList(this)">블랙</button>
                         </div>`;
                     reportList.appendChild(li);
 
                     // 각 모달 트리거 요소에 이벤트 리스너 추가
-                    li.querySelector('.trigger-modal').addEventListener('click', function() {
+                    li.querySelector('.trigger-modal').addEventListener('click', function () {
                         const modalTitle = document.querySelector('#exampleModalLabel');
                         const modalBody = document.querySelector('#exampleModal .modal-body');
 
@@ -163,7 +203,7 @@ function loadReportReviews(page = 0) {
         });
 }
 
-
+// 부적절한 리뷰 로드 함수
 function loadInappropriateReviews(page = 0) {
     axios.get(`/review/inappropriateReview?page=${page}`)
         .then((response) => {
@@ -191,16 +231,17 @@ function loadInappropriateReviews(page = 0) {
                 li.className = 'list-group-item d-flex justify-content-between align-items-center';
                 li.innerHTML = `
                         <div data-bs-toggle="modal" data-bs-target="#exampleModal" class="trigger-modal">
-                            <strong class="userId">${review.reviewId.userId != null ? review.reviewId.userId : 'Unknown User'}</strong>
+                            <strong id="userId">${review.reviewId.userId != null ? review.reviewId.userId : 'Unknown User'}</strong>
                             :
 
-                            <span>${review.reviewContent.length > 25 ? review.reviewContent.substring(0, 25) + '...' : review.reviewContent}</span>
+                            <span id="inappropriateDetail">${review.reviewContent.length > 25 ? review.reviewContent.substring(0, 25) + '...' : review.reviewContent}</span>
                             <br>
                             <small><strong>장소</strong>: <span class="i-placeName">${review.reviewId.placeName != null ? review.reviewId.placeName : '알 수 없음'}</span></small>&nbsp;&nbsp;
                             <small><strong>작성시간</strong>: ${formatDate(review.modifiedAt)}</small>
                         </div>
                         <div>
                             <button class="btn btn-danger btn-sm inappropriate-delete" onclick="deleteReview(this)">삭제</button>
+                            <button class="btn btn-dark btn-sm inappropriate-black" onclick="addBlackList(this)">블랙</button>
                         </div>`;
                 inappropriateList.appendChild(li);
 
@@ -236,7 +277,7 @@ function loadInappropriateReviews(page = 0) {
 }
 
 
-function updateModal({ title, body }) {
+function updateModal({title, body}) {
     const modalTitle = document.querySelector('#exampleModalLabel');
     const modalBody = document.querySelector('#exampleModal .modal-body');
 

@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{layout/fragments :: documentHeader}">
-	<link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
 </head>
 <body>
 <header th:replace="~{layout/fragments :: pageHeader}"></header>
 <!-- 탭 기능이 있는 컨테이너 -->
 <div class="container mt-5 p-4 bg-white rounded shadow-sm">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_회원_팀장', 'ROLE_명소_팀장', 'ROLE_리뷰_팀장')">
+        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_회원_팀장', 'ROLE_명소_팀장', 'ROLE_리뷰_팀장', 'ROLE_총괄_팀장')">
             <a class="nav-link active" id="analysis" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home"
                aria-selected="true">통계</a>
         </li>
-        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_회원_팀장', 'ROLE_회원_팀원', 'ROLE_리뷰_팀장')">
+        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_회원_팀장', 'ROLE_회원_팀원', 'ROLE_리뷰_팀장', 'ROLE_총괄_팀장')">
             <a class="nav-link" id="userMgr" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile"
                aria-selected="false">회원 관리</a>
         </li>
-        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_명소_팀장', 'ROLE_명소_팀원')">
+        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_명소_팀장', 'ROLE_명소_팀원', 'ROLE_총괄_팀장')">
             <a class="nav-link" id="placeMgr" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact"
                aria-selected="false">명소 관리</a>
         </li>
-        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_리뷰_팀장', 'ROLE_리뷰_팀원')">
+        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_리뷰_팀장', 'ROLE_리뷰_팀원', 'ROLE_총괄_팀장')">
             <a class="nav-link" id="reviewMgr" data-bs-toggle="tab" href="#review" role="tab" aria-controls="review"
                aria-selected="false">리뷰 관리</a>
         </li>
     </ul>
     <div class="tab-content mt-3" id="myTabContent">
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <div class="p-3 border bg-light" sec:authorize="hasAnyAuthority('ROLE_회원_팀장', 'ROLE_명소_팀장', 'ROLE_리뷰_팀장')">
+            <div class="p-3 border bg-light" sec:authorize="hasAnyAuthority('ROLE_회원_팀장', 'ROLE_명소_팀장', 'ROLE_리뷰_팀장', 'ROLE_총괄_팀장')">
                 <div th:replace="~{analysis/ga4-dashboard :: ga4Dashboard}"></div>
             </div>
         </div>
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <div class="p-3 border bg-light" sec:authorize="hasAnyAuthority('ROLE_회원_팀장', 'ROLE_회원_팀원', 'ROLE_리뷰_팀장')">
+            <div class="p-3 border bg-light" sec:authorize="hasAnyAuthority('ROLE_회원_팀장', 'ROLE_회원_팀원', 'ROLE_리뷰_팀장', 'ROLE_총괄_팀장')">
                 <div th:replace="~{user/user :: user}"></div>
             </div>
         </div>
@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="contact-tab">
-            <div class="p-3 border bg-light" sec:authorize="hasAnyAuthority('ROLE_리뷰_팀장', 'ROLE_리뷰_팀원')">
+            <div class="p-3 border bg-light" sec:authorize="hasAnyAuthority('ROLE_리뷰_팀장', 'ROLE_리뷰_팀원', 'ROLE_총괄_팀장')">
                 <div th:replace="~{review/review :: reviewContent}"></div>
             </div>
         </div>
@@ -51,7 +51,8 @@
 <!-- Use Axios :) -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script th:replace="~{layout/fragments :: bootstrapScript}"></script>
-<script th:src="@{/js/review.js}" sec:authorize="hasAnyAuthority('ROLE_리뷰_팀장', 'ROLE_리뷰_팀원')"></script>
-<script th:src="@{/js/user.js}" sec:authorize="hasAnyAuthority('ROLE_회원_팀장', 'ROLE_회원_팀원', 'ROLE_명소_팀장', 'ROLE_리뷰_팀장')"></script>
+<script th:src="@{/js/review.js}"></script>
+<script th:src="@{/js/user.js}"></script>
+<script th:src="@{/js/index.js}"></script>
 </body>
 </html>
