@@ -291,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     reporterIdContainer.style.display = 'none'; // 숨깁니다.
                 }
-                
+
                 // 2024-09-05 서상원 모달 부분 버그 고쳐봄 backdrop / keyboard 설정함
                 // let modal = new bootstrap.Modal(document.getElementById('detailModal'));
                 let modal = new bootstrap.Modal(document.getElementById('detailModal'), {
@@ -391,6 +391,18 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(key, value);
         }
 
+
+        // 기존의 placeImage1, placeImage2, placeImage3를 제거
+        formData.delete('placeImage1');
+        formData.delete('placeImage2');
+        formData.delete('placeImage3');
+
+        // 선택된 모든 파일을 placeImages[]로 추가
+        $placeImgInputs.forEach((input) => {
+            if (input.files.length > 0) {
+                formData.append('placeImages', input.files[0]);
+            }
+        });
 
         // // 모달에서 값들을 가져옵니다.
         // let updatedPlace = {
