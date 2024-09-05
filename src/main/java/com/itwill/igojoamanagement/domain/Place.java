@@ -38,11 +38,11 @@ public class Place {
 
     @Column(nullable = false)
     @NotNull(message = "위도는 필수 입력 항목입니다.")
-    private double placeLatitude;
+    private Double placeLatitude;
 
     @Column(nullable = false)
     @NotNull(message = "경도는 필수 입력 항목입니다.")
-    private double placeLongitude;
+    private Double placeLongitude;
 
     @Column(length = 500)
     private String operatingHours;
