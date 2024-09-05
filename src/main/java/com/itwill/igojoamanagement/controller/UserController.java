@@ -1,9 +1,6 @@
 package com.itwill.igojoamanagement.controller;
 
-<<<<<<< HEAD
-=======
-import org.springframework.data.domain.PageRequest;
->>>>>>> 6abfd7180ea55685ce69b42bc98cab6b8de82b30
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import com.itwill.igojoamanagement.dto.ReportedUserDto;
@@ -18,10 +15,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-<<<<<<< HEAD
-=======
-import org.springframework.ui.Model;
->>>>>>> 6abfd7180ea55685ce69b42bc98cab6b8de82b30
 import org.springframework.web.bind.annotation.*;
 
 @RestController

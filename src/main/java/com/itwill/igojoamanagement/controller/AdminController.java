@@ -1,9 +1,6 @@
 package com.itwill.igojoamanagement.controller;
 
-<<<<<<< HEAD
-=======
-import com.itwill.igojoamanagement.service.AdminService;
->>>>>>> 6abfd7180ea55685ce69b42bc98cab6b8de82b30
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

@@ -56,50 +56,57 @@
                         <form id="placeDetailsForm">
                             <div class="mb-3">
                                 <label for="modal-reporterId" class="form-label">작성자</label>
-                                <input type="text" class="form-control" id="modal-reporterId" readonly>
+                                <input type="text" class="form-control" id="modal-reporterId" name="reporterId" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="modal-placeName" class="form-label">장소 이름</label>
-                                <input type="text" class="form-control" id="modal-placeName" readonly>
+                                <input type="text" class="form-control" id="modal-placeName" name="placeName">
                             </div>
                             <div class="mb-3">
                                 <label for="modal-largeAddress" class="form-label">주소</label>
-                                <input type="text" class="form-control" id="modal-largeAddress" readonly>
+                                <input type="text" class="form-control" id="modal-largeAddress" name="largeAddress">
                             </div>
                             <div class="mb-3">
                                 <label for="modal-placeDescription" class="form-label">설명</label>
-                                <textarea class="form-control" id="modal-placeDescription" rows="3" readonly></textarea>
+                                <textarea class="form-control" id="modal-placeDescription" name="placeDescription" rows="3"></textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="modal-operatingHours" class="form-label">운영 시간</label>
-                                <input type="text" class="form-control" id="modal-operatingHours" readonly>
+                                <input type="text" class="form-control" id="modal-operatingHours" name="operatingHours">
                             </div>
                             <div class="mb-3">
                                 <label for="modal-placeLatitude" class="form-label">위도</label>
-                                <input type="text" class="form-control" id="modal-placeLatitude" readonly>
+                                <input type="text" class="form-control" id="modal-placeLatitude" name="placeLatitude">
                             </div>
                             <div class="mb-3">
                                 <label for="modal-placeLongitude" class="form-label">경도</label>
-                                <input type="text" class="form-control" id="modal-placeLongitude" readonly>
+                                <input type="text" class="form-control" id="modal-placeLongitude" name="placeLongitude">
                             </div>
                             <!-- 이미지가 있을 경우 표시 -->
                             <div class="mb-3">
-                                <img id="modal-firstImage" src="" alt="First Image" class="img-fluid">
-                                <p id="modal-firstImage-name" class="mt-1"></p>
-                                <input type="file" id="modal-firstImage-input" style="display: none;" accept="image/*">
+                                <div class="mb-3">
+                                    <span id="modal-oldFirstImage" style="display: none"></span>
+                                    <img id="modal-firstImage" src="/api/placeholder/150/150" alt="First Image" class="img-fluid">
+                                    <p id="modal-firstImage-name" class="mt-1">첫 번째 이미지</p>
+                                    <input type="file" id="PlaceImgInput1" name="placeImage1" accept="image/*" class="form-control">
+                                </div>
 
-                                <img id="modal-secondImage" src="" alt="Second Image" class="img-fluid">
-                                <p id="modal-secondImage-name" class="mt-1"></p>
-                                <input type="file" id="modal-secondImage-input" style="display: none;" accept="image/*">
+                                <div class="mb-3">
+                                    <img id="modal-secondImage" src="/api/placeholder/150/150" alt="Second Image" class="img-fluid">
+                                    <p id="modal-secondImage-name" class="mt-1">두 번째 이미지</p>
+                                    <input type="file" id="PlaceImgInput2" name="placeImage2" accept="image/*" class="form-control">
+                                </div>
 
-                                <img id="modal-thirdImage" src="" alt="Third Image" class="img-fluid">
-                                <p id="modal-thirdImage-name" class="mt-1"></p>
-                                <input type="file" id="modal-thirdImage-input" style="display: none;" accept="image/*">
-
+                                <div class="mb-3">
+                                    <img id="modal-thirdImage" src="/api/placeholder/150/150" alt="Third Image" class="img-fluid">
+                                    <p id="modal-thirdImage-name" class="mt-1">세 번째 이미지</p>
+                                    <input type="file" id="PlaceImgInput3" name="placeImage3" accept="image/*" class="form-control">
+                                </div>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
+                        <button id="modifyBtn" type="button" class="btn btn-primary" data-bs-dismiss="modal">수정</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                     </div>
                 </div>
