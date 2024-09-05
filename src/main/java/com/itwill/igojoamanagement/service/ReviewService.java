@@ -2,11 +2,7 @@ package com.itwill.igojoamanagement.service;
 
 import com.itwill.igojoamanagement.domain.BlackUser;
 import com.itwill.igojoamanagement.domain.ReportLog;
-import com.itwill.igojoamanagement.domain.RestrictionLog;
 import com.itwill.igojoamanagement.domain.Review;
-
-import com.itwill.igojoamanagement.domain.key.RestrictionLogPK;
-
 import com.itwill.igojoamanagement.domain.key.ReviewPK;
 import com.itwill.igojoamanagement.dto.ReportReviewDetailDto;
 import com.itwill.igojoamanagement.dto.ReportReviewDto;
@@ -18,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
