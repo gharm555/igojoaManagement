@@ -70,12 +70,12 @@ public class ReviewRepositoryImpl extends QuerydslRepositorySupport implements R
                         reportLog.review,
                         reportLog.reportReason))
                 .from(reportLog)
-                .where(reportLog.reasonCode.eq(101));
+                .where(reportLog.reasonCode.eq(101).and(reportLog.confirm.eq("대기중")));
 
         JPAQuery<Long> totalQuery = queryFactory
                 .select(reportLog.count())
                 .from(reportLog)
-                .where(reportLog.reasonCode.eq(101));
+                .where(reportLog.reasonCode.eq(101).and(reportLog.confirm.eq("대기중")));
 
         List<ReportReviewDto> results = query
                 .offset(pageable.getOffset())

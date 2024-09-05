@@ -2,9 +2,12 @@ package com.itwill.igojoamanagement.service;
 
 import com.itwill.igojoamanagement.domain.BlackUser;
 import com.itwill.igojoamanagement.domain.ReportLog;
+import com.itwill.igojoamanagement.domain.RestrictionLog;
 import com.itwill.igojoamanagement.domain.Review;
+
+import com.itwill.igojoamanagement.domain.key.RestrictionLogPK;
+
 import com.itwill.igojoamanagement.domain.key.ReviewPK;
-import com.itwill.igojoamanagement.domain.key.UserBlackListPK;
 import com.itwill.igojoamanagement.dto.ReportReviewDetailDto;
 import com.itwill.igojoamanagement.dto.ReportReviewDto;
 import com.itwill.igojoamanagement.repository.ReportLogRepository;
@@ -44,7 +47,7 @@ public class ReviewService {
         return reviewList;
     }
 
-    // 신고 리뷰 삭제하기(신고, 리뷰 테이블 둘다 삭제)
+    // 신고 리뷰 삭제하기(리뷰 테이블에서 삭제)
     // TODO: 포인트 날리기
     @Transactional
     public void deleteReportReview(String logId) {
@@ -54,14 +57,15 @@ public class ReviewService {
         // 리뷰 테이블에서 삭제
         reviewRepository.deleteById(review);
 
-        // 신고 테이블에서 삭제
-        reportLogRepository.deleteById(logId);
+        // 신고 테이블에서 처리 완료 업데이트 (confirm 대기중 -> 처리완료)
+        reportLog.confirmReport();
     }
 
-    // 신고 리뷰 취소하기 (신고 로그 테이블에서만 지우기)
+    // 신고 리뷰 취소하기 (confirm 대기중 -> 신고취소)
     @Transactional
     public void cancelReportReview(String logId) {
-        reportLogRepository.deleteById(logId);
+        ReportLog reportLog = reportLogRepository.findById(logId).orElseThrow();
+        reportLog.cancelReport();
     }
 
     // 부적절한 리뷰 삭제 (리뷰 테이블에서 지우기)
@@ -77,9 +81,17 @@ public class ReviewService {
         blackUserRepository.save(blackUser);
     }
 
+    // 블랙리스트 확인
+    @Transactional(readOnly = true)
+    public Boolean isUserBlacklisted(String userId) {
+        return blackUserRepository.findById(userId).isPresent();
+    }
+
     // 신고 리뷰 상세
+    @Transactional(readOnly = true)
     public ReportReviewDetailDto findReportReviewDetail(String logId) {
         ReportReviewDetailDto reviewDetail = reviewRepository.findReviewDetail(logId);
         return reviewDetail;
     }
+
 }

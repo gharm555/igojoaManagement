@@ -25,5 +25,7 @@ public class RestrictionLog {
 
     @Column(name = "detail")
     private String detail;
-
+  
 }
+
+

@@ -28,3 +28,4 @@ public class RestrictionLogPK implements Serializable {
         this.restrictionDate = LocalDateTime.now();
     }
 }
+
