@@ -392,6 +392,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
 
+        // 기존의 placeImage1, placeImage2, placeImage3를 제거
+        formData.delete('placeImage1');
+        formData.delete('placeImage2');
+        formData.delete('placeImage3');
+
+        // 선택된 모든 파일을 placeImages[]로 추가
+        $placeImgInputs.forEach((input) => {
+            if (input.files.length > 0) {
+                formData.append('placeImages', input.files[0]);
+            }
+        });
+
         // // 모달에서 값들을 가져옵니다.
         // let updatedPlace = {
         //     reporterId: document.getElementById('modal-reporterId').value,
