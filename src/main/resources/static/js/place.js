@@ -254,7 +254,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-
         axios.get(`/api/confirmPlaceDetails`, {
             params: {
                 placeName: placeName,
@@ -268,6 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 let fullAddress = `${place.largeAddress} ${place.mediumAddress} ${place.smallAddress}`;
                 let reporterIdElement = document.getElementById('modal-reporterId');
                 let reporterIdContainer = reporterIdElement.closest('.mb-3');
+                const modal = new bootstrap.Modal(document.getElementById('detailModal'));
 
                 document.getElementById('modal-reporterId').value = place.reporterId;
                 document.getElementById('modal-placeName').value = place.placeName;
@@ -291,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     reporterIdContainer.style.display = 'none'; // 숨깁니다.
                 }
 
-                let modal = new bootstrap.Modal(document.getElementById('detailModal'));
+
                 modal.show();
             })
             .catch(function (error) {
@@ -383,22 +383,7 @@ function  deleteConfirm(placeName,reporterId){
         }
 
 
-        // // 모달에서 값들을 가져옵니다.
-        // let updatedPlace = {
-        //     reporterId: document.getElementById('modal-reporterId').value,
-        //     placeName: document.getElementById('modal-placeName').value,
-        //     largeAddress: largeAddress,
-        //     mediumAddress: mediumAddress,
-        //     smallAddress: smallAddress,
-        //     placeDescription: document.getElementById('modal-placeDescription').value,
-        //     operatingHours: document.getElementById('modal-operatingHours').value,
-        //     placeLatitude: parseFloat(document.getElementById('modal-placeLatitude').value) || null,
-        //     placeLongitude: parseFloat(document.getElementById('modal-placeLongitude').value) || null,
-        //     radius:200,
-        //     oldFirstUrl:document.getElementById('modal-oldFirstImage').textContent
-        // };
-        //
-        // console.log("Sending updatedPlace:", JSON.stringify(updatedPlace, null, 2));
+
 
         axios.put('/api/updateConfirmPlace', formData, {
             headers: {
