@@ -19,6 +19,8 @@ public class QReportLog extends EntityPathBase<ReportLog> {
 
     public static final QReportLog reportLog = new QReportLog("reportLog");
 
+    public final StringPath confirm = createString("confirm");
+
     public final StringPath logId = createString("logId");
 
     public final StringPath placeName = createString("placeName");
