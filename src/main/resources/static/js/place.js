@@ -1,10 +1,10 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     let currentExistingPage = 0;
     let currentNewPage = 0;
 
 
-    document.querySelectorAll('.img-fluid').forEach(function(img) {
-        img.addEventListener('click', function() {
+    document.querySelectorAll('.img-fluid').forEach(function (img) {
+        img.addEventListener('click', function () {
             // 해당 이미지에 대응하는 파일 입력 요소를 찾음
             const inputId = this.id + '-input';
             const fileInput = document.getElementById(inputId);
@@ -16,14 +16,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // 파일 선택 후 이미지 미리 보기 업데이트
-    document.querySelectorAll('input[type="file"]').forEach(function(input) {
-        input.addEventListener('change', function(event) {
+    document.querySelectorAll('input[type="file"]').forEach(function (input) {
+        input.addEventListener('change', function (event) {
             const file = event.target.files[0];
 
             if (file) {
                 const reader = new FileReader();
 
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     // 선택된 파일의 데이터 URL을 사용해 이미지 src 변경
                     const imgId = input.id.replace('-input', '');
                     const imgElement = document.getElementById(imgId);
@@ -36,8 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-
-
     function loadExistingPlaces(page) {
         currentExistingPage = page;
 
@@ -46,12 +44,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 page: page
             }
         })
-            .then(function(response) {
+            .then(function (response) {
                 const existingPlacesList = document.getElementById('existing-places-list');
                 const existingPlacesPagination = document.getElementById('existing-places-pagination');
                 if (existingPlacesList) {
                     existingPlacesList.innerHTML = ''; // 기존 내용 비우기
-                    response.data.content.forEach(function(place) {
+                    response.data.content.forEach(function (place) {
                         const listItem = `
                 <tr>
                     <td><a href="#" class="show-detail-btn" data-place-name="${place.placeName}" data-place-type="existing">${place.placeName}</a></td>
@@ -62,15 +60,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
 
                     // 상세 정보 버튼 클릭 이벤트 설정
-                    document.querySelectorAll('.show-detail-btn').forEach(function(button) {
-                        button.addEventListener('click', function(event) {
+                    document.querySelectorAll('.show-detail-btn').forEach(function (button) {
+                        button.addEventListener('click', function (event) {
                             event.preventDefault();
                             const placeName = this.getAttribute('data-place-name');
                             loadPlaceDetails(placeName); // 기존 명소 로드
                         });
                     });
-                    document.querySelectorAll('.delete-btn').forEach(function(button) {
-                        button.addEventListener('click', function(event) {
+                    document.querySelectorAll('.delete-btn').forEach(function (button) {
+                        button.addEventListener('click', function (event) {
                             event.preventDefault();
                             const placeName = this.getAttribute('data-place-name');
                             console.log('Approving place:', placeName); // 로그 추가
@@ -83,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.error('existing-places-list element not found');
                 }
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.error('Error fetching existing places:', error);
             });
     }
@@ -95,12 +93,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 page: page
             }
         })
-            .then(function(response) {
+            .then(function (response) {
                 const newPlacesList = document.getElementById('new-places-list');
                 const newPlacesPagination = document.getElementById('new-places-pagination');
                 if (newPlacesList) {
                     newPlacesList.innerHTML = ''; // 기존 내용 비우기
-                    response.data.content.forEach(function(place) {
+                    response.data.content.forEach(function (place) {
                         const listItem = `
                 <tr>
                     <td><a href="#" class="show-detail-btn" data-place-name="${place.placeName}" data-reporter-id="${place.reporterId}" data-place-type="new">${place.placeName}</a></td>
@@ -113,8 +111,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 </tr>`;
                         newPlacesList.insertAdjacentHTML('beforeend', listItem);
                     });
-                    document.querySelectorAll('.approve-btn').forEach(function(button) {
-                        button.addEventListener('click', function(event) {
+                    document.querySelectorAll('.approve-btn').forEach(function (button) {
+                        button.addEventListener('click', function (event) {
                             event.preventDefault();
                             const placeName = this.getAttribute('data-place-name');
                             const reporterId = this.getAttribute('data-reporter-id');
@@ -124,19 +122,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
 
 
-                    document.querySelectorAll('.confirmDelete-btn').forEach(function(button) {
-                        button.addEventListener('click', function(event) {
+                    document.querySelectorAll('.confirmDelete-btn').forEach(function (button) {
+                        button.addEventListener('click', function (event) {
                             event.preventDefault();
                             const placeName = this.getAttribute('data-place-name');
                             const reporterId = this.getAttribute('data-reporter-id');
                             console.log('Approving place:', placeName, 'Reporter ID:', reporterId); // 로그 추가
-                            deleteConfirm(placeName,reporterId); // 비동기 승인 처리
+                            deleteConfirm(placeName, reporterId); // 비동기 승인 처리
                         });
                     });
 
                     // 상세 정보 버튼 클릭 이벤트 설정
-                    document.querySelectorAll('.show-detail-btn').forEach(function(button) {
-                        button.addEventListener('click', function(event) {
+                    document.querySelectorAll('.show-detail-btn').forEach(function (button) {
+                        button.addEventListener('click', function (event) {
                             event.preventDefault();
                             const placeName = this.getAttribute('data-place-name');
                             const reporterId = this.getAttribute('data-reporter-id');
@@ -150,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.error('new-places-list element not found');
                 }
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.error('Error fetching new places:', error);
             });
     }
@@ -161,11 +159,11 @@ document.addEventListener('DOMContentLoaded', function() {
             placeName: placeName,
             reporterId: reporterId
         })
-            .then(function(response) {
+            .then(function (response) {
                 alert('승인되었습니다!');
                 loadNewPlaces(currentNewPage); // 페이지를 새로고침하여 업데이트된 내용을 반영
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.error('Error approving place:', error);
                 if (error.response && error.response.data) {
                     if (error.response.data.includes('이미 승인된 장소입니다')) {
@@ -180,10 +178,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-
     function loadPlaceDetails(placeName) {
         axios.get(`/api/placeDetails/${placeName}`)
-            .then(function(response) {
+            .then(function (response) {
                 const place = response.data;
                 const fullAddress = `${place.largeAddress} ${place.mediumAddress} ${place.smallAddress}`;
                 document.getElementById('modal-placeName').value = place.placeName;
@@ -198,7 +195,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 setImageWithName('modal-secondImage', place.secondUrl, place.secondImageName);
                 setImageWithName('modal-thirdImage', place.thirdUrl, place.thirdImageName);
 
-                const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+                // 2024-09-05 서상원 모달 부분 버그 고쳐봄 backdrop / keyboard 설정함
+                // const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+                const modal = new bootstrap.Modal(document.getElementById('detailModal'), {
+                    backdrop: false,
+                    keyboard: true
+                });
                 const reporterIdElement = document.getElementById('modal-reporterId');
                 const reporterIdContainer = reporterIdElement.closest('.mb-3');
 
@@ -210,10 +212,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
 
-
                 modal.show();
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.error('Error loading place details:', error);
             });
     }
@@ -232,10 +233,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 imgNameElement.style.display = 'block';
             }
 
-            imgElement.onload = function() {
+            imgElement.onload = function () {
                 console.log(`Image loaded successfully: ${imageUrl}`);
             };
-            imgElement.onerror = function() {
+            imgElement.onerror = function () {
                 console.error(`Failed to load image: ${imageUrl}`);
                 imgElement.style.display = 'none';
                 if (imgNameElement) imgNameElement.style.display = 'none';
@@ -261,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 reporterId: reporterId
             }
         })
-            .then(function(response) {
+            .then(function (response) {
                 console.log(response.data);
 
                 let place = response.data;
@@ -291,7 +292,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     reporterIdContainer.style.display = 'none'; // 숨깁니다.
                 }
 
-                let modal = new bootstrap.Modal(document.getElementById('detailModal'));
+                // 2024-09-05 서상원 모달 부분 버그 고쳐봄 backdrop / keyboard 설정함
+                // let modal = new bootstrap.Modal(document.getElementById('detailModal'));
+                let modal = new bootstrap.Modal(document.getElementById('detailModal'), {
+                    backdrop: false,
+                    keyboard: true
+                });
                 modal.show();
             })
             .catch(function (error) {
@@ -302,38 +308,41 @@ document.addEventListener('DOMContentLoaded', function() {
     function deletePlace(placeName) {
         console.log('Deleting place:', placeName);
         axios.delete('/api/placeDelete', {
-            data: { placeName: placeName } // delete 요청에서는 data 속성을 사용하여 본문 데이터를 보냅니다.
+            data: {placeName: placeName} // delete 요청에서는 data 속성을 사용하여 본문 데이터를 보냅니다.
         })
-            .then(function(response) {
+            .then(function (response) {
                 alert('장소가 삭제되었습니다!');
 
                 loadExistingPlaces(currentExistingPage);
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.error('Error deleting place:', error);
                 alert('삭제에 실패했습니다. 다시 시도해 주세요.');
             });
     }
-function  deleteConfirm(placeName,reporterId){
-        axios.delete(`/api/confirmDelete`,{
-            data:{placeName: placeName,
+
+    function deleteConfirm(placeName, reporterId) {
+        axios.delete(`/api/confirmDelete`, {
+            data: {
+                placeName: placeName,
                 reporterId: reporterId
             }
         })
-            .then(function (reponse){
+            .then(function (reponse) {
                 alert('장소가 삭제되었습니다!');
                 loadNewPlaces(currentNewPage);
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.error('Error deleting place:', error);
                 alert('삭제에 실패했습니다. 다시 시도해 주세요.');
             });
 
-}
+    }
+
     // 이미지 선택 함수
     const $placeImgInputs = document.querySelectorAll('[id^="PlaceImgInput"]');
     $placeImgInputs.forEach((input, index) => {
-        input.addEventListener("change", function(event) {
+        input.addEventListener("change", function (event) {
             console.log(`File input ${index + 1} changed`);
             try {
                 if (this.files.length > 0) {
@@ -348,13 +357,13 @@ function  deleteConfirm(placeName,reporterId){
             }
         });
     });
-        // ------- 수창 작업 -------------------------------
+    // ------- 수창 작업 -------------------------------
 
     //수정버튼
     const $form = document.getElementById('placeDetailsForm');
     const $modifyBtn = document.querySelector("#modifyBtn");
 
-    $modifyBtn.addEventListener('click', function(event) {
+    $modifyBtn.addEventListener('click', function (event) {
         event.preventDefault();
         console.log('수정버튼 클릭함');
 
@@ -405,12 +414,12 @@ function  deleteConfirm(placeName,reporterId){
                 "Content-Type": "multipart/form-data",
             }
         })
-            .then(function(response) {
+            .then(function (response) {
                 console.log('서버 응답:', response.data);
                 alert('장소 정보가 성공적으로 업데이트되었습니다.');
 
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.error('장소 정보 업데이트 중 오류 발생:', error);
                 if (error.response) {
                     console.error('서버 응답:', error.response.data);
@@ -421,7 +430,6 @@ function  deleteConfirm(placeName,reporterId){
     });
 
 // 수창작업 끝 --------------------------------------------
-
 
 
     // 페이지네이션 업데이트 함수
@@ -455,8 +463,8 @@ function  deleteConfirm(placeName,reporterId){
 
         // 페이지 버튼 클릭 이벤트 설정
         const pageLinks = paginationElement.querySelectorAll('.page-link');
-        pageLinks.forEach(function(link, index) {
-            link.addEventListener('click', function(event) {
+        pageLinks.forEach(function (link, index) {
+            link.addEventListener('click', function (event) {
                 event.preventDefault();
                 if (index === 0 && currentPage > 0) {
                     loadFunction(currentPage - 1); // 이전 페이지 로드
@@ -471,7 +479,7 @@ function  deleteConfirm(placeName,reporterId){
 
     // 탭 전환 이벤트 리스너 추가
     const tabs = document.querySelectorAll('a[data-bs-toggle="pill"]');
-    tabs.forEach(function(tab) {
+    tabs.forEach(function (tab) {
         tab.addEventListener('shown.bs.tab', function (event) {
             if (event.target.id === 'v-pills-existing-tab') {
                 loadExistingPlaces(currentExistingPage);
