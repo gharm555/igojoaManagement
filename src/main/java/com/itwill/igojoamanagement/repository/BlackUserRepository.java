@@ -12,4 +12,6 @@ public interface BlackUserRepository extends JpaRepository<BlackUser, String>{
     
     @Query("SELECT b FROM BlackUser b WHERE b.confirm = '블랙리스트'")
     Page<BlackUser> findBlackUsers(Pageable pageable);
+
+    // pull
 }
