@@ -63,15 +63,11 @@ dependencies {
     // Google Cloud Libraries BOM
     implementation platform('com.google.cloud:libraries-bom:26.1.4')
     implementation 'com.google.cloud:google-cloud-core'
-
-    // AWS
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'software.amazon.awssdk:s3:2.17.46'
 }
 
-//tasks.named('test') {
-//    useJUnitPlatform()
-//}
+tasks.named('test') {
+    useJUnitPlatform()
+}
 
 // Querydsl 관련 빌드 옵션 -----
 def querydslDir = "$buildDir/generated/querydsl"

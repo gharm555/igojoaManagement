@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('modal-operatingHours').value = place.operatingHours;
                 document.getElementById('modal-placeLatitude').value = place.placeLatitude;
                 document.getElementById('modal-placeLongitude').value = place.placeLongitude;
-                document.getElementById('modal-ridius').value = place.placeRadius;
+                document.getElementById('modal-radius').value = place.placeRadius;
 
                 setImageWithName('modal-firstImage', place.firstUrl, place.firstImageName);
                 setImageWithName('modal-secondImage', place.secondUrl, place.secondImageName);
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('modal-operatingHours').value = place.operatingHours;
                 document.getElementById('modal-placeLatitude').value = place.placeLatitude;
                 document.getElementById('modal-placeLongitude').value = place.placeLongitude;
-                document.getElementById('modal-ridius').value = place.radius;
+                document.getElementById('modal-radius').value = place.radius;
                 setImageWithName('modal-firstImage', place.firstUrl, place.firstImageName);
                 setImageWithName('modal-secondImage', place.secondUrl, place.secondImageName);
                 setImageWithName('modal-thirdImage', place.thirdUrl, place.thirdImageName);
