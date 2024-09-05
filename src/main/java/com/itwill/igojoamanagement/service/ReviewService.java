@@ -48,9 +48,6 @@ public class ReviewService {
         ReportLog reportLog = reportLogRepository.findById(logId).orElseThrow();
         ReviewPK review = new ReviewPK(reportLog.getPlaceName(), reportLog.getReportedId());
 
-        // 제재 내역에 등록
-        //        addRestrictionLog(reportLog);
-
         // 리뷰 테이블에서 삭제
         reviewRepository.deleteById(review);
 
