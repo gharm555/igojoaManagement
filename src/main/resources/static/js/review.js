@@ -5,7 +5,7 @@ function deleteReview(button) {
         return;
     }
 
-    const userIdElement = liElement.querySelector('.userId');
+    const userIdElement = liElement.querySelector('#userId');
     const iplaceNameElement = liElement.querySelector('.i-placeName');
 
     const userId = userIdElement ? userIdElement.textContent.trim() : null;

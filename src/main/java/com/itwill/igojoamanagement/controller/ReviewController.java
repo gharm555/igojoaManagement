@@ -119,7 +119,7 @@ public class ReviewController {
         log.info("userBlack(userId: {}, detail: {})", userId, detail);
 
         // 이미 블랙리스트에 등록된 유저인지 확인
-        if(reviewService.isUserBlacklisted(userId)) {
+        if((reviewService.isUserBlacklisted(userId)).equals("블랙리스트")) {
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
                     .body(Map.of("message", "이미 블랙리스트에 등록된 유저입니다."));
@@ -127,7 +127,7 @@ public class ReviewController {
 
         String adminId = authentication.getName();
 
-        BlackUser blackUser = BlackUser.builder().userId(userId).adminId(adminId).reasonCode(101).detail(detail).build();
+        BlackUser blackUser = BlackUser.builder().userId(userId).adminId(adminId).reasonCode(101).detail(detail).confirm("블랙리스트").build();
 
         reviewService.addBlackList(blackUser);
 
