@@ -2,16 +2,12 @@ package com.itwill.igojoamanagement.service;
 
 import com.itwill.igojoamanagement.domain.BlackUser;
 import com.itwill.igojoamanagement.domain.ReportLog;
-import com.itwill.igojoamanagement.domain.RestrictionLog;
 import com.itwill.igojoamanagement.domain.User;
-import com.itwill.igojoamanagement.domain.key.RestrictionLogPK;
 import com.itwill.igojoamanagement.dto.ChangeReportedNickNameRequest;
 import com.itwill.igojoamanagement.dto.ReportedUserDto;
-import com.itwill.igojoamanagement.dto.ToRestrictionLogs;
 import com.itwill.igojoamanagement.dto.UserDto;
 import com.itwill.igojoamanagement.repository.BlackUserRepository;
 import com.itwill.igojoamanagement.repository.ReportLogRepository;
-import com.itwill.igojoamanagement.repository.RestrictionLogRepository;
 import com.itwill.igojoamanagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -34,7 +27,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ReportLogRepository reportLogRepository;
-    private final RestrictionLogRepository restrictionLogRepository;
     private final BlackUserRepository blackUserRepository;
 
     // 유저 전체 목록 service

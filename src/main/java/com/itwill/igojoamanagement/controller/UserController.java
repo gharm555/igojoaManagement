@@ -2,9 +2,7 @@ package com.itwill.igojoamanagement.controller;
 
 import com.google.api.Http;
 import com.itwill.igojoamanagement.domain.BlackUser;
-import com.itwill.igojoamanagement.domain.RestrictionLog;
 import com.itwill.igojoamanagement.dto.ChangeReportedNickNameRequest;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import com.itwill.igojoamanagement.dto.ReportedUserDto;
@@ -19,7 +17,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -170,4 +167,5 @@ public class UserController {
             return ResponseEntity.badRequest().body(result);
         }
     }
+
 }
