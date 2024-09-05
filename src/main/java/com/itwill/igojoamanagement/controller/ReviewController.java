@@ -16,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -92,7 +91,7 @@ public class ReviewController {
         log.info("deleteInappropriateReview(placeName: {}, userId: {})", placeName, userId);
 
         ReviewPK review = new ReviewPK(placeName, userId);
-//        reviewService.deleteInappropriateReview(review);
+        reviewService.deleteInappropriateReview(review);
 
         return ResponseEntity.ok(review);
     }
