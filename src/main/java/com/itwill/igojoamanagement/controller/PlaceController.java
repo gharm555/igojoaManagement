@@ -2,11 +2,9 @@ package com.itwill.igojoamanagement.controller;
 
 import com.itwill.igojoamanagement.domain.Place;
 import com.itwill.igojoamanagement.domain.PlaceImage;
-import com.itwill.igojoamanagement.dto.ConfirmPlaceDetailsDTO;
-import com.itwill.igojoamanagement.dto.ConfirmPlaceNameDto;
-import com.itwill.igojoamanagement.dto.PlaceDTO;
-import com.itwill.igojoamanagement.dto.PlaceNameDto;
+import com.itwill.igojoamanagement.dto.*;
 import com.itwill.igojoamanagement.repository.ConfirmPlaceQueryDslImpl;
+import com.itwill.igojoamanagement.service.AwsService;
 import com.itwill.igojoamanagement.service.ConfirmPlaceService;
 import com.itwill.igojoamanagement.service.PlaceService;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,7 +15,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -26,6 +27,7 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class PlaceController {
 
+    private final AwsService awsService;
     private final PlaceService placeService;
     private final ConfirmPlaceService confirmPlaceService;
     private final ConfirmPlaceQueryDslImpl confirmPlaceQueryDslImpl;
@@ -90,6 +92,7 @@ public class PlaceController {
         return ResponseEntity.ok().body("Place deleted successfully");
 
     }
+
     @DeleteMapping("/confirmDelete")
     public ResponseEntity<Object> confirmDeletePlace(@RequestBody ConfirmPlaceNameDto confirmPlaceNameDto) {
         String placeName = confirmPlaceNameDto.getPlaceName();
@@ -100,6 +103,46 @@ public class PlaceController {
         return ResponseEntity.ok().body("ConfirmPlace deleted successfully");
 
     }
+
+    @PutMapping("/updateConfirmPlace")
+    public ResponseEntity<Long> updateConfirmPlace(
+            @ModelAttribute ConfirmPlaceSoochangDto dto,
+            @RequestPart(value = "placeImages", required = false) List<MultipartFile> placeImages
+    ) {
+        log.info("Received PUT request for /api/updateConfirmPlace");
+        log.info("Received PlaceConfirmDto: {}", dto);
+        log.info("placeImages = {}",placeImages);
+        log.info("Received placeImages: {}", placeImages != null ? placeImages.size() : "null");
+
+        String reportUserId = dto.getReporterId();
+        // PlaceConfirm 처리
+        long res = confirmPlaceService.updatePlace(dto);
+
+
+        // 이미지 처리
+        int res2 = 0;
+        if (placeImages != null && !placeImages.isEmpty()) {
+            PlaceImageDto placeImageDto = new PlaceImageDto();
+
+            placeImageDto.setPlaceName(dto.getPlaceName());
+
+            List<String> imageNames = new ArrayList<>();
+            List<String> imageUrls = new ArrayList<>();
+
+            for (MultipartFile image : placeImages) {
+                if (!image.isEmpty()) {
+                    String url = awsService.uploadImage(image, reportUserId);
+                    imageNames.add(image.getOriginalFilename());
+                    imageUrls.add(url);
+                }
+            }
+
+            placeImageDto.setImageNames(imageNames);
+            placeImageDto.setImageUrls(imageUrls);
+
+            confirmPlaceService.insertPlaceImages(placeImageDto);
+        }
+
+        return ResponseEntity.ok(res );
+    }
 }
-
-

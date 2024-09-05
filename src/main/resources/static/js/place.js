@@ -180,6 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
+
     function loadPlaceDetails(placeName) {
         axios.get(`/api/placeDetails/${placeName}`)
             .then(function(response) {
@@ -191,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('modal-operatingHours').value = place.operatingHours;
                 document.getElementById('modal-placeLatitude').value = place.placeLatitude;
                 document.getElementById('modal-placeLongitude').value = place.placeLongitude;
-                document.getElementById('modal-ridius').value = place.placeRadius;
+                document.getElementById('modal-radius').value = place.placeRadius;
 
                 setImageWithName('modal-firstImage', place.firstUrl, place.firstImageName);
                 setImageWithName('modal-secondImage', place.secondUrl, place.secondImageName);
@@ -246,11 +247,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    //  신규명소 모달에 값을 가져오기
     function loadConfirmPlaceDetails(placeName, reporterId) {
         if (!reporterId) {
             console.error('Reporter ID is null or undefined');
             return;
         }
+
+
         axios.get(`/api/confirmPlaceDetails`, {
             params: {
                 placeName: placeName,
@@ -258,8 +262,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
             .then(function(response) {
-                const place = response.data;
-                const fullAddress = `${place.largeAddress} ${place.mediumAddress} ${place.smallAddress}`;
+                console.log(response.data);
+
+                let place = response.data;
+                let fullAddress = `${place.largeAddress} ${place.mediumAddress} ${place.smallAddress}`;
+                let reporterIdElement = document.getElementById('modal-reporterId');
+                let reporterIdContainer = reporterIdElement.closest('.mb-3');
+
                 document.getElementById('modal-reporterId').value = place.reporterId;
                 document.getElementById('modal-placeName').value = place.placeName;
                 document.getElementById('modal-largeAddress').value = fullAddress;
@@ -267,24 +276,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('modal-operatingHours').value = place.operatingHours;
                 document.getElementById('modal-placeLatitude').value = place.placeLatitude;
                 document.getElementById('modal-placeLongitude').value = place.placeLongitude;
-                document.getElementById('modal-ridius').value = place.radius;
+                document.getElementById('modal-radius').value = place.radius;
+                document.getElementById('modal-oldFirstImage').textContent = place.firstUrl;
                 setImageWithName('modal-firstImage', place.firstUrl, place.firstImageName);
                 setImageWithName('modal-secondImage', place.secondUrl, place.secondImageName);
                 setImageWithName('modal-thirdImage', place.thirdUrl, place.thirdImageName);
 
-                const reporterIdElement = document.getElementById('modal-reporterId');
-                const reporterIdContainer = reporterIdElement.closest('.mb-3');
 
-                const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+                // Reporter ID가 존재할 경우 보여주고, 그렇지 않을 경우 숨깁니다.
                 if (place.reporterId) {
                     reporterIdElement.value = place.reporterId;
                     reporterIdContainer.style.display = 'block'; // 보여줍니다.
                 } else {
                     reporterIdContainer.style.display = 'none'; // 숨깁니다.
                 }
+
+                let modal = new bootstrap.Modal(document.getElementById('detailModal'));
                 modal.show();
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.error('Error loading confirm place details:', error);
             });
     }
@@ -320,6 +330,99 @@ function  deleteConfirm(placeName,reporterId){
             });
 
 }
+    // 이미지 선택 함수
+    const $placeImgInputs = document.querySelectorAll('[id^="PlaceImgInput"]');
+    $placeImgInputs.forEach((input, index) => {
+        input.addEventListener("change", function(event) {
+            console.log(`File input ${index + 1} changed`);
+            try {
+                if (this.files.length > 0) {
+                    let fileName = this.files[0].name;
+                    // document.getElementById(`file-name${index + 1}`).textContent = `파일 ${index + 1}: ${fileName}`;
+                    console.log(`File selected for input ${index + 1}:`, fileName);
+                } else {
+                    document.getElementById(`file-name${index + 1}`).textContent = "";
+                }
+            } catch (error) {
+                console.error(`Error in file selection handler for input ${index + 1}:`, error);
+            }
+        });
+    });
+        // ------- 수창 작업 -------------------------------
+
+    //수정버튼
+    const $form = document.getElementById('placeDetailsForm');
+    const $modifyBtn = document.querySelector("#modifyBtn");
+
+    $modifyBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        console.log('수정버튼 클릭함');
+
+        const formData = new FormData($form);
+
+        // FormData에서 largeAddress 값을 가져와 쪼개기
+        const fullAddress = formData.get('largeAddress').split(' ');
+        const largeAddress = fullAddress[0] || '';
+        const mediumAddress = fullAddress[1] || '';
+        const smallAddress = fullAddress.slice(2).join(' ') || '';
+
+        formData.delete('largeAddress');
+
+        // 쪼갠 주소 추가
+        formData.append('largeAddress', largeAddress);
+        formData.append('mediumAddress', mediumAddress);
+        formData.append('smallAddress', smallAddress);
+
+        const oldFirstUrl = document.getElementById('modal-oldFirstImage').textContent;
+        formData.append('oldFirstUrl', oldFirstUrl);
+
+
+        // FormData 내용 로깅
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+
+
+        // // 모달에서 값들을 가져옵니다.
+        // let updatedPlace = {
+        //     reporterId: document.getElementById('modal-reporterId').value,
+        //     placeName: document.getElementById('modal-placeName').value,
+        //     largeAddress: largeAddress,
+        //     mediumAddress: mediumAddress,
+        //     smallAddress: smallAddress,
+        //     placeDescription: document.getElementById('modal-placeDescription').value,
+        //     operatingHours: document.getElementById('modal-operatingHours').value,
+        //     placeLatitude: parseFloat(document.getElementById('modal-placeLatitude').value) || null,
+        //     placeLongitude: parseFloat(document.getElementById('modal-placeLongitude').value) || null,
+        //     radius:200,
+        //     oldFirstUrl:document.getElementById('modal-oldFirstImage').textContent
+        // };
+        //
+        // console.log("Sending updatedPlace:", JSON.stringify(updatedPlace, null, 2));
+
+        axios.put('/api/updateConfirmPlace', formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            }
+        })
+            .then(function(response) {
+                console.log('서버 응답:', response.data);
+                alert('장소 정보가 성공적으로 업데이트되었습니다.');
+
+            })
+            .catch(function(error) {
+                console.error('장소 정보 업데이트 중 오류 발생:', error);
+                if (error.response) {
+                    console.error('서버 응답:', error.response.data);
+                    console.error('상태 코드:', error.response.status);
+                }
+                alert('장소 정보 업데이트에 실패했습니다. 자세한 내용은 콘솔을 확인해주세요.');
+            });
+    });
+
+// 수창작업 끝 --------------------------------------------
+
+
 
     // 페이지네이션 업데이트 함수
     function updatePagination(paginationElement, totalPages, loadFunction, currentPage) {
