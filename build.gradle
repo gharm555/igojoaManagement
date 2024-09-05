@@ -69,9 +69,9 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.99'  // v1
 }
 
-//tasks.named('test') {
-//    useJUnitPlatform()
-//}
+tasks.named('test') {
+    useJUnitPlatform()
+}
 
 // Querydsl 관련 빌드 옵션 -----
 def querydslDir = "$buildDir/generated/querydsl"

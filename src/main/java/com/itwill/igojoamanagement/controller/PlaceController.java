@@ -92,6 +92,7 @@ public class PlaceController {
         return ResponseEntity.ok().body("Place deleted successfully");
 
     }
+
     @DeleteMapping("/confirmDelete")
     public ResponseEntity<Object> confirmDeletePlace(@RequestBody ConfirmPlaceNameDto confirmPlaceNameDto) {
         String placeName = confirmPlaceNameDto.getPlaceName();

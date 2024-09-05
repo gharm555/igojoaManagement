@@ -32,10 +32,9 @@ public class ConfirmPlaceService {
 
     private final ConfirmPlaceQueryDsl confirmPlaceQueryDsl;
 
-
     private final PlaceRepository placeRepository;
-    private final PlaceStatsRepository placeStatsRepository;
 
+    private final PlaceStatsRepository placeStatsRepository;
 
     @Transactional(readOnly = true)
     public Page<ConfirmPlaceNameDto> read(Pageable pageable) {

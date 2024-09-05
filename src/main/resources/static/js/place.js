@@ -293,8 +293,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 let modal = new bootstrap.Modal(document.getElementById('detailModal'));
                 modal.show();
-
-
             })
             .catch(function (error) {
                 console.error('Error loading confirm place details:', error);
@@ -485,11 +483,4 @@ function  deleteConfirm(placeName,reporterId){
 
     // 처음 로딩 시 첫 페이지 데이터를 불러옴
     loadExistingPlaces(currentExistingPage);
-
-
-
-
-
-
-
 });
