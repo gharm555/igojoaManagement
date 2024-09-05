@@ -1,15 +1,15 @@
 package com.itwill.igojoamanagement.service;
 
+import com.itwill.igojoamanagement.domain.BlackUser;
 import com.itwill.igojoamanagement.domain.ReportLog;
 import com.itwill.igojoamanagement.domain.Review;
-import com.itwill.igojoamanagement.domain.UserBlackList;
 import com.itwill.igojoamanagement.domain.key.ReviewPK;
 import com.itwill.igojoamanagement.domain.key.UserBlackListPK;
 import com.itwill.igojoamanagement.dto.ReportReviewDetailDto;
 import com.itwill.igojoamanagement.dto.ReportReviewDto;
 import com.itwill.igojoamanagement.repository.ReportLogRepository;
 import com.itwill.igojoamanagement.repository.ReviewRepository;
-import com.itwill.igojoamanagement.repository.UserBlackListRepository;
+import com.itwill.igojoamanagement.repository.BlackUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,7 +27,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ReportLogRepository reportLogRepository;
-    private final UserBlackListRepository userBlackListRepository;
+    private final BlackUserRepository blackUserRepository;
 
     @Transactional(readOnly = true)
     public Page<Review> findInappropriateReviews(Pageable pageable) {
@@ -51,9 +51,6 @@ public class ReviewService {
         ReportLog reportLog = reportLogRepository.findById(logId).orElseThrow();
         ReviewPK review = new ReviewPK(reportLog.getPlaceName(), reportLog.getReportedId());
 
-        // 블랙리스트에 등록
-        addBlackList(reportLog.getReportedId());
-
         // 리뷰 테이블에서 삭제
         reviewRepository.deleteById(review);
 
@@ -76,14 +73,8 @@ public class ReviewService {
 
     // 블랙리스트에 등록
     @Transactional
-    public void addBlackList(String userId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String adminId = authentication.getName();
-
-        UserBlackListPK blackListLog = new UserBlackListPK(userId);
-        UserBlackList userBlackList = UserBlackList.builder().userBlackListPK(blackListLog).reasonCode(101).adminId(adminId).build();
-
-       userBlackListRepository.save(userBlackList);
+    public void addBlackList(BlackUser blackUser) {
+        blackUserRepository.save(blackUser);
     }
 
     // 신고 리뷰 상세
