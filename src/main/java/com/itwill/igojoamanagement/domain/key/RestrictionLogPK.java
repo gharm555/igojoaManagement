@@ -18,6 +18,7 @@ public class RestrictionLogPK implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String reportedId;
+
     // 관리자에 의해 처리된 시간
     @Column(nullable = false)
     private LocalDateTime restrictionDate;
@@ -27,3 +28,4 @@ public class RestrictionLogPK implements Serializable {
         this.restrictionDate = LocalDateTime.now();
     }
 }
+

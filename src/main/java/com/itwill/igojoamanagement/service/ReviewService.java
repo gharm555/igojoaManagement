@@ -4,7 +4,9 @@ import com.itwill.igojoamanagement.domain.BlackUser;
 import com.itwill.igojoamanagement.domain.ReportLog;
 import com.itwill.igojoamanagement.domain.RestrictionLog;
 import com.itwill.igojoamanagement.domain.Review;
+
 import com.itwill.igojoamanagement.domain.key.RestrictionLogPK;
+
 import com.itwill.igojoamanagement.domain.key.ReviewPK;
 import com.itwill.igojoamanagement.dto.ReportReviewDetailDto;
 import com.itwill.igojoamanagement.dto.ReportReviewDto;
@@ -51,9 +53,6 @@ public class ReviewService {
     public void deleteReportReview(String logId) {
         ReportLog reportLog = reportLogRepository.findById(logId).orElseThrow();
         ReviewPK review = new ReviewPK(reportLog.getPlaceName(), reportLog.getReportedId());
-
-        // 제재 내역에 등록
-        //        addRestrictionLog(reportLog);
 
         // 리뷰 테이블에서 삭제
         reviewRepository.deleteById(review);
