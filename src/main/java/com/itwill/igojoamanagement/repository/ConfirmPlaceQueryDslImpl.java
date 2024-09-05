@@ -1,15 +1,19 @@
 package com.itwill.igojoamanagement.repository;
 
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import com.itwill.igojoamanagement.domain.ConfirmPlace;
 import com.itwill.igojoamanagement.domain.QConfirmPlace;
 import com.itwill.igojoamanagement.domain.QPlaceImage;
 import com.itwill.igojoamanagement.dto.ConfirmPlaceDetailsDTO;
+import com.itwill.igojoamanagement.dto.ConfirmPlaceSoochangDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import com.querydsl.jpa.impl.JPAUpdateClause;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
@@ -23,7 +27,7 @@ public class ConfirmPlaceQueryDslImpl extends QuerydslRepositorySupport implemen
 
     private final JPAQueryFactory queryFactory;
 
-    public ConfirmPlaceQueryDslImpl( JPAQueryFactory queryFactory) {
+    public ConfirmPlaceQueryDslImpl(JPAQueryFactory queryFactory) {
         super(ConfirmPlace.class);
         this.queryFactory = queryFactory;
     }
@@ -100,5 +104,40 @@ public class ConfirmPlaceQueryDslImpl extends QuerydslRepositorySupport implemen
         log.info("Result for placeName: {}, reporterId: {}: {}", placeName, reporterId, result);
         return Optional.ofNullable(result);
     }
+    @Override
+    public long updateConfirmPlace(ConfirmPlace updateConfirmPlace) {
+        if (queryFactory == null) {
+            throw new IllegalStateException("QueryFactory is not initialized");
+        }
+
+        QConfirmPlace confirmPlace = QConfirmPlace.confirmPlace;
+
+        JPAUpdateClause updateClause = queryFactory.update(confirmPlace);
+
+        // 모든 필드를 업데이트 (null 값 포함)
+        updateClause.set(confirmPlace.largeAddress, updateConfirmPlace.getLargeAddress())
+                .set(confirmPlace.mediumAddress, updateConfirmPlace.getMediumAddress())
+                .set(confirmPlace.smallAddress, updateConfirmPlace.getSmallAddress())
+                .set(confirmPlace.placeDescription, updateConfirmPlace.getPlaceDescription())
+                .set(confirmPlace.placeLongitude, updateConfirmPlace.getPlaceLongitude())
+                .set(confirmPlace.placeLatitude, updateConfirmPlace.getPlaceLatitude())
+                .set(confirmPlace.operatingHours, updateConfirmPlace.getOperatingHours())
+                .set(confirmPlace.radius, updateConfirmPlace.getRadius())
+                .set(confirmPlace.displayDate, LocalDateTime.now());
+
+        return updateClause
+                .where(confirmPlace.placeName.eq(updateConfirmPlace.getPlaceName())
+                        .and(confirmPlace.reporterId.eq(updateConfirmPlace.getReporterId())))
+                .execute();
+    }
+
+
 
 }
+
+
+
+
+
+
+
