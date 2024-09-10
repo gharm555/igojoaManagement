@@ -77,8 +77,18 @@ public class ReviewService {
 
     // 블랙리스트 확인
     @Transactional(readOnly = true)
-    public Boolean isUserBlacklisted(String userId) {
-        return blackUserRepository.findById(userId).isPresent();
+    public String isUserBlacklisted(String userId) {
+        // Optional을 사용하여 블랙 유저 정보를 조회
+        return blackUserRepository.findById(userId)
+                .map(blackUser -> {
+                    // 블랙리스트 상태인지 확인
+                    if ("블랙리스트".equals(blackUser.getConfirm())) {
+                        return "블랙리스트";
+                    } else {
+                        return "제재철회";
+                    }
+                })
+                .orElse("사용자를 찾을 수 없습니다."); // 값이 없을 경우 처리
     }
 
     // 신고 리뷰 상세

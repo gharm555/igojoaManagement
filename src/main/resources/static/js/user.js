@@ -6,19 +6,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const paginationDiv = document.getElementById('pagination');
     const style = document.createElement('style');
     style.textContent = `
-    table {
+    .userTable {
         width: 100%;
         border-collapse: collapse;
     }
-    th, td {
+    .userTh, .userTd {
         border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
     }
-    th {
+    .userTh {
         background-color: #f2f2f2;
     }
-    tr:nth-child(even) {
+    .userTr:nth-child(even) {
         background-color: #f9f9f9;
     }
     .user-link {
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .modal {
         display: none;
         position: fixed;
-        z-index: 1;
+        z-index: 9999;
         left: 0;
         top: 0;
         width: 100%;
@@ -68,18 +68,6 @@ document.addEventListener('DOMContentLoaded', function () {
         loadUsers(currentUrl);
     });
 
-    // function loadUsers(url, page = 0) {
-    //     axios.get(`${url}?page=${page}`)
-    //         .then(response => {
-    //             const data = response.data;
-    //             renderUsers(data.content);
-    //             renderPagination(data);
-    //         })
-    //         .catch(error => {
-    //             console.error('Error:', error);
-    //             contentDiv.innerHTML = '<p>데이터가 없습니다.</p>';
-    //         });
-    // }
     function loadUsers(url, page = 0) {
         axios.get(`${url}?page=${page}`)
             .then(response => {
@@ -94,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
                 if (error.response && error.response.status === 403) {
                     // 권한이 없는 경우 블랙리스트로 리다이렉트
                     currentUrl = '/admin/user/blacklist';
@@ -106,39 +93,39 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function renderUsers(users) {
-        let html = '<table><thead><tr>';
+        let html = '<table class="userTable"><thead><tr class="userTr">';
 
         if (currentUrl === '/admin/user/user-management') {
-            html += '<th>유저 아이디</th>';
+            html += '<th class="userTh">유저 아이디</th>';
         } else if (currentUrl === '/admin/user/reported-users') {
-            html += '<th>유저 아이디</th><th>현재 닉네임</th><th>신고된 닉네임</th><th>로그 아이디</th>';
+            html += '<th class="userTh">유저 아이디</th><th class="userTh">현재 닉네임</th><th class="userTh">신고된 닉네임</th><th class="userTh">로그 아이디</th>';
         } else if (currentUrl === '/admin/user/blacklist') {
-            html += '<th>유저 아이디</th><th>제재한 관리자</th><th>제재 코드</th><th>제재 사유</th><th>제재 일시</th><th>제재 취소</th>';
+            html += '<th class="userTh">유저 아이디</th><th class="userTh">제재한 관리자</th><th class="userTh">제재 코드</th><th class="userTh">제재 사유</th><th class="userTh">제재 일시</th><th class="userTh">제재 취소</th>';
         }
 
         html += '</tr></thead><tbody>';
 
         users.forEach(user => {
-            html += '<tr>';
+            html += '<tr class="userTr">';
 
             if (currentUrl === '/admin/user/user-management') {
-                html += `<td><a href="#" class="user-link" data-user-id="${user.userId}">${user.userId}</a></td>`;
+                html += `<td class="userTd"><a href="#" class="user-link" data-user-id="${user.userId}">${user.userId}</a></td>`;
             } else if (currentUrl === '/admin/user/reported-users') {
                 const userId = user.userId || user.reportedId;
-                html += `<td><a href="#" class="user-link" data-user-id="${userId}">${userId}</a></td>`;
-                html += `<td>${user.currentNickname || '-'}</td>`;
-                html += `<td>${user.reportedNickname || '-'}</td>`;
-                html += `<td><p>${user.logId || '-'}</p>
+                html += `<td class="userTd"><a href="#" class="user-link" data-user-id="${userId}">${userId}</a></td>`;
+                html += `<td class="userTd">${user.currentNickname || '-'}</td>`;
+                html += `<td class="userTd">${user.reportedNickname || '-'}</td>`;
+                html += `<td class="userTd"><p>${user.logId || '-'}</p>
                     <button class="reportCancelBtn" data-log-id="${user.logId}">신고 취소</button>
                     <button class="changeReportedUserNickName" data-log-id="${user.logId}" data-user-id="${userId}">신고자 닉네임 바꾸기</button>
-                    <button class="reportBlackUser" data-log-id="${user.logId}">블랙 갈기기</button></td>`;
+                    <button class="reportBlackUser" data-log-id="${user.logId}">블랙리스트 등록</button></td>`;
             } else if (currentUrl === '/admin/user/blacklist') {
-                html += `<td>${user.userId}</td>`;
-                html += `<td>${user.adminId}</td>`;
-                html += `<td>${user.reasonCode}</td>`;
-                html += `<td>${user.detail}</td>`;
-                html += `<td>${new Date(user.processedAt).toLocaleString()}</td>`;
-                html += `<td><button class="cancelBlacklist" data-user-id="${user.userId}" >제재 취소</button></td>`;
+                html += `<td class="userTd">${user.userId}</td>`;
+                html += `<td class="userTd">${user.adminId}</td>`;
+                html += `<td class="userTd">${user.reasonCode}</td>`;
+                html += `<td class="userTd">${user.detail}</td>`;
+                html += `<td class="userTd">${new Date(user.processedAt).toLocaleString()}</td>`;
+                html += `<td class="userTd"><button class="cancelBlacklist" data-user-id="${user.userId}" >제재 취소</button></td>`;
             }
 
             html += '</tr>';
@@ -191,7 +178,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         loadUsers('/admin/user/reported-users');  // 페이지를 새로고침하여 업데이트된 데이터를 로드
                     })
                     .catch(error => {
-                        console.error('Error:', error);
                         alert('신고 취소 중 오류가 발생했습니다.');
                     });
             });
@@ -210,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     reportedId: reportedId
                 }).then(response => {
                     if (response.data === '변경 성공') {
-                        alert('정상화');
+                        alert('변경 성공');
                     }
                     loadUsers('/admin/user/reported-users');
                 }).catch(error => {
@@ -236,7 +222,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 showUserModal(user);
             })
             .catch(error => {
-                console.error('Error:', error);
                 alert('유저 정보를 불러오는데 실패했습니다.');
             });
     }
@@ -316,7 +301,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
                     alert('처리 실패');
                 });
         });

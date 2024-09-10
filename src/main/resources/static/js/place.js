@@ -339,7 +339,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     }
 
-    // 이미지 선택 함수
+    // ------- 수창 작업 -------------------------------
+    /// 이미지 선택 함수
     const $placeImgInputs = document.querySelectorAll('[id^="PlaceImgInput"]');
     $placeImgInputs.forEach((input, index) => {
         input.addEventListener("change", function (event) {
@@ -347,19 +348,25 @@ document.addEventListener('DOMContentLoaded', function () {
             try {
                 if (this.files.length > 0) {
                     let fileName = this.files[0].name;
-                    // document.getElementById(`file-name${index + 1}`).textContent = `파일 ${index + 1}: ${fileName}`;
+                    document.getElementById(`modal-${['first', 'second', 'third'][index]}Image-name`).textContent = fileName;
                     console.log(`File selected for input ${index + 1}:`, fileName);
+
+                    // 선택된 이미지 미리보기
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById(`modal-${['first', 'second', 'third'][index]}Image`).src = e.target.result;
+                    };
+                    reader.readAsDataURL(this.files[0]);
                 } else {
-                    document.getElementById(`file-name${index + 1}`).textContent = "";
+                    document.getElementById(`modal-${['first', 'second', 'third'][index]}Image-name`).textContent = `${index + 1}번째 이미지`;
                 }
             } catch (error) {
                 console.error(`Error in file selection handler for input ${index + 1}:`, error);
             }
         });
     });
-    // ------- 수창 작업 -------------------------------
 
-    //수정버튼
+    //수정버튼 클릭 이벤트
     const $form = document.getElementById('placeDetailsForm');
     const $modifyBtn = document.querySelector("#modifyBtn");
 
@@ -382,44 +389,26 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.append('mediumAddress', mediumAddress);
         formData.append('smallAddress', smallAddress);
 
-        const oldFirstUrl = document.getElementById('modal-oldFirstImage').textContent;
-        formData.append('oldFirstUrl', oldFirstUrl);
-
-
-        // FormData 내용 로깅
-        for (let [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
-
+        const $oldFirstUrl = document.getElementById('modal-oldFirstImage').textContent;
+        formData.append('oldFirstUrl', $oldFirstUrl);
 
         // 기존의 placeImage1, placeImage2, placeImage3를 제거
+
         formData.delete('placeImage1');
         formData.delete('placeImage2');
         formData.delete('placeImage3');
 
-        // 선택된 모든 파일을 placeImages[]로 추가
-        $placeImgInputs.forEach((input) => {
+        // 새로 선택된 이미지만 placeImages[]로 추가
+        $placeImgInputs.forEach((input, index) => {
             if (input.files.length > 0) {
                 formData.append('placeImages', input.files[0]);
             }
         });
 
-        // // 모달에서 값들을 가져옵니다.
-        // let updatedPlace = {
-        //     reporterId: document.getElementById('modal-reporterId').value,
-        //     placeName: document.getElementById('modal-placeName').value,
-        //     largeAddress: largeAddress,
-        //     mediumAddress: mediumAddress,
-        //     smallAddress: smallAddress,
-        //     placeDescription: document.getElementById('modal-placeDescription').value,
-        //     operatingHours: document.getElementById('modal-operatingHours').value,
-        //     placeLatitude: parseFloat(document.getElementById('modal-placeLatitude').value) || null,
-        //     placeLongitude: parseFloat(document.getElementById('modal-placeLongitude').value) || null,
-        //     radius:200,
-        //     oldFirstUrl:document.getElementById('modal-oldFirstImage').textContent
-        // };
-        //
-        // console.log("Sending updatedPlace:", JSON.stringify(updatedPlace, null, 2));
+        // FormData 내용 로깅
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
 
         axios.put('/api/updateConfirmPlace', formData, {
             headers: {
@@ -429,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(function (response) {
                 console.log('서버 응답:', response.data);
                 alert('장소 정보가 성공적으로 업데이트되었습니다.');
-
+                // 여기에 모달을 닫거나 페이지를 새로고침하는 로직을 추가할 수 있습니다.
             })
             .catch(function (error) {
                 console.error('장소 정보 업데이트 중 오류 발생:', error);

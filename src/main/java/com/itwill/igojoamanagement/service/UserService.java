@@ -121,6 +121,7 @@ public class UserService {
                 .adminId(adminId)
                 .reasonCode(reportLog.get().getReasonCode())
                 .detail(reportLog.get().getReportedNickname())
+                .confirm("블랙리스트")
                 .build();
 
         if (reportLog.isPresent()) {
@@ -129,7 +130,7 @@ public class UserService {
             a.confirmReport();
             return true;
         }
-        
+
         return false;
     }
 

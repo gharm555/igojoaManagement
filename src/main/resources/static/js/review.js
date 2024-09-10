@@ -5,7 +5,7 @@ function deleteReview(button) {
         return;
     }
 
-    const userIdElement = liElement.querySelector('.userId');
+    const userIdElement = liElement.querySelector('#userId');
     const iplaceNameElement = liElement.querySelector('.i-placeName');
 
     const userId = userIdElement ? userIdElement.textContent.trim() : null;
@@ -17,15 +17,12 @@ function deleteReview(button) {
             const logId = liElement.querySelector('#logId').textContent.trim();
             axios.delete('/review/deleteReportReview', {data: {logId: logId}})
                 .then((response) => {
-                    console.log(response.data);
                     alert('리뷰가 삭제되었습니다.');
                     loadReportReviews();
                 });
         } else {
             axios.delete('/review/deleteInappropriateReview', {data: {reportedId: userId, placeName: iplaceName}})
                 .then((response) => {
-                    console.log(userId);
-                    console.log(response.data);
                     alert('리뷰가 삭제되었습니다.');
                     loadInappropriateReviews();
                 });
@@ -36,7 +33,6 @@ function deleteReview(button) {
 function cancelReport(button) {
     const liElement = button.closest('li');
     if (!liElement) {
-        console.error('리스트 항목을 찾을 수 없습니다.');
         return;
     }
 
@@ -47,10 +43,8 @@ function cancelReport(button) {
     const rplaceName = rplaceNameElement ? rplaceNameElement.textContent.trim() : null;
     const logId = liElement.querySelector('#logId').textContent.trim();
     if (confirm('정말로 이 신고를 취소하시겠습니까?')) {
-        console.log("신고 취소 요청: " + reportedId, rplaceName);
         axios.delete('/review/cancelReport', {data: {logId: logId}})
             .then((response) => {
-                console.log(response.data);
                 alert('신고가 취소되었습니다.');
                 loadReportReviews();
             });
@@ -60,7 +54,6 @@ function cancelReport(button) {
 function addBlackList(button) {
     const liElement = button.closest('li');
     if (!liElement) {
-        console.error('리스트 항목을 찾을 수 없습니다.');
         return;
     }
 
@@ -78,18 +71,15 @@ function addBlackList(button) {
         const userId = userIdElement ? userIdElement.textContent.trim() : null;
         const detail = detailElement ? detailElement.textContent.trim() : null;
 
-        console.log("블랙 요청: " + userId);
 
         axios.post('/review/userBlack', {data: {userId, detail}})
             .then((response) => {
-                console.log(response.data);
                 alert(userId + '님이 블랙처리되었습니다.');
             })
             .catch((error) => {
                 if (error.response && error.response.status === 409) {
                     alert(error.response.data.message);
                 } else {
-                    console.error('블랙리스트 추가 중 오류 발생:', error);
                     alert('블랙리스트 추가 중 오류가 발생했습니다.');
                 }
             });
@@ -131,7 +121,6 @@ function loadReportReviews(page = 0) {
                 const pagination = paginationContainer ? paginationContainer.querySelector('ul') : null;
 
                 if (!pagination) {
-                    console.error('Pagination container not found');
                     return;
                 }
 
@@ -182,8 +171,6 @@ function loadReportReviews(page = 0) {
                             <p><strong>신고 사유:</strong> ${review.reportReason}</p>
                             <p><strong>리뷰 내용:</strong> ${review.review}</p>
                         `;
-                        } else {
-                            console.error('모달 요소를 찾을 수 없습니다.');
                         }
                     });
                 });
@@ -198,7 +185,6 @@ function loadReportReviews(page = 0) {
             }
         )
         .catch((error) => {
-            console.error('신고 리뷰 로드 중 오류 발생:', error);
             alert('신고 리뷰 로드 중 문제가 발생했습니다.');
         });
 }
@@ -214,8 +200,6 @@ function loadInappropriateReviews(page = 0) {
             inappropriateList.innerHTML = ''; // 기존 리스트 초기화
             if (pagination) {
                 pagination.innerHTML = ''; // 기존 페이지네이션 초기화
-            } else {
-                console.error('Pagination container not found for inappropriate reviews');
             }
             if (response.data.message === "부적절한 리뷰가 없습니다.") {
                 inappropriateList.innerHTML = '<li class="list-group-item">부적절한 리뷰가 없습니다.</li>';
@@ -269,7 +253,6 @@ function loadInappropriateReviews(page = 0) {
 
         })
         .catch((error) => {
-            console.error('부적절한 리뷰 로드 중 오류 발생:', error);
             alert('부적절한 리뷰 로드 중 문제가 발생했습니다.');
         });
 
@@ -284,7 +267,5 @@ function updateModal({title, body}) {
     if (modalTitle && modalBody) {
         modalTitle.textContent = title;
         modalBody.innerHTML = body;
-    } else {
-        console.error('모달 요소를 찾을 수 없습니다.');
     }
 }
