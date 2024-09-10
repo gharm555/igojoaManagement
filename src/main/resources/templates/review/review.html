@@ -2,6 +2,8 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/fragments :: documentHeader}">
 </head>
+<head>
+</head>
 <body>
 <div class="container p-4 bg-white rounded shadow-sm" th:fragment="reviewContent">
 	<div class="row">
@@ -15,28 +17,6 @@
 			<div class="tab-content" id="v-pills-tabContent">
 				<div class="tab-pane fade show active" id="v-pills-report" role="tabpanel" aria-labelledby="v-pills-report-tab">
 					<ul class="list-group list-group-flush" id="report-list">
-<!--						<li th:each="review : ${reportReviews}" class="list-group-item d-flex justify-content-between align-items-center">-->
-<!--							<div>-->
-<!--								<span class="d-none" id="logId" name="logId" th:text="${review.logId}"></span>-->
-<!--								<strong class="reportedId" th:text="${review.reporterId != null ? review.reporterId : 'Unknown User'}"></strong>-->
-<!--								<span> (at </span><span th:text="${review.reportTime}"></span>):-->
-<!--								<span th:text="${review.reportReason}"></span>-->
-<!--								<br>-->
-<!--								<strong th:text="${review.reportedNickname != null ? review.reportedNickname : 'Unknown Place'}"></strong><span>: </span>-->
-<!--								<span th:if="${#strings.length(review.review) > 25}" th:text="${#strings.substring(review.review, 0, 25) + '...'}"></span>-->
-<!--								<span th:if="${#strings.length(review.review) <= 25}" th:text="${review.review}"></span>-->
-<!--								<br>-->
-<!--								<small>장소: <span class="r-placeName" th:text="${review.placeName != null ? review.placeName : '알 수 없음'}"></span></small>-->
-<!--							</div>-->
-<!--							<div>-->
-<!--								&lt;!&ndash; 신고 취소 버튼 &ndash;&gt;-->
-<!--								<button class="btn btn-warning btn-sm report-cancel"-->
-<!--										onclick="cancelReport(this)">신고 취소</button>-->
-<!--								&lt;!&ndash; 삭제 버튼 &ndash;&gt;-->
-<!--								<button class="btn btn-danger btn-sm report-delete"-->
-<!--										onclick="deleteReview(this)">삭제</button>-->
-<!--							</div>-->
-<!--						</li>-->
 					</ul>
 					<nav aria-label="Report Reviews Page Navigation" id="report-pagination">
 						<ul class="pagination justify-content-center">
@@ -47,20 +27,7 @@
 				<!-- 전체 리뷰 목록 -->
 				<div class="tab-pane fade" id="v-pills-inappropriate" role="tabpanel" aria-labelledby="v-pills-inappropriate-tab">
 					<ul class="list-group list-group-flush" id="inappropriate-list">
-<!--						<li th:each="review : ${inappropriateReviews}" class="list-group-item d-flex justify-content-between align-items-center">-->
-<!--							<div>-->
-<!--								<strong class="userId" th:text="${review.reviewId.userId != null ? review.reviewId.userId : 'Unknown User'}"></strong>-->
-<!--								:-->
-<!--								<span th:text="${review.reviewContent}"></span>-->
-<!--								<br>-->
-<!--								<small>장소: <span class="i-placeName" th:text="${review.reviewId.placeName != null ? review.reviewId.placeName : '알 수 없음'}"></span></small>-->
-<!--							</div>-->
-<!--							<div>-->
-<!--								&lt;!&ndash; 삭제 버튼 &ndash;&gt;-->
-<!--								<button class="btn btn-danger btn-sm inappropriate-delete"-->
-<!--										onclick="deleteReview(this)">삭제</button>-->
-<!--							</div>-->
-<!--						</li>-->
+
 					</ul>
 					<nav aria-label="Inappropriate Reviews Page Navigation" id="inappropriate-pagination">
 						<ul class="pagination justify-content-center">

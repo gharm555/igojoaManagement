@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         button.addEventListener('click', function (event) {
                             event.preventDefault();
                             const placeName = this.getAttribute('data-place-name');
-                            console.log('Approving place:', placeName); // 로그 추가
                             deletePlace(placeName); // 비동기 승인 처리
                         });
                     });
@@ -116,7 +115,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             event.preventDefault();
                             const placeName = this.getAttribute('data-place-name');
                             const reporterId = this.getAttribute('data-reporter-id');
-                            console.log('Approving place:', placeName, 'Reporter ID:', reporterId); // 로그 추가
                             approvePlace(placeName, reporterId); // 비동기 승인 처리
                         });
                     });
@@ -127,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             event.preventDefault();
                             const placeName = this.getAttribute('data-place-name');
                             const reporterId = this.getAttribute('data-reporter-id');
-                            console.log('Approving place:', placeName, 'Reporter ID:', reporterId); // 로그 추가
                             deleteConfirm(placeName, reporterId); // 비동기 승인 처리
                         });
                     });
@@ -197,10 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // 2024-09-05 서상원 모달 부분 버그 고쳐봄 backdrop / keyboard 설정함
                 // const modal = new bootstrap.Modal(document.getElementById('detailModal'));
-                const modal = new bootstrap.Modal(document.getElementById('detailModal'), {
-                    backdrop: false,
-                    keyboard: true
-                });
+                const modal = new bootstrap.Modal(document.getElementById('detailModal'));
                 const reporterIdElement = document.getElementById('modal-reporterId');
                 const reporterIdContainer = reporterIdElement.closest('.mb-3');
 
@@ -224,7 +218,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const imgNameElement = document.getElementById(`${elementId}-name`);
 
         if (imageUrl) {
-            console.log(`Setting ${elementId} src to: ${imageUrl}`);
             imgElement.src = imageUrl;
             imgElement.style.display = 'block';
 
@@ -251,7 +244,6 @@ document.addEventListener('DOMContentLoaded', function () {
     //  신규명소 모달에 값을 가져오기
     function loadConfirmPlaceDetails(placeName, reporterId) {
         if (!reporterId) {
-            console.error('Reporter ID is null or undefined');
             return;
         }
 
@@ -263,8 +255,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         })
             .then(function (response) {
-                console.log(response.data);
-
                 let place = response.data;
                 let fullAddress = `${place.largeAddress} ${place.mediumAddress} ${place.smallAddress}`;
                 let reporterIdElement = document.getElementById('modal-reporterId');
@@ -294,10 +284,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // 2024-09-05 서상원 모달 부분 버그 고쳐봄 backdrop / keyboard 설정함
                 // let modal = new bootstrap.Modal(document.getElementById('detailModal'));
-                let modal = new bootstrap.Modal(document.getElementById('detailModal'), {
-                    backdrop: false,
-                    keyboard: true
-                });
+                let modal = new bootstrap.Modal(document.getElementById('detailModal'));
                 modal.show();
             })
             .catch(function (error) {
@@ -306,7 +293,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function deletePlace(placeName) {
-        console.log('Deleting place:', placeName);
         axios.delete('/api/placeDelete', {
             data: {placeName: placeName} // delete 요청에서는 data 속성을 사용하여 본문 데이터를 보냅니다.
         })
@@ -343,12 +329,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const $placeImgInputs = document.querySelectorAll('[id^="PlaceImgInput"]');
     $placeImgInputs.forEach((input, index) => {
         input.addEventListener("change", function (event) {
-            console.log(`File input ${index + 1} changed`);
             try {
                 if (this.files.length > 0) {
                     let fileName = this.files[0].name;
                     // document.getElementById(`file-name${index + 1}`).textContent = `파일 ${index + 1}: ${fileName}`;
-                    console.log(`File selected for input ${index + 1}:`, fileName);
                 } else {
                     document.getElementById(`file-name${index + 1}`).textContent = "";
                 }
@@ -365,7 +349,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     $modifyBtn.addEventListener('click', function (event) {
         event.preventDefault();
-        console.log('수정버튼 클릭함');
 
         const formData = new FormData($form);
 
@@ -386,10 +369,10 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.append('oldFirstUrl', oldFirstUrl);
 
 
-        // FormData 내용 로깅
-        for (let [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
+        // // FormData 내용 로깅
+        // for (let [key, value] of formData.entries()) {
+        //     console.log(key, value);
+        // }
 
 
         // 기존의 placeImage1, placeImage2, placeImage3를 제거
@@ -427,16 +410,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         })
             .then(function (response) {
-                console.log('서버 응답:', response.data);
                 alert('장소 정보가 성공적으로 업데이트되었습니다.');
 
             })
             .catch(function (error) {
-                console.error('장소 정보 업데이트 중 오류 발생:', error);
-                if (error.response) {
-                    console.error('서버 응답:', error.response.data);
-                    console.error('상태 코드:', error.response.status);
-                }
                 alert('장소 정보 업데이트에 실패했습니다. 자세한 내용은 콘솔을 확인해주세요.');
             });
     });

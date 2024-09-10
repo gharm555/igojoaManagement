@@ -77,8 +77,12 @@ public class ReviewService {
 
     // 블랙리스트 확인
     @Transactional(readOnly = true)
-    public Boolean isUserBlacklisted(String userId) {
-        return blackUserRepository.findById(userId).isPresent();
+    public String isUserBlacklisted(String userId) {
+        if((blackUserRepository.findById(userId).orElseThrow().getConfirm().equals("블랙리스트"))) {
+            return "블랙리스트";
+        } else {
+            return "제재철회";
+        }
     }
 
     // 신고 리뷰 상세
