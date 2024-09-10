@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<body>
+<div th:fragment="user">
+    <div class="user-container">
+        <div class="user-buttons">
+            <button id="blacklist">블랙리스트</button>
+            <button id="allUsers" sec:authorize="hasAnyAuthority('ROLE_회원_팀장', 'ROLE_회원_팀원')">전체정보</button>
+            <button id="reportedUsers" sec:authorize="hasAnyAuthority('ROLE_회원_팀장', 'ROLE_회원_팀원')">신고당한유저</button>
+        </div>
+        <div id="userContent">
+            <!-- 여기에 내용이 동적으로 삽입됨 -->
+        </div>
+        <div id="pagination">
+            <!-- 페이지네이션 -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

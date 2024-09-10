@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{layout/fragments :: documentHeader}"></head>
+<body>
+<header th:replace="~{layout/fragments :: pageHeader}"></header>
+<main>
+    <div class="container-fluid">
+        <form method="post" th:action="@{/manager/signUp}">
+            <input type="text" id="adminId" name="adminId" placeholder="사번">
+            <input type="password" id="password" name="password" placeholder="비밀번호">
+            <select name="adminGroup">
+                <option value="총괄">총괄</option>
+                <option value="회원">회원</option>
+                <option value="명소">명소</option>
+                <option value="리뷰">리뷰</option>
+            </select>
+            <select name="adminRole">
+                <option value="팀장">팀장</option>
+                <option value="팀원">팀원</option>
+            </select>
+            <button type="submit" id="signInBtn">생성</button>
+        </form>
+    </div>
+</main>
+<div th:replace="~{layout/fragments :: bootstrapScript}"></div>
+</body>
+</html>

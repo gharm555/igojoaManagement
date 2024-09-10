@@ -2,8 +2,11 @@
 cat << 'EOF' > /home/ubuntu/scripts/restart_server.sh
 #!/bin/bash
 
+# Change to the directory where the JAR file is located
+cd /home/ubuntu
+
 # Start the application
-nohup java -jar /home/ubuntu/igojoaManagement-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
+nohup java -jar igojoaManagement-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
 EOF
 
 # Make the script executable

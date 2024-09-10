@@ -41,8 +41,50 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'org.projectlombok:lombok'
+
+    // validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Querydsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
+    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+
+    // Spring Boot Mail Starter
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // Google Analytics Data API
+    implementation 'com.google.analytics:google-analytics-data:0.14.3'
+
+    // Google Auth Library
+    implementation 'com.google.auth:google-auth-library-oauth2-http:1.11.0'
+
+    // Google Cloud Libraries BOM
+    implementation platform('com.google.cloud:libraries-bom:26.1.4')
+    implementation 'com.google.cloud:google-cloud-core'
+
+    // AWS
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.99'  // v1
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+// Querydsl 관련 빌드 옵션 -----
+def querydslDir = "$buildDir/generated/querydsl"
+
+sourceSets {
+    main.java.srcDirs += [ querydslDir ]
+}
+
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}
+
+clean.doLast {
+    file(querydslDir).deleteDir()
+}
+// -----------------------------
