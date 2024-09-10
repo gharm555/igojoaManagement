@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     reportedId: reportedId
                 }).then(response => {
                     if (response.data === '변경 성공') {
-                        alert('정상화');
+                        alert('변경 성공');
                     }
                     loadUsers('/admin/user/reported-users');
                 }).catch(error => {
