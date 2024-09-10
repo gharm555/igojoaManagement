@@ -115,12 +115,12 @@ public class PlaceController {
         log.info("Received placeImages: {}", placeImages != null ? placeImages.size() : "null");
 
         String reportUserId = dto.getReporterId();
+
         // PlaceConfirm 처리
         long res = confirmPlaceService.updatePlace(dto);
 
 
         // 이미지 처리
-        int res2 = 0;
         if (placeImages != null && !placeImages.isEmpty()) {
             PlaceImageDto placeImageDto = new PlaceImageDto();
 
